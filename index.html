@@ -1533,7 +1533,7 @@ async function grabShot(){
 
   try {
     // microlink.io: free, CORS-enabled, returns real screenshot URL
-    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(rawUrl)}&screenshot=true&meta=false`);
+    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(rawUrl)}&screenshot=true&meta=false&waitFor=3500`);
     const json = await res.json();
     if (json.status === 'success' && json.data?.screenshot?.url) {
       done();
