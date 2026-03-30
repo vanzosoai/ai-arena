@@ -1173,13 +1173,8 @@ async function switchUser(){
 //  BOOT — on page load, restore session
 // ============================================================
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data: { session } } = await sb.auth.getSession();
-  if (session){
-    _session = session;
-    MU.start();
-    await showArena();
-  }
-  // else: show login screen (already visible)
+  // Always start at login — clear any lingering Supabase session
+  await sb.auth.signOut();
 });
 
 // ============================================================
@@ -1468,6 +1463,10 @@ function clearForm(){
   ['fTitle','fDesc','fUrl','fSocial','fEarn'].forEach(id => document.getElementById(id).value = '');
   const img = document.getElementById('imgPreview');
   img.src = ''; img.style.display = 'none';
+  const ldr = document.getElementById('ssLoading');
+  if (ldr) ldr.style.display = 'none';
+  const fi = document.getElementById('fileIn');
+  if (fi) fi.value = '';
 }
 
 async function uploadPreviewImage(weekId){
