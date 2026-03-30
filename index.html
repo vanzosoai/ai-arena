@@ -1432,8 +1432,14 @@ async function handleSubmit(){
   // Upload image if preview is shown
   let imageUrl = existing?.image_url || null;
   const imgEl = document.getElementById('imgPreview');
-  if (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.startsWith('data:image') === false || imgEl.src.startsWith('http')) {
-    imageUrl = await uploadPreviewImage(weekId) || imageUrl;
+  if (imgEl.style.display !== 'none' && imgEl.src && imgEl.src !== window.location.href) {
+    if (imgEl.src.startsWith('data:')) {
+      // Local file upload — upload to Supabase storage
+      imageUrl = await uploadPreviewImage(weekId) || imageUrl;
+    } else if (imgEl.src.startsWith('http')) {
+      // External screenshot URL — save directly, no re-upload needed
+      imageUrl = imgEl.src;
+    }
   }
 
   const sub = {
@@ -1506,58 +1512,45 @@ async function handleFileUpload(file){
 }
 
 // ============================================================
-//  SCREENSHOT (thum.io)
+//  SCREENSHOT (microlink.io)
 // ============================================================
-function grabShot(){
+async function grabShot(){
   const rawUrl = document.getElementById('fUrl').value.trim();
   if (!rawUrl){ flash('ENTER A URL FIRST!'); return; }
   const prv = document.getElementById('imgPreview');
   const ldr = document.getElementById('ssLoading');
-  const sep = rawUrl.includes('?') ? '&' : '?';
-  const ssUrl = `https://image.thum.io/get/width/1200/crop/630/delay/2000/${rawUrl + sep + '_ss=' + Date.now()}`;
 
   prv.onload = null; prv.onerror = null;
   prv.style.display = 'none'; prv.src = '';
-
-  const start = Date.now();
-  const ticker = setInterval(() => {
-    const s = Math.floor((Date.now() - start) / 1000);
-    ldr.innerHTML = `📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">⏱ ${s}s — VIDEO SITES CAN TAKE 20–30s</span>`;
-  }, 1000);
-
-  ldr.innerHTML = '📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">LOADING PAGE — PLEASE WAIT</span>';
   ldr.style.display = 'block';
+  ldr.innerHTML = '📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">LOADING PAGE — PLEASE WAIT</span>';
 
+  let elapsed = 0;
+  const ticker = setInterval(() => {
+    elapsed++;
+    ldr.innerHTML = `📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">⏱ ${elapsed}s — PLEASE WAIT</span>`;
+  }, 1000);
   const done = () => { clearInterval(ticker); ldr.style.display = 'none'; };
 
-  const reveal = (srcUrl) => {
-    done();
-    const tmp = new Image(); tmp.crossOrigin = 'anonymous';
-    tmp.onload = () => {
-      try {
-        const MAX = 900;
-        let w = tmp.naturalWidth || 1200, h = tmp.naturalHeight || 630;
-        if (w > MAX){ h = Math.round(h * MAX / w); w = MAX; }
-        const cv = document.createElement('canvas');
-        cv.width = w; cv.height = h;
-        cv.getContext('2d').drawImage(tmp, 0, 0, w, h);
-        prv.src = cv.toDataURL('image/jpeg', 0.78);
-      } catch(err){ prv.src = srcUrl; }
+  try {
+    // microlink.io: free, CORS-enabled, returns real screenshot URL
+    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(rawUrl)}&screenshot=true&meta=false`);
+    const json = await res.json();
+    if (json.status === 'success' && json.data?.screenshot?.url) {
+      done();
+      prv.src = json.data.screenshot.url;
       prv.style.display = 'block';
       flash('📸 SCREENSHOT LOADED!');
-    };
-    tmp.onerror = () => { prv.src = srcUrl; prv.style.display = 'block'; flash('📸 SCREENSHOT LOADED!'); };
-    tmp.src = srcUrl;
-  };
+      return;
+    }
+  } catch(e){}
 
-  prv.onload = () => reveal(ssUrl);
-  prv.onerror = () => {
-    ldr.innerHTML = '📸 TRYING BACKUP SERVICE...<br><span class="ss-bar">PLEASE WAIT</span>';
-    prv.onload = () => reveal(prv.src);
-    prv.onerror = () => { done(); flash('SCREENSHOT FAILED\nUPLOAD AN IMAGE INSTEAD'); };
-    prv.src = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(rawUrl)}?w=1200&h=630`;
-  };
-  prv.src = ssUrl;
+  // Fallback: WordPress mshots
+  ldr.innerHTML = '📸 TRYING BACKUP SERVICE...<br><span class="ss-bar">PLEASE WAIT</span>';
+  const msUrl = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(rawUrl)}?w=900&h=473`;
+  prv.onload = () => { done(); prv.style.display = 'block'; flash('📸 SCREENSHOT LOADED!'); };
+  prv.onerror = () => { done(); flash('SCREENSHOT FAILED — UPLOAD AN IMAGE INSTEAD'); };
+  prv.src = msUrl;
 }
 
 // ============================================================
