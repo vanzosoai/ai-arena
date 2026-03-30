@@ -1193,7 +1193,8 @@ async function doLogin(){
   const pw = document.getElementById('pwInp').value;
   if (!pw){ document.getElementById('pwErr').textContent = 'ENTER YOUR PASSWORD'; return; }
   MU.init(); // create AudioContext NOW while still in user-gesture context
-  const email = `${_pendingPlayer}@aiarena.game`;
+  const playerEmails = { john: 'jjurko@gmail.com', nick: 'nickarmyfilms@gmail.com' };
+  const email = playerEmails[_pendingPlayer] || `${_pendingPlayer}@aiarena.game`;
   const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
   if (error){
     document.getElementById('pwErr').textContent = 'WRONG PASSWORD, SOLDIER!';
