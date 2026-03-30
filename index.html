@@ -177,11 +177,67 @@ body::after{
 .mute-btn.active{border-color:var(--green);color:var(--green)}
 .settings-btn{
   font-size:.32em;padding:5px 12px;
-  border:2px solid var(--bdr);color:var(--dim);
+  border:2px solid rgba(255,215,0,.45);color:rgba(255,215,0,.7);
+  box-shadow:0 0 10px rgba(255,215,0,.2);
   cursor:pointer;transition:all .15s;background:none;
   font-family:'Press Start 2P',monospace;letter-spacing:1px;
 }
-.settings-btn:hover{border-color:var(--j);color:var(--j)}
+.settings-btn:hover{border-color:var(--j);color:var(--j);box-shadow:0 0 18px rgba(255,215,0,.45)}
+
+/* ================================================
+   COUNTDOWN TIMER
+================================================ */
+.countdown-timer{
+  font-size:.3em;letter-spacing:1px;color:#555577;
+  font-family:'Press Start 2P',monospace;
+  transition:color .5s;
+}
+.countdown-timer.warn{color:var(--j);animation:cdpulse 2s ease-in-out infinite}
+.countdown-timer.urgent{color:var(--red);animation:cdpulse .8s ease-in-out infinite}
+@keyframes cdpulse{0%,100%{opacity:.75}50%{opacity:1}}
+
+/* ================================================
+   AVATAR POWER-UP STATES
+================================================ */
+.av.fired-up.jg{
+  filter:drop-shadow(0 0 30px rgba(255,200,0,.95)) drop-shadow(0 0 10px rgba(255,120,0,.7));
+  animation:firepulse-j 1.3s ease-in-out infinite;
+}
+.av.fired-up.ng{
+  filter:drop-shadow(0 0 30px rgba(0,210,255,.95)) drop-shadow(0 0 10px rgba(0,150,255,.7));
+  animation:firepulse-n 1.3s ease-in-out infinite;
+}
+@keyframes firepulse-j{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(255,200,0,.8)) drop-shadow(0 0 6px rgba(255,120,0,.5))}
+  50%{filter:drop-shadow(0 0 42px rgba(255,230,0,1)) drop-shadow(0 0 18px rgba(255,150,0,.9))}
+}
+@keyframes firepulse-n{
+  0%,100%{filter:drop-shadow(0 0 20px rgba(0,200,255,.8)) drop-shadow(0 0 6px rgba(0,150,255,.5))}
+  50%{filter:drop-shadow(0 0 42px rgba(0,230,255,1)) drop-shadow(0 0 18px rgba(0,180,255,.9))}
+}
+.av.cooked-out{
+  filter:grayscale(80%) brightness(0.55);
+  animation:cookedshake 6s ease-in-out infinite;
+}
+@keyframes cookedshake{
+  0%,90%,100%{transform:translateX(0)}
+  92%{transform:translateX(-2px)}
+  94%{transform:translateX(2px)}
+  96%{transform:translateX(-2px)}
+  98%{transform:translateX(1px)}
+}
+.av-badge{
+  text-align:center;font-family:'Press Start 2P',monospace;
+  min-height:22px;margin-top:6px;display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.badge-fire{
+  font-size:.28em;color:var(--j);letter-spacing:1px;
+  animation:fbadge 1.4s ease-in-out infinite;
+  text-shadow:0 0 8px rgba(255,200,0,.6);
+}
+@keyframes fbadge{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+.badge-cooked{font-size:.28em;color:#883333;letter-spacing:1px}
+.badge-champ{font-size:.26em;color:#FFD700;letter-spacing:1px;text-shadow:0 0 6px rgba(255,215,0,.5)}
 
 /* ================================================
    ARENA — 3 COL DESKTOP / STACK MOBILE
@@ -723,6 +779,7 @@ footer span{color:#8888aa}
     <div class="hsub">— AI CREATION ARENA —</div>
     <div class="hmeta">
       <div class="week-tag" id="weekTag">WEEK 1</div>
+      <div class="countdown-timer" id="countdown">⏳ —</div>
       <div class="sess-tag" id="sessTag" onclick="switchUser()">👤 —</div>
       <button class="mute-btn" id="muteBtn" onclick="toggleMute()">♫ MUTE</button>
       <button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙️</button>
@@ -834,6 +891,7 @@ footer span{color:#8888aa}
         <rect x="24" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <rect x="64" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
       </svg>
+      <div class="av-badge" id="johnBadge"></div>
     </div>
     <div class="sb-wrap">
       <div class="sb-lbl">🔥 STREAK</div>
@@ -960,6 +1018,7 @@ footer span{color:#8888aa}
         <rect x="24" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <rect x="64" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
       </svg>
+      <div class="av-badge" id="nickBadge"></div>
     </div>
     <div class="sb-wrap">
       <div class="sb-lbl">🔥 STREAK</div>
@@ -1255,6 +1314,7 @@ async function showArena(){
     sp.className = p === 'john' ? '' : 'n';
   }
 
+  startCountdown();
   await loadAndRender();
 }
 
@@ -1335,6 +1395,8 @@ function renderArena(){
   else if (w.john){ badge.textContent = '⚡ JOHN LOCKED IN'; badge.className='badge'; }
   else if (w.nick){ badge.textContent = '💙 NICK LOCKED IN'; badge.className='badge'; }
   else { badge.textContent = '💀 NO ENTRIES YET'; badge.className='badge w'; }
+
+  updateAvatarStates();
 }
 
 function streak(p){
@@ -1506,14 +1568,24 @@ async function handleSubmit(){
     earnings: parseFloat(document.getElementById('fEarn').value) || 0,
   };
 
+  // First blood check before insert
+  const isFirstBlood = _subs.filter(s => s.week_id === weekId).length === 0;
+
   const { error } = await sb.from('submissions').upsert(sub, { onConflict: 'user_id,week_id' });
   if (error){ flash('ERROR: ' + error.message); return; }
 
-  flash('🎮 LOCKED IN!');
+  if (isFirstBlood) {
+    flash('⚔️ FIRST BLOOD! YOU STRUCK FIRST!');
+  } else {
+    flash('🎮 LOCKED IN!');
+  }
   MU.sting();
   splat();
   clearForm();
   await loadAndRender();
+
+  // Notify the other player (non-blocking)
+  notifyOtherPlayer(username, weekId).catch(() => {});
 }
 
 function clearForm(){
@@ -1654,6 +1726,129 @@ async function delEntry(subId){
 // ============================================================
 //  CHANGE PASSWORD
 // ============================================================
+// ============================================================
+//  COUNTDOWN TIMER — Sunday midnight Eastern time
+// ============================================================
+let _cdInterval = null;
+
+function getNextSundayMidnightEastern() {
+  // Parse "now" as Eastern time using the locale trick
+  const now = new Date();
+  const etNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+  const dow = etNow.getDay(); // 0=Sun, 1=Mon ... 6=Sat
+  // Days until the END of the coming Sunday (if today is Sunday, target end of today)
+  const daysUntilSunday = dow === 0 ? 0 : 7 - dow;
+  const etTarget = new Date(etNow);
+  etTarget.setDate(etNow.getDate() + daysUntilSunday);
+  etTarget.setHours(23, 59, 59, 0);
+  // Offset: eastern "fake UTC" minus real UTC = Eastern offset in ms
+  const offsetMs = etNow.getTime() - now.getTime();
+  return new Date(etTarget.getTime() - offsetMs);
+}
+
+function startCountdown() {
+  if (_cdInterval) clearInterval(_cdInterval);
+  function tick() {
+    const el = document.getElementById('countdown');
+    if (!el) return;
+    const now = new Date();
+    const target = getNextSundayMidnightEastern();
+    const diff = target - now;
+    if (diff <= 0) {
+      el.textContent = '⏰ WEEK OVER';
+      el.className = 'countdown-timer urgent';
+      return;
+    }
+    const days    = Math.floor(diff / 86400000);
+    const hours   = Math.floor((diff % 86400000) / 3600000);
+    const minutes = Math.floor((diff % 3600000) / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+    const hh = String(hours).padStart(2,'0');
+    const mm = String(minutes).padStart(2,'0');
+    const ss = String(seconds).padStart(2,'0');
+    el.textContent = days > 0 ? `${days}D ${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`;
+    if (diff < 86400000) {
+      el.className = 'countdown-timer urgent';  // < 24h: red + pulse
+    } else if (diff < 172800000) {
+      el.className = 'countdown-timer warn';    // < 48h: yellow pulse
+    } else {
+      el.className = 'countdown-timer';
+    }
+  }
+  tick();
+  _cdInterval = setInterval(tick, 1000);
+}
+
+// ============================================================
+//  AVATAR POWER-UP STATES
+// ============================================================
+function updateAvatarStates() {
+  const cur = wid();
+  const weeks = grouped();
+  const w = weeks[cur] || {};
+
+  // This week submission status
+  const jLocked = !!w.john;
+  const nLocked = !!w.nick;
+
+  // Last week winner
+  const allIds = Object.keys(weeks).sort();
+  const curIdx = allIds.indexOf(cur);
+  const lastId = curIdx > 0 ? allIds[curIdx - 1] : null;
+  const lastW  = lastId ? (weeks[lastId] || {}) : {};
+  let lastChamp = null;
+  if (lastW.john && lastW.nick) {
+    const je = parseFloat(lastW.john.earnings) || 0;
+    const ne = parseFloat(lastW.nick.earnings) || 0;
+    if (je > ne) lastChamp = 'john';
+    else if (ne > je) lastChamp = 'nick';
+    // tie → no champ
+  } else if (lastW.john) lastChamp = 'john';
+  else if (lastW.nick)  lastChamp = 'nick';
+
+  // Cooked: didn't submit LAST week (only show if they haven't submitted THIS week yet)
+  const jCooked = !!lastId && !lastW.john && !jLocked;
+  const nCooked = !!lastId && !lastW.nick && !nLocked;
+
+  _applyAvatarState('john', jLocked, lastChamp === 'john', jCooked);
+  _applyAvatarState('nick',  nLocked, lastChamp === 'nick',  nCooked);
+}
+
+function _applyAvatarState(player, lockedIn, isChamp, isCooked) {
+  const av    = document.getElementById(player === 'john' ? 'johnSvg' : 'nickSvg')?.parentElement;
+  const badge = document.getElementById(player === 'john' ? 'johnBadge' : 'nickBadge');
+  if (!av || !badge) return;
+
+  // Reset state
+  av.classList.remove('fired-up', 'cooked-out');
+  badge.innerHTML = '';
+
+  if (lockedIn) {
+    av.classList.add('fired-up');
+    badge.innerHTML += '<div class="badge-fire">🔥 LOCKED IN</div>';
+  } else if (isCooked) {
+    av.classList.add('cooked-out');
+    badge.innerHTML += '<div class="badge-cooked">💀 GET BUSY</div>';
+  }
+
+  if (isChamp) {
+    badge.innerHTML = '<div class="badge-champ">👑 LAST CHAMP</div>' + badge.innerHTML;
+  }
+}
+
+// ============================================================
+//  EMAIL NOTIFICATION — calls Supabase Edge Function
+// ============================================================
+async function notifyOtherPlayer(submitter, weekId) {
+  try {
+    await sb.functions.invoke('notify-submission', {
+      body: { submitter, weekId }
+    });
+  } catch(e) {
+    // Non-critical — silently ignore
+  }
+}
+
 // ============================================================
 //  ACCOUNT SETTINGS
 // ============================================================
