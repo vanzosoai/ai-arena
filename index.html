@@ -108,10 +108,12 @@ body::after{
 .pw-err{font-size:.35em;color:var(--red);letter-spacing:1px;min-height:1em;text-align:center}
 
 .spectate-link{
-  font-size:.32em;color:#333355;letter-spacing:1px;cursor:pointer;
-  text-decoration:none;border-bottom:1px solid #222244;transition:color .2s;
+  font-size:.38em;color:#aaaacc;letter-spacing:2px;cursor:pointer;
+  text-decoration:none;padding:10px 22px;border:2px solid #334466;
+  background:rgba(30,30,60,.5);transition:all .2s;display:inline-block;
+  margin-top:4px;
 }
-.spectate-link:hover{color:#6666aa}
+.spectate-link:hover{color:#fff;border-color:#6688cc;background:rgba(50,50,100,.6)}
 
 .music-hint{font-size:.3em;color:#888;letter-spacing:1px;text-align:center;animation:mhpulse 2.5s ease-in-out infinite}
 @keyframes mhpulse{0%,100%{color:#666}50%{color:#cc3333}}
@@ -173,6 +175,13 @@ body::after{
 }
 .mute-btn:hover{border-color:var(--green);color:var(--green)}
 .mute-btn.active{border-color:var(--green);color:var(--green)}
+.settings-btn{
+  font-size:.32em;padding:5px 12px;
+  border:2px solid var(--bdr);color:var(--dim);
+  cursor:pointer;transition:all .15s;background:none;
+  font-family:'Press Start 2P',monospace;letter-spacing:1px;
+}
+.settings-btn:hover{border-color:var(--j);color:var(--j)}
 
 /* ================================================
    ARENA — 3 COL DESKTOP / STACK MOBILE
@@ -716,6 +725,7 @@ footer span{color:#8888aa}
       <div class="week-tag" id="weekTag">WEEK 1</div>
       <div class="sess-tag" id="sessTag" onclick="switchUser()">👤 —</div>
       <button class="mute-btn" id="muteBtn" onclick="toggleMute()">♫ MUTE</button>
+      <button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙️</button>
     </div>
   </div>
 </div>
@@ -1026,9 +1036,6 @@ footer span{color:#8888aa}
     </div>
   </div>
   <button class="sub-btn" onclick="handleSubmit()">🎮 LOCK IN THIS WEEK'S CREATION</button>
-  <div style="text-align:center">
-    <span class="chpw-link" onclick="openSettings()">⚙️ ACCOUNT SETTINGS</span>
-  </div>
 </section>
 
 <!-- ================================================
@@ -1199,7 +1206,12 @@ async function doLogin(){
 
 async function spectate(){
   _session = null;
+  MU.init();
+  MU.start();
   await showArena();
+  // Hide settings gear for spectators
+  const sb2 = document.getElementById('settingsBtn');
+  if (sb2) sb2.style.display = 'none';
 }
 
 async function switchUser(){
