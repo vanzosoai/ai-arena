@@ -357,22 +357,27 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.8}
 .sub-btn:hover{background:var(--j);color:#000;box-shadow:0 0 28px var(--jglow)}
 .sub-btn:active{transform:scale(.99)}
 
-/* change password link */
+/* settings + forgot password links */
 .chpw-link{
-  display:inline-block;margin-top:16px;font-size:.28em;color:#333355;
-  cursor:pointer;letter-spacing:1px;border-bottom:1px solid #222244;transition:color .2s;
+  display:inline-block;margin-top:16px;font-size:.32em;color:#888;
+  cursor:pointer;letter-spacing:2px;border-bottom:1px solid #555;transition:color .2s;
 }
-.chpw-link:hover{color:#6666aa}
+.chpw-link:hover{color:#FFD700}
+.forgot-link{
+  display:inline-block;margin-top:10px;font-size:.32em;color:#555;
+  cursor:pointer;letter-spacing:2px;transition:color .2s;
+}
+.forgot-link:hover{color:#aaa}
 
 /* ================================================
    EDIT / CHANGE PASSWORD MODALS
 ================================================ */
-#editModal,#pwModal{
+#editModal,#pwModal,#recoveryModal{
   position:fixed;inset:0;background:rgba(0,0,0,.85);
   display:flex;align-items:center;justify-content:center;
   z-index:5000;padding:20px;
 }
-#editModal.hidden,#pwModal.hidden{display:none}
+#editModal.hidden,#pwModal.hidden,#recoveryModal.hidden{display:none}
 .modal-box{
   background:var(--p1);border:3px solid var(--j);
   padding:28px;width:min(520px,95vw);
@@ -598,6 +603,21 @@ footer span{color:#8888aa}
       <button class="pw-back" onclick="backToNames()">← BACK</button>
       <button class="pw-go" id="pwGoBtn" onclick="doLogin()">ENTER →</button>
     </div>
+    <div style="text-align:center">
+      <span class="forgot-link" onclick="showForgotPw()">🔑 FORGOT PASSWORD?</span>
+    </div>
+  </div>
+
+  <!-- forgot password step -->
+  <div id="forgotPanel" style="display:none">
+    <div class="lq" style="font-size:.55em;margin-bottom:16px">PASSWORD RESET</div>
+    <div style="font-size:.3em;color:#888;letter-spacing:2px;margin-bottom:14px;line-height:1.8">ENTER THE EMAIL ON YOUR ACCOUNT.<br>WE'LL SEND A RESET LINK.</div>
+    <input class="pw-inp" id="forgotEmail" type="email" placeholder="YOUR EMAIL ADDRESS" autocomplete="email">
+    <div class="pw-err" id="forgotErr"></div>
+    <div class="pw-row">
+      <button class="pw-back" onclick="backFromForgot()">← BACK</button>
+      <button class="pw-go" onclick="doForgotPw()">SEND →</button>
+    </div>
   </div>
 
   <div class="music-hint">▶ CLICK TO ENTER THE ARENA</div>
@@ -640,22 +660,46 @@ footer span{color:#8888aa}
   </div>
 </div>
 
-<!-- CHANGE PASSWORD MODAL -->
+<!-- ACCOUNT SETTINGS MODAL -->
 <div id="pwModal" class="hidden">
   <div class="modal-box">
-    <div class="modal-title">🔐 CHANGE PASSWORD</div>
+    <div class="modal-title">⚙️ ACCOUNT SETTINGS</div>
+    <div class="fg">
+      <label class="fl">EMAIL (USED FOR PASSWORD RESET)</label>
+      <input class="fi" id="settingsEmail" type="email" placeholder="your@email.com" autocomplete="email">
+      <div style="font-size:.28em;color:#555;margin-top:4px;letter-spacing:1px">SET A REAL EMAIL TO ENABLE FORGOT PASSWORD</div>
+    </div>
     <div class="fg">
       <label class="fl">NEW PASSWORD</label>
-      <input class="fi" id="newPw1" type="password" placeholder="MIN 6 CHARACTERS">
+      <input class="fi" id="newPw1" type="password" placeholder="LEAVE BLANK TO KEEP CURRENT" autocomplete="new-password">
     </div>
     <div class="fg">
       <label class="fl">CONFIRM PASSWORD</label>
-      <input class="fi" id="newPw2" type="password" placeholder="REPEAT PASSWORD">
+      <input class="fi" id="newPw2" type="password" placeholder="REPEAT NEW PASSWORD" autocomplete="new-password">
     </div>
     <div class="pw-err" id="pwModalErr" style="margin-bottom:8px"></div>
     <div class="modal-btns">
-      <button class="modal-btn save" onclick="doChangePw()">💾 UPDATE</button>
-      <button class="modal-btn cancel" onclick="document.getElementById('pwModal').classList.add('hidden')">✖ CANCEL</button>
+      <button class="modal-btn save" onclick="doChangeSettings()">💾 SAVE CHANGES</button>
+      <button class="modal-btn cancel" onclick="closeSettings()">✖ CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- PASSWORD RECOVERY MODAL (arrives from reset email link) -->
+<div id="recoveryModal" class="hidden">
+  <div class="modal-box">
+    <div class="modal-title">🔐 SET NEW PASSWORD</div>
+    <div class="fg">
+      <label class="fl">NEW PASSWORD</label>
+      <input class="fi" id="recovPw1" type="password" placeholder="MIN 6 CHARACTERS" autocomplete="new-password">
+    </div>
+    <div class="fg">
+      <label class="fl">CONFIRM PASSWORD</label>
+      <input class="fi" id="recovPw2" type="password" placeholder="REPEAT PASSWORD" autocomplete="new-password">
+    </div>
+    <div class="pw-err" id="recovErr" style="margin-bottom:8px"></div>
+    <div class="modal-btns">
+      <button class="modal-btn save" onclick="doSetRecoveryPassword()">💾 SET PASSWORD</button>
     </div>
   </div>
 </div>
@@ -983,7 +1027,7 @@ footer span{color:#8888aa}
   </div>
   <button class="sub-btn" onclick="handleSubmit()">🎮 LOCK IN THIS WEEK'S CREATION</button>
   <div style="text-align:center">
-    <span class="chpw-link" onclick="document.getElementById('pwModal').classList.remove('hidden')">🔐 CHANGE MY PASSWORD</span>
+    <span class="chpw-link" onclick="openSettings()">⚙️ ACCOUNT SETTINGS</span>
   </div>
 </section>
 
@@ -1597,19 +1641,119 @@ async function delEntry(subId){
 // ============================================================
 //  CHANGE PASSWORD
 // ============================================================
-async function doChangePw(){
+// ============================================================
+//  ACCOUNT SETTINGS
+// ============================================================
+function openSettings(){
+  const modal = document.getElementById('pwModal');
+  modal.classList.remove('hidden');
+  // Pre-fill email from current session
+  const emailInp = document.getElementById('settingsEmail');
+  emailInp.value = _session?.user?.email || '';
+  document.getElementById('newPw1').value = '';
+  document.getElementById('newPw2').value = '';
+  document.getElementById('pwModalErr').textContent = '';
+}
+
+function closeSettings(){
+  document.getElementById('pwModal').classList.add('hidden');
+  document.getElementById('settingsEmail').value = '';
+  document.getElementById('newPw1').value = '';
+  document.getElementById('newPw2').value = '';
+  document.getElementById('pwModalErr').textContent = '';
+}
+
+async function doChangeSettings(){
+  const newEmail = document.getElementById('settingsEmail').value.trim();
   const p1 = document.getElementById('newPw1').value;
   const p2 = document.getElementById('newPw2').value;
   const err = document.getElementById('pwModalErr');
+  err.textContent = '';
+
+  // Validate password if provided
+  if (p1 || p2) {
+    if (p1.length < 6){ err.textContent = 'MIN 6 CHARACTERS'; return; }
+    if (p1 !== p2){ err.textContent = 'PASSWORDS DO NOT MATCH'; return; }
+  }
+
+  // Validate email
+  if (!newEmail){ err.textContent = 'EMAIL CANNOT BE EMPTY'; return; }
+
+  let changed = false;
+
+  // Update email if it changed
+  const currentEmail = _session?.user?.email || '';
+  if (newEmail !== currentEmail) {
+    const { error: emailErr } = await sb.auth.updateUser({ email: newEmail });
+    if (emailErr){ err.textContent = emailErr.message; return; }
+    changed = true;
+  }
+
+  // Update password if provided
+  if (p1) {
+    const { error: pwErr } = await sb.auth.updateUser({ password: p1 });
+    if (pwErr){ err.textContent = pwErr.message; return; }
+    changed = true;
+  }
+
+  if (!changed){ err.textContent = 'NOTHING TO CHANGE'; return; }
+
+  closeSettings();
+  flash(p1 && newEmail !== currentEmail ? '✅ EMAIL & PASSWORD UPDATED!' : p1 ? '🔐 PASSWORD UPDATED!' : '📧 CHECK YOUR NEW EMAIL TO CONFIRM!');
+}
+
+// ============================================================
+//  FORGOT PASSWORD (on login screen)
+// ============================================================
+function showForgotPw(){
+  document.getElementById('pwPanel').style.display = 'none';
+  document.getElementById('forgotPanel').style.display = '';
+  document.getElementById('forgotEmail').value = '';
+  document.getElementById('forgotErr').textContent = '';
+}
+
+function backFromForgot(){
+  document.getElementById('forgotPanel').style.display = 'none';
+  document.getElementById('pwPanel').style.display = '';
+}
+
+async function doForgotPw(){
+  const email = document.getElementById('forgotEmail').value.trim();
+  const err = document.getElementById('forgotErr');
+  err.textContent = '';
+  if (!email){ err.textContent = 'ENTER YOUR EMAIL ADDRESS'; return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://vanzosoai.github.io/ai-arena'
+  });
+  if (error){ err.textContent = error.message; return; }
+  err.style.color = 'var(--green)';
+  err.textContent = '✅ RESET LINK SENT! CHECK YOUR EMAIL.';
+}
+
+// ============================================================
+//  PASSWORD RECOVERY (arriving from reset email link)
+// ============================================================
+async function doSetRecoveryPassword(){
+  const p1 = document.getElementById('recovPw1').value;
+  const p2 = document.getElementById('recovPw2').value;
+  const err = document.getElementById('recovErr');
+  err.textContent = '';
   if (p1.length < 6){ err.textContent = 'MIN 6 CHARACTERS'; return; }
   if (p1 !== p2){ err.textContent = 'PASSWORDS DO NOT MATCH'; return; }
   const { error } = await sb.auth.updateUser({ password: p1 });
   if (error){ err.textContent = error.message; return; }
-  document.getElementById('pwModal').classList.add('hidden');
-  document.getElementById('newPw1').value = '';
-  document.getElementById('newPw2').value = '';
-  flash('🔐 PASSWORD UPDATED!');
+  document.getElementById('recoveryModal').classList.add('hidden');
+  document.getElementById('recovPw1').value = '';
+  document.getElementById('recovPw2').value = '';
+  flash('🔐 PASSWORD SET! YOU CAN NOW LOG IN.');
 }
+
+// Listen for PASSWORD_RECOVERY event (user clicked reset link in email)
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    document.getElementById('recoveryModal').classList.remove('hidden');
+  }
+});
 
 // ============================================================
 //  SPLAT
