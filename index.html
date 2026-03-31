@@ -757,7 +757,14 @@ footer span{color:#8888aa}
     <div class="pw-who" id="pwWho"></div>
     <div style="position:relative;width:100%">
       <input class="pw-inp" id="pwInp" type="password" placeholder="PASSWORD" autocomplete="current-password" style="padding-right:42px">
-      <button type="button" id="pwToggle" onclick="togglePwVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#555577;cursor:pointer;font-size:1.1em;padding:2px;line-height:1;transition:color .15s" title="Show/hide password">👁</button>
+      <button type="button" id="pwToggle" onclick="togglePwVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#555577;cursor:pointer;padding:2px;line-height:0;transition:color .15s" title="Show/hide password">
+        <svg id="pwEyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+        </svg>
+        <svg id="pwEyeOffIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
+          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>
+        </svg>
+      </button>
     </div>
     <div class="pw-err" id="pwErr"></div>
     <div class="pw-row">
@@ -1464,11 +1471,17 @@ function pickPlayer(p){
 function togglePwVis(){
   const inp = document.getElementById('pwInp');
   const btn = document.getElementById('pwToggle');
+  const eyeOn  = document.getElementById('pwEyeIcon');
+  const eyeOff = document.getElementById('pwEyeOffIcon');
   if (inp.type === 'password') {
     inp.type = 'text';
+    eyeOn.style.display  = 'none';
+    eyeOff.style.display = '';
     btn.style.color = '#aaaacc';
   } else {
     inp.type = 'password';
+    eyeOn.style.display  = '';
+    eyeOff.style.display = 'none';
     btn.style.color = '#555577';
   }
 }
