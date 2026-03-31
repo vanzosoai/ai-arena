@@ -54,8 +54,8 @@ body::after{
   text-shadow:4px 4px 0 var(--dred),8px 8px 0 #300000,0 0 40px var(--jglow);
   letter-spacing:4px;line-height:1.7;
 }
-.ls{font-size:clamp(.35em,1.2vw,.55em);color:var(--red);letter-spacing:4px}
-.lq{font-size:clamp(.38em,1.4vw,.65em);color:#999;letter-spacing:2px}
+.ls{font-size:clamp(.42em,1.5vw,.65em);color:var(--red);letter-spacing:4px;margin-top:-14px}
+.lq{font-size:clamp(.38em,1.4vw,.65em);color:#999;letter-spacing:2px;text-align:center}
 .lbs{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
 .lb{
   padding:18px 32px;font-family:'Press Start 2P',monospace;
@@ -1469,8 +1469,8 @@ function renderArena(){
   // session tag
   const tag = document.getElementById('sessTag');
   const p = who();
-  if (p === 'john'){ tag.textContent = '⚡ JOHN — SWITCH'; tag.className = 'sess-tag sess-j'; }
-  else if (p === 'nick'){ tag.textContent = '💙 NICK — SWITCH'; tag.className = 'sess-tag sess-n'; }
+  if (p === 'john'){ tag.textContent = '⚡ JOHN — LOGOUT'; tag.className = 'sess-tag sess-j'; }
+  else if (p === 'nick'){ tag.textContent = '💙 NICK — LOGOUT'; tag.className = 'sess-tag sess-n'; }
   else { tag.textContent = '👁 SPECTATING — LOG IN'; tag.className = 'sess-tag sess-spec'; }
 
   // streaks
