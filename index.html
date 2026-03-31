@@ -419,7 +419,7 @@ body::after{
 ================================================ */
 .sform{background:var(--p2);border-top:3px solid var(--j);border-bottom:3px solid var(--j);padding:28px 20px}
 .sform .sec-h{color:var(--j);border-left-color:var(--j)}
-.as-lbl{font-size:.32em;color:#444466;margin-bottom:16px;letter-spacing:1px}
+.as-lbl{font-size:.32em;color:#aaaacc;margin-bottom:16px;letter-spacing:1px}
 .as-lbl span{color:var(--j)}.as-lbl span.n{color:var(--n)}
 .fg{margin-bottom:14px}
 .fl{display:block;font-size:.3em;color:var(--dim);margin-bottom:6px;letter-spacing:1px}
@@ -660,10 +660,12 @@ footer span{color:#8888aa}
 @media(max-width:480px){
   /* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
   .pw-inp,.fi,input[type="password"],input[type="email"],input[type="text"]{
-    font-size:16px!important;
+    font-size:15px!important;
   }
   /* Login title — tighter letter-spacing stops lightning bolt wrapping */
   .lt{letter-spacing:1px}
+  /* "Who Are You, Soldier?" — bump up so it's legible */
+  .lq{font-size:clamp(.52em,4.5vw,.75em)}
   /* Spectate link — center the wrapped text */
   .spectate-link{text-align:center;display:block;box-sizing:border-box;width:100%}
   /* Arena header — same letter-spacing fix + make subtitle readable */
@@ -672,6 +674,17 @@ footer span{color:#8888aa}
   /* Hall of Carnage — search bar full width, buttons share row below */
   .hist-search-wrap{flex:0 0 100%;width:100%;min-width:0}
   .hist-ctrl-btn{flex:1}
+  /* Dashboard body text — nudge up 1-2px equivalent */
+  .sc-title{font-size:.52em}
+  .sc-desc{font-size:.36em}
+  .mc-lbl{font-size:.30em}
+  .mc-val{font-size:.43em}
+  .cs-l{font-size:.27em}
+  .cs-v{font-size:.36em}
+  .is-lbl{font-size:.28em}
+  .is-val{font-size:.45em}
+  .sb-lbl{font-size:.31em}
+  .fl{font-size:.33em}
 }
 .mobile-combined{
   display:none;padding:18px 20px;
