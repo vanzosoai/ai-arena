@@ -759,7 +759,7 @@ footer span{color:#8888aa}
 </div>
 
 <!-- README MODAL -->
-<div id="readmeModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:flex-start;justify-content:center;z-index:6000;padding:20px;overflow-y:auto">
+<div id="readmeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);align-items:flex-start;justify-content:center;z-index:6000;padding:20px;overflow-y:auto">
   <div style="background:#0a0a12;border:2px solid #222244;padding:32px;width:min(700px,95vw);margin:auto;position:relative">
     <div style="font-size:.55em;color:var(--j);border-left:4px solid var(--j);padding-left:12px;margin-bottom:24px;letter-spacing:2px">📖 HOW TO PLAY — AI ARENA</div>
     <button onclick="closeReadme()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#666;font-size:1.2em;cursor:pointer;font-family:'Press Start 2P',monospace">✖</button>
@@ -2019,10 +2019,11 @@ function openSettings(){
 
 function openReadme(){
   closeSettings();
-  document.getElementById('readmeModal').classList.remove('hidden');
+  const m = document.getElementById('readmeModal');
+  m.style.display = 'flex';
 }
 function closeReadme(){
-  document.getElementById('readmeModal').classList.add('hidden');
+  document.getElementById('readmeModal').style.display = 'none';
 }
 
 function closeSettings(){
