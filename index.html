@@ -2144,22 +2144,13 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked) {
 // ============================================================
 //  EMAIL NOTIFICATION — calls Supabase Edge Function
 // ============================================================
-async function _getAuthHeaders() {
-  try {
-    const { data } = await sb.auth.getSession();
-    if (data?.session?.access_token) {
-      return { Authorization: `Bearer ${data.session.access_token}` };
-    }
-  } catch(e) { /* ignore */ }
-  return {};
-}
+const _ARENA_KEY = 'a7Kp-Xm3N-wQ9r-Tz6L';
 
 async function notifyOtherPlayer(submitter, weekId, title='', description='', bothSubmitted=false) {
   try {
-    const headers = await _getAuthHeaders();
     await sb.functions.invoke('notify-submission', {
       body: { submitter, weekId, title, description, bothSubmitted },
-      headers
+      headers: { 'x-arena-key': _ARENA_KEY }
     });
   } catch(e) {
     // Non-critical — silently ignore
@@ -2173,7 +2164,6 @@ async function sendTestEmail() {
   err.style.color = '#888888';
   err.textContent = 'SENDING TEST EMAIL...';
   try {
-    const headers = await _getAuthHeaders();
     const res = await sb.functions.invoke('notify-submission', {
       body: {
         submitter: p,
@@ -2183,7 +2173,7 @@ async function sendTestEmail() {
         bothSubmitted: false,
         isTest: true
       },
-      headers
+      headers: { 'x-arena-key': _ARENA_KEY }
     });
     err.style.color = 'var(--green)';
     err.textContent = '✅ TEST SENT! CHECK THE OTHER INBOX.';
