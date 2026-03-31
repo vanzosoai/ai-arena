@@ -2144,10 +2144,22 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked) {
 // ============================================================
 //  EMAIL NOTIFICATION — calls Supabase Edge Function
 // ============================================================
+async function _getAuthHeaders() {
+  try {
+    const { data } = await sb.auth.getSession();
+    if (data?.session?.access_token) {
+      return { Authorization: `Bearer ${data.session.access_token}` };
+    }
+  } catch(e) { /* ignore */ }
+  return {};
+}
+
 async function notifyOtherPlayer(submitter, weekId, title='', description='', bothSubmitted=false) {
   try {
+    const headers = await _getAuthHeaders();
     await sb.functions.invoke('notify-submission', {
-      body: { submitter, weekId, title, description, bothSubmitted }
+      body: { submitter, weekId, title, description, bothSubmitted },
+      headers
     });
   } catch(e) {
     // Non-critical — silently ignore
@@ -2161,6 +2173,7 @@ async function sendTestEmail() {
   err.style.color = '#888888';
   err.textContent = 'SENDING TEST EMAIL...';
   try {
+    const headers = await _getAuthHeaders();
     const res = await sb.functions.invoke('notify-submission', {
       body: {
         submitter: p,
@@ -2169,7 +2182,8 @@ async function sendTestEmail() {
         description: 'This is a test notification from AI Arena. If you got this, emails are working!',
         bothSubmitted: false,
         isTest: true
-      }
+      },
+      headers
     });
     err.style.color = 'var(--green)';
     err.textContent = '✅ TEST SENT! CHECK THE OTHER INBOX.';
