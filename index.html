@@ -256,6 +256,16 @@ body::after{
   0%,100%{transform:translateX(-50%) translateY(0)}
   50%{transform:translateX(-50%) translateY(-5px)}
 }
+.skull-overlay{
+  position:absolute;top:27%;left:50%;
+  transform:translateX(-50%);
+  font-size:1.6em;z-index:10;pointer-events:none;
+  animation:skullpulse 3s ease-in-out infinite;
+}
+@keyframes skullpulse{
+  0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}
+  50%{opacity:1;transform:translateX(-50%) scale(1.1)}
+}
 @keyframes cookedshake{
   0%,90%,100%{transform:translateX(0)}
   92%{transform:translateX(-2px)}
@@ -1095,8 +1105,8 @@ footer span{color:#8888aa}
         <rect x="24" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <rect x="64" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
       </svg>
-      <div class="av-badge" id="johnBadge"></div>
     </div>
+    <div class="av-badge" id="johnBadge"></div>
     <div class="sb-wrap">
       <div class="sb-lbl">🔥 STREAK</div>
       <div class="sb-out"><div class="sb-in s0" id="jBar"></div></div>
@@ -1226,8 +1236,8 @@ footer span{color:#8888aa}
         <rect x="24" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <rect x="64" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
       </svg>
-      <div class="av-badge" id="nickBadge"></div>
     </div>
+    <div class="av-badge" id="nickBadge"></div>
     <div class="sb-wrap">
       <div class="sb-lbl">🔥 STREAK</div>
       <div class="sb-out"><div class="sb-in s0" id="nBar"></div></div>
@@ -2082,7 +2092,7 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked) {
   // Reset state
   av.classList.remove('fired-up', 'cooked-out', 'is-champ');
   badge.innerHTML = '';
-  av.querySelectorAll('.crown-overlay').forEach(el => el.remove());
+  av.querySelectorAll('.crown-overlay, .skull-overlay').forEach(el => el.remove());
 
   if (lockedIn) {
     av.classList.add('fired-up');
@@ -2090,6 +2100,10 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked) {
   } else if (isCooked) {
     av.classList.add('cooked-out');
     badge.innerHTML += '<div class="badge-cooked">💀 GET BUSY</div>';
+    const skull = document.createElement('div');
+    skull.className = 'skull-overlay';
+    skull.textContent = '💀';
+    av.appendChild(skull);
   }
 
   if (isChamp) {
