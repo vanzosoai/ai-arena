@@ -410,9 +410,9 @@ body::after{
 .sc-earn{font-size:.3em;color:var(--green);border:1px solid rgba(0,255,65,.25);padding:5px 9px;margin-left:auto}
 .sc-date{font-size:.25em;color:#2a2a3a;margin-left:auto}
 .noshow{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:12px}
-.ns-ico{font-size:2.2em;opacity:.55}
-.ns-t{font-size:.5em;color:#cc4455}
-.ns-s{font-size:.28em;color:#7777aa}
+.ns-ico{font-size:2.2em;opacity:.8}
+.ns-t{font-size:.5em;color:#ee5566}
+.ns-s{font-size:.28em;color:#9999bb}
 
 /* ================================================
    SUBMIT FORM
@@ -654,6 +654,24 @@ footer span{color:#8888aa}
 }
 @media(min-width:681px){
   .mobile-combined{display:none!important}
+}
+
+/* ── iPhone / narrow mobile fixes ── */
+@media(max-width:480px){
+  /* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
+  .pw-inp,.fi,input[type="password"],input[type="email"],input[type="text"]{
+    font-size:16px!important;
+  }
+  /* Login title — tighter letter-spacing stops lightning bolt wrapping */
+  .lt{letter-spacing:1px}
+  /* Spectate link — center the wrapped text */
+  .spectate-link{text-align:center;display:block;box-sizing:border-box;width:100%}
+  /* Arena header — same letter-spacing fix + make subtitle readable */
+  .htitle{letter-spacing:2px}
+  .hsub{font-size:clamp(.38em,3.2vw,.5em);letter-spacing:2px}
+  /* Hall of Carnage — search bar full width, buttons share row below */
+  .hist-search-wrap{flex:0 0 100%;width:100%;min-width:0}
+  .hist-ctrl-btn{flex:1}
 }
 .mobile-combined{
   display:none;padding:18px 20px;
