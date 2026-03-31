@@ -163,7 +163,7 @@ body::after{
   border:2px solid var(--bdr);color:var(--dim);
   cursor:pointer;transition:all .15s;letter-spacing:1px;
 }
-.sess-tag:hover{background:rgba(0,0,0,.25)}
+.sess-tag:hover{background:rgba(0,0,0,.25);opacity:.55}
 .sess-j{border-color:var(--jd)!important;color:var(--j)!important}
 .sess-n{border-color:var(--nd)!important;color:var(--n)!important}
 .sess-spec{border-color:#2a2a44!important;color:#6666aa!important}
@@ -173,7 +173,7 @@ body::after{
   cursor:pointer;transition:all .15s;background:none;
   font-family:'Press Start 2P',monospace;letter-spacing:1px;
 }
-.mute-btn:hover{border-color:var(--green);color:var(--green)}
+.mute-btn:hover{background:rgba(0,0,0,.25);opacity:.55}
 .mute-btn.active{border-color:var(--green);color:var(--green)}
 .settings-btn{
   font-size:.32em;padding:5px 12px;
@@ -188,9 +188,9 @@ body::after{
    COUNTDOWN TIMER
 ================================================ */
 .cd-block{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:6px}
-.cd-label{font-size:.22em;color:var(--dim);letter-spacing:3px;font-family:'Press Start 2P',monospace}
+.cd-label{font-size:.22em;color:#9999bb;letter-spacing:3px;font-family:'Press Start 2P',monospace}
 .countdown-timer{
-  font-size:.42em;letter-spacing:2px;color:#9999bb;
+  font-size:.42em;letter-spacing:2px;color:var(--green);
   font-family:'Press Start 2P',monospace;
   transition:color .5s;
 }
@@ -365,9 +365,9 @@ body::after{
 .sc-earn{font-size:.3em;color:var(--green);border:1px solid rgba(0,255,65,.25);padding:5px 9px;margin-left:auto}
 .sc-date{font-size:.25em;color:#2a2a3a;margin-left:auto}
 .noshow{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:12px}
-.ns-ico{font-size:2.2em;opacity:.2}
-.ns-t{font-size:.5em;color:var(--red)}
-.ns-s{font-size:.28em;color:#2a2a3a}
+.ns-ico{font-size:2.2em;opacity:.55}
+.ns-t{font-size:.5em;color:#cc4455}
+.ns-s{font-size:.28em;color:#7777aa}
 
 /* ================================================
    SUBMIT FORM
@@ -752,6 +752,117 @@ footer span{color:#8888aa}
     <div class="modal-btns" style="margin-top:8px">
       <button class="modal-btn" style="border-color:#333355;color:#555577;font-size:.38em" onclick="sendTestEmail()">📧 SEND TEST EMAIL</button>
     </div>
+    <div class="modal-btns" style="margin-top:8px">
+      <button class="modal-btn" style="border-color:#2a2a44;color:#6666aa;font-size:.38em" onclick="openReadme()">📖 HOW TO PLAY</button>
+    </div>
+  </div>
+</div>
+
+<!-- README MODAL -->
+<div id="readmeModal" class="hidden" style="position:fixed;inset:0;background:rgba(0,0,0,.9);display:flex;align-items:flex-start;justify-content:center;z-index:6000;padding:20px;overflow-y:auto">
+  <div style="background:#0a0a12;border:2px solid #222244;padding:32px;width:min(700px,95vw);margin:auto;position:relative">
+    <div style="font-size:.55em;color:var(--j);border-left:4px solid var(--j);padding-left:12px;margin-bottom:24px;letter-spacing:2px">📖 HOW TO PLAY — AI ARENA</div>
+    <button onclick="closeReadme()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#666;font-size:1.2em;cursor:pointer;font-family:'Press Start 2P',monospace">✖</button>
+
+    <!-- TOC -->
+    <div style="background:#060608;border:1px solid #1a1a2a;padding:16px 20px;margin-bottom:28px">
+      <div style="font-size:.28em;color:var(--j);letter-spacing:2px;margin-bottom:10px">TABLE OF CONTENTS</div>
+      <div style="font-size:.24em;color:#8888aa;line-height:2.2;letter-spacing:1px">
+        1. THE GAME &nbsp;·&nbsp; 2. WEEKLY SUBMISSIONS &nbsp;·&nbsp; 3. SCORING &amp; EARNINGS<br>
+        4. AVATAR STATES &amp; PERKS &nbsp;·&nbsp; 5. EMAIL NOTIFICATIONS<br>
+        6. SPECTATOR MODE &nbsp;·&nbsp; 7. HALL OF CARNAGE &nbsp;·&nbsp; 8. ACCOUNT SETTINGS
+      </div>
+    </div>
+
+    <!-- 1 -->
+    <div style="border-left:3px solid var(--red);padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:var(--red);letter-spacing:2px;margin-bottom:8px">1. THE GAME</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        AI Arena is a head-to-head weekly creativity challenge between John and Nick. Every week, both players must submit an AI-generated creation — an app, video, image, tool, anything built with AI. Whoever earns the most from their creation that week wins. If only one player submits, they claim the week by default. The goal: show up every week, build real things, and make money from them.
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <div style="border-left:3px solid var(--j);padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:var(--j);letter-spacing:2px;margin-bottom:8px">2. WEEKLY SUBMISSIONS</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        <span style="color:#cccccc">TITLE</span> — Give your creation a name. Required.<br><br>
+        <span style="color:#cccccc">DESCRIPTION</span> — Describe what you built and how AI was used.<br><br>
+        <span style="color:#cccccc">WEBSITE / PROJECT URL</span> — Link to your live project. <span style="color:var(--j)">Must start with https://</span> for the screenshot preview to load correctly. A screenshot is auto-captured from the URL when you submit — no need to upload one separately unless the URL doesn't load a visual.<br><br>
+        <span style="color:#cccccc">SOCIAL LINK</span> — Optional TikTok, Instagram, or X link if you posted about it.<br><br>
+        <span style="color:#cccccc">EARNINGS FROM AI THIS WEEK (USD)</span> — Enter any money your AI creation generated this week. This is what determines the winner. Be honest — it's between you two.<br><br>
+        <span style="color:#cccccc">PHOTO UPLOAD</span> — If you don't have a URL, upload an image directly. Drag and drop or click to select. Max recommended size: 5MB.<br><br>
+        Submissions lock in for the current week. You can re-submit to update before the week ends.
+      </div>
+    </div>
+
+    <!-- 3 -->
+    <div style="border-left:3px solid var(--green);padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:var(--green);letter-spacing:2px;margin-bottom:8px">3. SCORING &amp; EARNINGS</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        Each week is won by whoever earned more from their AI creation. The scoreboard tracks:<br><br>
+        <span style="color:#cccccc">WEEKLY SCORE</span> — Wins tracked across all weeks (shown next to each player's name).<br>
+        <span style="color:#cccccc">EARNINGS</span> — Shown per submission in the battle cards and history.<br>
+        <span style="color:#cccccc">COMBINED STATS</span> — The center panel shows total weeks, apps built, weeks where both showed up, and total combined earnings. These update live.
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div style="border-left:3px solid #aa44ff;padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:#aa44ff;letter-spacing:2px;margin-bottom:8px">4. AVATAR STATES &amp; PERKS</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        Your avatar changes based on your status each week:<br><br>
+        <span style="color:var(--j)">🔥 LOCKED IN</span> — You've submitted for the current week. Your avatar glows gold (John) or blue (Nick).<br>
+        <span style="color:#cc4455">💀 GET BUSY</span> — You didn't submit last week and haven't submitted yet this week. Your avatar goes greyscale. A warning.<br>
+        <span style="color:#FFD700">👑 LAST CHAMP</span> — You won last week. A crown sits above your avatar until someone else wins.<br><br>
+        <span style="color:#cccccc">⚔️ FIRST BLOOD</span> — If you're the first to submit in a given week, you get the First Blood flash on screen and the other player gets a special email taunt.
+      </div>
+    </div>
+
+    <!-- 5 -->
+    <div style="border-left:3px solid #4466cc;padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:#4466cc;letter-spacing:2px;margin-bottom:8px">5. EMAIL NOTIFICATIONS</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        When you submit your creation, the other player automatically gets an email letting them know. The email includes:<br><br>
+        · Your creation title and description<br>
+        · A randomized trash-talk taunt<br>
+        · A link directly back to the arena<br>
+        · A different message if both players have already submitted that week<br><br>
+        Emails go to the address in your Account Settings. Update your email there to change where notifications are sent.
+      </div>
+    </div>
+
+    <!-- 6 -->
+    <div style="border-left:3px solid #336655;padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:#44aa77;letter-spacing:2px;margin-bottom:8px">6. SPECTATOR MODE</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        Anyone can watch without an account. On the login screen, click <span style="color:var(--green)">👁 SPECTATE</span> to enter the arena in read-only mode. You'll see all current and past submissions, scores, and stats — but cannot submit. Music plays for spectators too. The settings gear is hidden in spectator mode.
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div style="border-left:3px solid #553333;padding-left:14px;margin-bottom:24px">
+      <div style="font-size:.32em;color:#aa4444;letter-spacing:2px;margin-bottom:8px">7. HALL OF CARNAGE</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        Every completed week lives in the Hall of Carnage — the battle history at the bottom of the arena. Each week shows both submissions, the winner, and earnings. Weeks with only one submission show who showed up and who didn't. Expand any week to see the full cards. This is the permanent record.
+      </div>
+    </div>
+
+    <!-- 8 -->
+    <div style="border-left:3px solid #444422;padding-left:14px;margin-bottom:8px">
+      <div style="font-size:.32em;color:#aaaa44;letter-spacing:2px;margin-bottom:8px">8. ACCOUNT SETTINGS</div>
+      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
+        Access via the <span style="color:var(--j)">⚙️</span> gear button in the header (players only — hidden for spectators).<br><br>
+        <span style="color:#cccccc">CHANGE EMAIL</span> — Updates your login email and your notification address for weekly emails in one step.<br>
+        <span style="color:#cccccc">CHANGE PASSWORD</span> — Enter a new password (min 6 characters) and confirm it.<br>
+        <span style="color:#cccccc">FORGOT PASSWORD</span> — On the login screen, enter your email and a reset link will be sent. Click the link, then set a new password when the recovery screen appears.<br><br>
+        Both players log in with email + password. There are no shared accounts — each player has their own credentials.
+      </div>
+    </div>
+
+    <div style="margin-top:28px;text-align:center">
+      <button class="modal-btn cancel" onclick="closeReadme()" style="font-size:.35em">✖ CLOSE</button>
+    </div>
   </div>
 </div>
 
@@ -1056,6 +1167,7 @@ footer span{color:#8888aa}
 <!-- ================================================
      THIS WEEK'S BATTLE
 ================================================ -->
+<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:0 20px"></div>
 <section class="sec" id="thisWeekSec" style="display:none">
   <div class="sec-h">▶ THIS WEEK'S BATTLE</div>
   <div class="wgrid" id="thisWeek"></div>
@@ -1096,7 +1208,7 @@ footer span{color:#8888aa}
     <img id="imgPreview" alt="preview">
   </div>
   <div class="fg">
-    <label class="fl">💰 EARNINGS THIS WEEK (USD)</label>
+    <label class="fl">💰 EARNINGS FROM AI THIS WEEK (USD)</label>
     <div class="earn-row">
       <span class="d-sign">$</span>
       <input class="fi earn-fi" id="fEarn" type="number" min="0" step="0.01" placeholder="0.00">
@@ -1905,6 +2017,14 @@ function openSettings(){
   if (testBtn) testBtn.style.display = who() === 'john' ? '' : 'none';
 }
 
+function openReadme(){
+  closeSettings();
+  document.getElementById('readmeModal').classList.remove('hidden');
+}
+function closeReadme(){
+  document.getElementById('readmeModal').classList.add('hidden');
+}
+
 function closeSettings(){
   document.getElementById('pwModal').classList.add('hidden');
   document.getElementById('settingsEmail').value = '';
@@ -1936,6 +2056,11 @@ async function doChangeSettings(){
   if (newEmail !== currentEmail) {
     const { error: emailErr } = await sb.auth.updateUser({ email: newEmail });
     if (emailErr){ err.textContent = emailErr.message; return; }
+    // Also update notification email in player_emails table
+    const p = who();
+    if (p) {
+      await sb.from('player_emails').upsert({ player: p, notify_email: newEmail, updated_at: new Date().toISOString() });
+    }
     changed = true;
   }
 
