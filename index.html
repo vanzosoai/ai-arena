@@ -1057,12 +1057,13 @@ footer span{color:#8888aa}
         <rect x="62" y="30" width="28" height="8" fill="#FF6633" opacity=".6"/>
         <!-- Bridge -->
         <rect x="55" y="33" width="6"  height="5"  fill="#661100" stroke="#441100" stroke-width="1"/>
-        <!-- MOUTH — clean block + cigarette -->
+        <!-- MOUTH -->
+        <g id="jMouth">
         <rect x="44" y="60" width="24" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
         <rect x="46" y="61" width="14" height="4" fill="#EDE0CC"/>
-        <!-- CIGARETTE — subtle, from corner of mouth -->
         <rect x="68" y="62" width="14" height="2" fill="#F0EDE0"/>
         <rect x="82" y="62" width="3"  height="2" fill="#FF4400" opacity=".85"/>
+        </g>
         <!-- CHIN CLEFT -->
         <rect x="55" y="68" width="6"  height="4"  fill="#FFAA77"/>
         <!-- NECK -->
@@ -1191,9 +1192,11 @@ footer span{color:#8888aa}
         <rect x="62" y="30" width="28" height="8" fill="#3388FF" opacity=".6"/>
         <!-- Bridge -->
         <rect x="55" y="33" width="6"  height="5"  fill="#001144" stroke="#000C33" stroke-width="1"/>
-        <!-- GRIN — wide smile showing teeth -->
+        <!-- MOUTH -->
+        <g id="nMouth">
         <rect x="38" y="56" width="40" height="6" fill="#BB7733" stroke="#994411" stroke-width="1"/>
         <rect x="42" y="57" width="32" height="4" fill="#EEEEDD"/>
+        </g>
         <!-- CHIN CLEFT -->
         <rect x="55" y="68" width="6"  height="4"  fill="#FFAA77"/>
         <!-- NECK -->
@@ -2315,6 +2318,64 @@ sb.auth.onAuthStateChange((event, session) => {
     document.getElementById('recoveryModal').classList.remove('hidden');
   }
 });
+
+// ============================================================
+//  RANDOM MOUTHS
+// ============================================================
+const _MOUTHS = {
+  john: [
+    // cigarette (default)
+    `<rect x="44" y="60" width="24" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
+     <rect x="46" y="61" width="14" height="4" fill="#EDE0CC"/>
+     <rect x="68" y="62" width="14" height="2" fill="#F0EDE0"/>
+     <rect x="82" y="62" width="3"  height="2" fill="#FF4400" opacity=".85"/>`,
+    // wide grin
+    `<rect x="40" y="60" width="36" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
+     <rect x="43" y="61" width="30" height="4" fill="#EEEEDD"/>`,
+    // tongue out
+    `<rect x="42" y="59" width="30" height="9" fill="#8B3010" stroke="#6B2005" stroke-width="1"/>
+     <rect x="44" y="59" width="26" height="4" fill="#EEEEDD"/>
+     <rect x="49" y="62" width="16" height="6" fill="#EE5566" rx="2"/>`,
+    // smirk
+    `<rect x="44" y="62" width="26" height="5" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
+     <rect x="46" y="63" width="20" height="3" fill="#EDE0CC"/>
+     <rect x="44" y="60" width="6"  height="3" fill="#C07840"/>`,
+    // stern flat
+    `<rect x="44" y="63" width="28" height="3" fill="#7A4010"/>
+     <rect x="45" y="64" width="26" height="1" fill="#5A2800" opacity=".6"/>`
+  ],
+  nick: [
+    // wide grin (default)
+    `<rect x="38" y="56" width="40" height="6" fill="#BB7733" stroke="#994411" stroke-width="1"/>
+     <rect x="42" y="57" width="32" height="4" fill="#EEEEDD"/>`,
+    // cigarette
+    `<rect x="40" y="56" width="24" height="6" fill="#BB7733" stroke="#994411" stroke-width="1"/>
+     <rect x="42" y="57" width="14" height="4" fill="#EDE0CC"/>
+     <rect x="64" y="58" width="14" height="2" fill="#F0EDE0"/>
+     <rect x="78" y="58" width="3"  height="2" fill="#FF4400" opacity=".85"/>`,
+    // tongue out
+    `<rect x="40" y="55" width="34" height="9" fill="#8B3010" stroke="#6B2005" stroke-width="1"/>
+     <rect x="42" y="55" width="30" height="4" fill="#EEEEDD"/>
+     <rect x="47" y="58" width="18" height="6" fill="#EE5566" rx="2"/>`,
+    // smirk
+    `<rect x="40" y="58" width="28" height="5" fill="#BB7733" stroke="#994411" stroke-width="1"/>
+     <rect x="42" y="59" width="22" height="3" fill="#EDE0CC"/>
+     <rect x="40" y="56" width="6"  height="3" fill="#BB7733"/>`,
+    // stern flat
+    `<rect x="40" y="59" width="32" height="3" fill="#7A4010"/>
+     <rect x="41" y="60" width="30" height="1" fill="#5A2800" opacity=".6"/>`
+  ]
+};
+
+function _randomizeMouths() {
+  const jEl = document.getElementById('jMouth');
+  const nEl = document.getElementById('nMouth');
+  if (jEl) jEl.innerHTML = _MOUTHS.john[Math.floor(Math.random() * _MOUTHS.john.length)];
+  if (nEl) nEl.innerHTML = _MOUTHS.nick[Math.floor(Math.random() * _MOUTHS.nick.length)];
+}
+
+// Randomize on page load
+_randomizeMouths();
 
 // ============================================================
 //  SPLAT
