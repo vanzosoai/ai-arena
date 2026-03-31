@@ -1892,6 +1892,7 @@ async function handleSubmit(){
     flash('🎮 LOCKED IN!');
   }
   MU.sting();
+  DUKE.play();
   splat();
   clearForm();
   await loadAndRender();
@@ -2653,6 +2654,51 @@ const MU = {
       o.start(t + i * 0.04); o.stop(t + 0.9);
     });
   },
+};
+
+// ============================================================
+//  DUKE NUKEM VOICE — random clip on submission
+// ============================================================
+const DUKE = {
+  _srcs: [
+    'Duke%20Nukem%20Slogans/bitchin.wav',
+    'Duke%20Nukem%20Slogans/come%20get%20some.wav',
+    'Duke%20Nukem%20Slogans/damn%20im%20good.wav',
+    'Duke%20Nukem%20Slogans/hail%20to%20the%20king%20baby.wav',
+    'Duke%20Nukem%20Slogans/lets%20rock.wav',
+    'Duke%20Nukem%20Slogans/see%20you%20in%20hell.wav',
+    'Duke%20Nukem%20Slogans/who%20wants%20some.wav',
+  ],
+  _loaded: [],
+
+  init(){
+    if (this._loaded.length) return;
+    this._loaded = this._srcs.map(src => {
+      const a = new Audio(src);
+      a.preload = 'auto';
+      return a;
+    });
+  },
+
+  play(){
+    if (MU.muted) return;          // respect mute button
+    this.init();
+    const a = this._loaded[Math.floor(Math.random() * this._loaded.length)];
+    // Fade music to near-silent while Duke speaks
+    if (MU.master && MU.ctx) {
+      MU.master.gain.cancelScheduledValues(MU.ctx.currentTime);
+      MU.master.gain.linearRampToValueAtTime(0.08, MU.ctx.currentTime + 0.25);
+    }
+    a.currentTime = 0;
+    a.volume = 1.0;
+    a.play().catch(() => {});      // silently swallow autoplay policy errors
+    a.onended = () => {
+      // Fade music back to full
+      if (MU.master && MU.ctx && !MU.muted) {
+        MU.master.gain.linearRampToValueAtTime(0.45, MU.ctx.currentTime + 0.4);
+      }
+    };
+  }
 };
 </script>
 </body>
