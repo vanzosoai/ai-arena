@@ -749,7 +749,7 @@ footer span{color:#8888aa}
       <button class="modal-btn save" onclick="doChangeSettings()">💾 SAVE CHANGES</button>
       <button class="modal-btn cancel" onclick="closeSettings()">✖ CANCEL</button>
     </div>
-    <div class="modal-btns" style="margin-top:8px">
+    <div id="testEmailRow" class="modal-btns" style="margin-top:8px">
       <button class="modal-btn" style="border-color:#333355;color:#555577;font-size:.38em" onclick="sendTestEmail()">📧 SEND TEST EMAIL</button>
     </div>
     <div class="modal-btns" style="margin-top:8px">
@@ -1167,7 +1167,7 @@ footer span{color:#8888aa}
 <!-- ================================================
      THIS WEEK'S BATTLE
 ================================================ -->
-<div style="height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:0 20px"></div>
+<div style="height:2px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.35),transparent);margin:0 20px"></div>
 <section class="sec" id="thisWeekSec" style="display:none">
   <div class="sec-h">▶ THIS WEEK'S BATTLE</div>
   <div class="wgrid" id="thisWeek"></div>
@@ -2013,8 +2013,8 @@ function openSettings(){
   errEl.textContent = '';
   errEl.style.color = 'var(--red)';
   // Test email button only visible to john
-  const testBtn = document.querySelector('#pwModal .modal-btns:last-of-type');
-  if (testBtn) testBtn.style.display = who() === 'john' ? '' : 'none';
+  const testEmailRow = document.getElementById('testEmailRow');
+  if (testEmailRow) testEmailRow.style.display = who() === 'john' ? '' : 'none';
 }
 
 function openReadme(){
