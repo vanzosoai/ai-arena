@@ -747,6 +747,9 @@ footer span{color:#8888aa}
       <button class="modal-btn save" onclick="doChangeSettings()">💾 SAVE CHANGES</button>
       <button class="modal-btn cancel" onclick="closeSettings()">✖ CANCEL</button>
     </div>
+    <div class="modal-btns" style="margin-top:8px">
+      <button class="modal-btn" style="border-color:#333355;color:#555577;font-size:.38em" onclick="sendTestEmail()">📧 SEND TEST EMAIL</button>
+    </div>
   </div>
 </div>
 
@@ -1584,8 +1587,12 @@ async function handleSubmit(){
   clearForm();
   await loadAndRender();
 
+  // Check if the other player has already submitted this week
+  const otherPlayer = username === 'john' ? 'nick' : 'john';
+  const otherAlreadyIn = !!_subs.find(s => s.week_id === weekId && s.username === otherPlayer);
+
   // Notify the other player (non-blocking)
-  notifyOtherPlayer(username, weekId).catch(() => {});
+  notifyOtherPlayer(username, weekId, title, sub.description || '', otherAlreadyIn).catch(() => {});
 }
 
 function clearForm(){
@@ -1839,13 +1846,38 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked) {
 // ============================================================
 //  EMAIL NOTIFICATION — calls Supabase Edge Function
 // ============================================================
-async function notifyOtherPlayer(submitter, weekId) {
+async function notifyOtherPlayer(submitter, weekId, title='', description='', bothSubmitted=false) {
   try {
     await sb.functions.invoke('notify-submission', {
-      body: { submitter, weekId }
+      body: { submitter, weekId, title, description, bothSubmitted }
     });
   } catch(e) {
     // Non-critical — silently ignore
+  }
+}
+
+async function sendTestEmail() {
+  const p = who();
+  const err = document.getElementById('pwModalErr');
+  if (!p) { err.textContent = 'LOG IN FIRST'; err.style.color = 'var(--red)'; return; }
+  err.style.color = '#888888';
+  err.textContent = 'SENDING TEST EMAIL...';
+  try {
+    const res = await sb.functions.invoke('notify-submission', {
+      body: {
+        submitter: p,
+        weekId: wid(),
+        title: 'TEST ENTRY — WEEKLY CREATION',
+        description: 'This is a test notification from AI Arena. If you got this, emails are working!',
+        bothSubmitted: false,
+        isTest: true
+      }
+    });
+    err.style.color = 'var(--green)';
+    err.textContent = '✅ TEST SENT! CHECK THE OTHER INBOX.';
+  } catch(e) {
+    err.style.color = 'var(--red)';
+    err.textContent = 'FAILED — CHECK BREVO KEY';
   }
 }
 
@@ -1860,7 +1892,9 @@ function openSettings(){
   emailInp.value = _session?.user?.email || '';
   document.getElementById('newPw1').value = '';
   document.getElementById('newPw2').value = '';
-  document.getElementById('pwModalErr').textContent = '';
+  const errEl = document.getElementById('pwModalErr');
+  errEl.textContent = '';
+  errEl.style.color = 'var(--red)';
 }
 
 function closeSettings(){
