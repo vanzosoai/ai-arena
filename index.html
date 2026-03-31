@@ -163,7 +163,7 @@ body::after{
   border:2px solid var(--bdr);color:var(--dim);
   cursor:pointer;transition:all .15s;letter-spacing:1px;
 }
-.sess-tag:hover{border-color:var(--j);color:var(--j)}
+.sess-tag:hover{background:rgba(0,0,0,.25)}
 .sess-j{border-color:var(--jd)!important;color:var(--j)!important}
 .sess-n{border-color:var(--nd)!important;color:var(--n)!important}
 .sess-spec{border-color:#2a2a44!important;color:#6666aa!important}
@@ -177,18 +177,20 @@ body::after{
 .mute-btn.active{border-color:var(--green);color:var(--green)}
 .settings-btn{
   font-size:.32em;padding:5px 12px;
-  border:2px solid rgba(255,215,0,.45);color:rgba(255,215,0,.7);
-  box-shadow:0 0 10px rgba(255,215,0,.2);
+  border:2px solid var(--j);color:var(--j);
+  box-shadow:0 0 10px rgba(255,215,0,.25);
   cursor:pointer;transition:all .15s;background:none;
   font-family:'Press Start 2P',monospace;letter-spacing:1px;
 }
-.settings-btn:hover{border-color:var(--j);color:var(--j);box-shadow:0 0 18px rgba(255,215,0,.45)}
+.settings-btn:hover{border-color:rgba(255,215,0,.5);color:rgba(255,215,0,.5);box-shadow:0 0 6px rgba(255,215,0,.1);background:rgba(0,0,0,.25)}
 
 /* ================================================
    COUNTDOWN TIMER
 ================================================ */
+.cd-block{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:6px}
+.cd-label{font-size:.22em;color:var(--dim);letter-spacing:3px;font-family:'Press Start 2P',monospace}
 .countdown-timer{
-  font-size:.3em;letter-spacing:1px;color:#555577;
+  font-size:.42em;letter-spacing:2px;color:#9999bb;
   font-family:'Press Start 2P',monospace;
   transition:color .5s;
 }
@@ -782,7 +784,6 @@ footer span{color:#8888aa}
     <div class="hsub">— AI CREATION ARENA —</div>
     <div class="hmeta">
       <div class="week-tag" id="weekTag">WEEK 1</div>
-      <div class="countdown-timer" id="countdown">⏳ —</div>
       <div class="sess-tag" id="sessTag" onclick="switchUser()">👤 —</div>
       <button class="mute-btn" id="muteBtn" onclick="toggleMute()">♫ MUTE</button>
       <button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙️</button>
@@ -912,6 +913,10 @@ footer span{color:#8888aa}
   <!-- CENTER -->
   <div class="ccol">
     <div class="vs">VS</div>
+    <div class="cd-block">
+      <div class="countdown-timer" id="countdown">⏳ —</div>
+      <div class="cd-label">TO SUBMIT</div>
+    </div>
     <div class="score"><span class="j" id="jScore">0</span> — <span class="n" id="nScore">0</span></div>
     <div class="cdiv"></div>
     <div class="clbl">⚡ COMBINED ⚡</div>
@@ -1895,6 +1900,9 @@ function openSettings(){
   const errEl = document.getElementById('pwModalErr');
   errEl.textContent = '';
   errEl.style.color = 'var(--red)';
+  // Test email button only visible to john
+  const testBtn = document.querySelector('#pwModal .modal-btns:last-of-type');
+  if (testBtn) testBtn.style.display = who() === 'john' ? '' : 'none';
 }
 
 function closeSettings(){
