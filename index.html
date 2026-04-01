@@ -2941,6 +2941,11 @@ function updateAvatarStates() {
 
   _applyAvatarState('john', jLocked, champJ, jCooked, jStressed, js);
   _applyAvatarState('nick',  nLocked, champN, nCooked, nStressed, ns);
+
+  // Saturday urgency music: 25% faster if the logged-in player hasn't submitted yet
+  const _me = who();
+  const _iStressed = (_me === 'john' && jStressed) || (_me === 'nick' && nStressed);
+  if (MU.ctx) MU.setSpeed(_iStressed ? 1.25 : 1.0);
 }
 
 function _applyAvatarState(player, lockedIn, isChamp, isCooked, isStressed=false, streakCount=0) {
@@ -3351,9 +3356,15 @@ const MU = {
     this.master.connect(this.ctx.destination);
   },
 
+  _baseDur(){ return (60 / this.SEQ.bpm) / 2; },
+
+  setSpeed(rate){
+    this._dur = this._baseDur() / rate;
+  },
+
   start(){
     this.init();
-    this._dur = (60 / this.SEQ.bpm) / 2;
+    this._dur = this._baseDur();
     this._step = 0;
     this._nxt = this.ctx.currentTime + 0.08;
     this._sched();
