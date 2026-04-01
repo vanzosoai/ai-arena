@@ -54,8 +54,8 @@ body::after{
   text-shadow:4px 4px 0 var(--dred),8px 8px 0 #300000,0 0 40px var(--jglow);
   letter-spacing:4px;line-height:1.7;
 }
-.ls{font-size:clamp(.42em,1.5vw,.65em);color:var(--red);letter-spacing:4px;margin-top:-14px}
-.lq{font-size:clamp(.38em,1.4vw,.65em);color:#999;letter-spacing:2px;text-align:center}
+.ls{font-size:clamp(.35em,1.2vw,.55em);color:var(--red);letter-spacing:4px}
+.lq{font-size:clamp(.38em,1.4vw,.65em);color:#999;letter-spacing:2px}
 .lbs{display:flex;gap:20px;flex-wrap:wrap;justify-content:center}
 .lb{
   padding:18px 32px;font-family:'Press Start 2P',monospace;
@@ -108,12 +108,10 @@ body::after{
 .pw-err{font-size:.35em;color:var(--red);letter-spacing:1px;min-height:1em;text-align:center}
 
 .spectate-link{
-  font-size:.38em;color:#aaaacc;letter-spacing:2px;cursor:pointer;
-  text-decoration:none;padding:10px 22px;border:2px solid #334466;
-  background:rgba(30,30,60,.5);transition:all .2s;display:inline-block;
-  margin-top:4px;
+  font-size:.32em;color:#333355;letter-spacing:1px;cursor:pointer;
+  text-decoration:none;border-bottom:1px solid #222244;transition:color .2s;
 }
-.spectate-link:hover{color:#fff;border-color:#6688cc;background:rgba(50,50,100,.6)}
+.spectate-link:hover{color:#6666aa}
 
 .music-hint{font-size:.3em;color:#888;letter-spacing:1px;text-align:center;animation:mhpulse 2.5s ease-in-out infinite}
 @keyframes mhpulse{0%,100%{color:#666}50%{color:#cc3333}}
@@ -163,7 +161,7 @@ body::after{
   border:2px solid var(--bdr);color:var(--dim);
   cursor:pointer;transition:all .15s;letter-spacing:1px;
 }
-.sess-tag:hover{background:rgba(0,0,0,.25);opacity:.55}
+.sess-tag:hover{border-color:var(--j);color:var(--j)}
 .sess-j{border-color:var(--jd)!important;color:var(--j)!important}
 .sess-n{border-color:var(--nd)!important;color:var(--n)!important}
 .sess-spec{border-color:#2a2a44!important;color:#6666aa!important}
@@ -173,137 +171,8 @@ body::after{
   cursor:pointer;transition:all .15s;background:none;
   font-family:'Press Start 2P',monospace;letter-spacing:1px;
 }
-.mute-btn:hover{background:rgba(0,0,0,.25);opacity:.55}
+.mute-btn:hover{border-color:var(--green);color:var(--green)}
 .mute-btn.active{border-color:var(--green);color:var(--green)}
-.settings-btn{
-  font-size:.32em;padding:5px 12px;
-  border:2px solid var(--j);color:var(--j);
-  box-shadow:0 0 10px rgba(255,215,0,.25);
-  cursor:pointer;transition:all .15s;background:none;
-  font-family:'Press Start 2P',monospace;letter-spacing:1px;
-}
-.settings-btn:hover{border-color:rgba(255,215,0,.5);color:rgba(255,215,0,.5);box-shadow:0 0 6px rgba(255,215,0,.1);background:rgba(0,0,0,.25)}
-
-/* ================================================
-   COUNTDOWN TIMER
-================================================ */
-.cd-block{display:flex;flex-direction:column;align-items:center;gap:3px;margin-top:6px}
-.cd-label{font-size:.22em;color:#9999bb;letter-spacing:3px;font-family:'Press Start 2P',monospace}
-.countdown-timer{
-  font-size:.42em;letter-spacing:2px;color:var(--green);
-  font-family:'Press Start 2P',monospace;
-  transition:color .5s;
-}
-.countdown-timer.warn{color:var(--j);animation:cdpulse 2s ease-in-out infinite}
-.countdown-timer.urgent{color:var(--red);animation:cdpulse .8s ease-in-out infinite}
-@keyframes cdpulse{0%,100%{opacity:.75}50%{opacity:1}}
-
-/* ================================================
-   AVATAR POWER-UP STATES
-================================================ */
-.av.fired-up.jg{
-  filter:drop-shadow(0 0 30px rgba(255,200,0,.95)) drop-shadow(0 0 10px rgba(255,120,0,.7));
-  animation:firepulse-j 1.3s ease-in-out infinite;
-}
-.av.fired-up.ng{
-  filter:drop-shadow(0 0 30px rgba(0,210,255,.95)) drop-shadow(0 0 10px rgba(0,150,255,.7));
-  animation:firepulse-n 1.3s ease-in-out infinite;
-}
-@keyframes firepulse-j{
-  0%,100%{filter:drop-shadow(0 0 20px rgba(255,200,0,.8)) drop-shadow(0 0 6px rgba(255,120,0,.5))}
-  50%{filter:drop-shadow(0 0 42px rgba(255,230,0,1)) drop-shadow(0 0 18px rgba(255,150,0,.9))}
-}
-@keyframes firepulse-n{
-  0%,100%{filter:drop-shadow(0 0 20px rgba(0,200,255,.8)) drop-shadow(0 0 6px rgba(0,150,255,.5))}
-  50%{filter:drop-shadow(0 0 42px rgba(0,230,255,1)) drop-shadow(0 0 18px rgba(0,180,255,.9))}
-}
-.av.cooked-out{
-  filter:grayscale(88%) brightness(0.62) !important;
-  animation:cookedshake 6s ease-in-out infinite;
-}
-.av.is-champ:not(.fired-up){
-  filter:drop-shadow(0 0 28px rgba(255,140,0,.9)) drop-shadow(0 0 10px rgba(255,80,0,.6));
-  animation:champpulse 2s ease-in-out infinite;
-}
-.av.is-champ.fired-up.jg{
-  filter:drop-shadow(0 0 32px rgba(255,210,0,.95)) drop-shadow(0 0 18px rgba(255,110,0,.75));
-  animation:champpulse-j 1.5s ease-in-out infinite;
-}
-.av.is-champ.fired-up.ng{
-  filter:drop-shadow(0 0 32px rgba(0,210,255,.9)) drop-shadow(0 0 18px rgba(255,110,0,.7));
-  animation:champpulse-n 1.5s ease-in-out infinite;
-}
-@keyframes champpulse{
-  0%,100%{filter:drop-shadow(0 0 18px rgba(255,140,0,.7)) drop-shadow(0 0 6px rgba(255,80,0,.4))}
-  50%{filter:drop-shadow(0 0 38px rgba(255,165,0,1)) drop-shadow(0 0 18px rgba(255,100,0,.85))}
-}
-@keyframes champpulse-j{
-  0%,100%{filter:drop-shadow(0 0 22px rgba(255,210,0,.85)) drop-shadow(0 0 12px rgba(255,100,0,.6))}
-  50%{filter:drop-shadow(0 0 44px rgba(255,230,0,1)) drop-shadow(0 0 24px rgba(255,140,0,.9))}
-}
-@keyframes champpulse-n{
-  0%,100%{filter:drop-shadow(0 0 22px rgba(0,200,255,.85)) drop-shadow(0 0 12px rgba(255,100,0,.6))}
-  50%{filter:drop-shadow(0 0 44px rgba(0,230,255,1)) drop-shadow(0 0 24px rgba(255,140,0,.9))}
-}
-.crown-overlay{
-  position:absolute;top:-18px;left:50%;
-  transform:translateX(-50%);
-  font-size:1.9em;z-index:10;pointer-events:none;
-  filter:drop-shadow(0 0 7px rgba(255,210,0,.95));
-  animation:crownbob 2.5s ease-in-out infinite;
-}
-@keyframes crownbob{
-  0%,100%{transform:translateX(-50%) translateY(0)}
-  50%{transform:translateX(-50%) translateY(-5px)}
-}
-.skull-overlay{
-  position:absolute;top:40%;left:50%;
-  transform:translateX(-50%);
-  font-size:1.6em;z-index:10;pointer-events:none;
-  animation:skullpulse 3s ease-in-out infinite;
-}
-@keyframes skullpulse{
-  0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}
-  50%{opacity:1;transform:translateX(-50%) scale(1.1)}
-}
-@keyframes cookedshake{
-  0%,90%,100%{transform:translateX(0)}
-  92%{transform:translateX(-2px)}
-  94%{transform:translateX(2px)}
-  96%{transform:translateX(-2px)}
-  98%{transform:translateX(1px)}
-}
-.av-badge{
-  text-align:center;font-family:'Press Start 2P',monospace;
-  min-height:22px;margin-top:6px;display:flex;flex-direction:column;align-items:center;gap:3px;
-}
-.badge-fire{
-  font-size:.28em;color:var(--j);letter-spacing:1px;
-  animation:fbadge 1.4s ease-in-out infinite;
-  text-shadow:0 0 8px rgba(255,200,0,.6);
-}
-@keyframes fbadge{0%,100%{opacity:.8;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-.badge-cooked{font-size:.28em;color:#dd2233;letter-spacing:1px;text-shadow:0 0 8px rgba(200,0,0,.5)}
-.badge-champ{font-size:.26em;color:#FFD700;letter-spacing:1px;text-shadow:0 0 10px rgba(255,215,0,.8),0 0 4px rgba(255,200,0,.6)}
-/* Streak escalation badges */
-.sb-streak-badge{min-height:1.2em;text-align:center;margin-top:3px}
-.streak-roll{font-size:.26em;color:#cc6600;letter-spacing:1px}
-.streak-unstop{font-size:.26em;color:#FF8800;letter-spacing:1px;animation:fbadge 1.4s ease-in-out infinite}
-.streak-legendary{font-size:.28em;color:#FFD700;letter-spacing:1px;text-shadow:0 0 8px rgba(255,215,0,.8);animation:fbadge 1s ease-in-out infinite}
-/* Streak avatar glow escalation */
-.av.streak-hot.jg{filter:drop-shadow(0 0 22px rgba(255,200,0,.75)) drop-shadow(0 0 8px rgba(255,150,0,.5))}
-.av.streak-hot.ng{filter:drop-shadow(0 0 22px rgba(0,210,255,.75)) drop-shadow(0 0 8px rgba(0,150,255,.5))}
-.av.streak-epic.jg{filter:drop-shadow(0 0 38px rgba(255,220,0,1)) drop-shadow(0 0 18px rgba(255,120,0,.8)) drop-shadow(0 0 6px rgba(255,255,200,.6))}
-.av.streak-epic.ng{filter:drop-shadow(0 0 38px rgba(0,230,255,1)) drop-shadow(0 0 18px rgba(0,160,255,.8)) drop-shadow(0 0 6px rgba(200,240,255,.6))}
-/* Submission timestamp on cards */
-.sc-time{font-size:.22em;color:#555577;letter-spacing:1px;text-align:right;margin-bottom:5px}
-/* Thursday urgency */
-@keyframes urgentPulse{0%,100%{opacity:.7;color:#ff2233}50%{opacity:1;color:#ff5566}}
-.ns-t.urgent{animation:urgentPulse .9s ease-in-out infinite}
-.ns-ico.urgent{animation:urgentPulse 1.1s ease-in-out infinite}
-/* Stressed avatar sweat drop */
-@keyframes sweatDrip{0%{transform:translateY(0);opacity:.9}60%{transform:translateY(10px);opacity:.6}90%{transform:translateY(16px);opacity:0}100%{transform:translateY(16px);opacity:0}}
-.sweat-drip-anim{animation:sweatDrip 2s ease-in infinite;transform-box:fill-box;transform-origin:center top}
 
 /* ================================================
    ARENA — 3 COL DESKTOP / STACK MOBILE
@@ -429,16 +298,16 @@ body::after{
 .sc-earn{font-size:.3em;color:var(--green);border:1px solid rgba(0,255,65,.25);padding:5px 9px;margin-left:auto}
 .sc-date{font-size:.25em;color:#2a2a3a;margin-left:auto}
 .noshow{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;gap:12px}
-.ns-ico{font-size:2.2em;opacity:.8}
-.ns-t{font-size:.5em;color:#ee5566}
-.ns-s{font-size:.28em;color:#9999bb}
+.ns-ico{font-size:2.2em;opacity:.2}
+.ns-t{font-size:.5em;color:var(--red)}
+.ns-s{font-size:.28em;color:#2a2a3a}
 
 /* ================================================
    SUBMIT FORM
 ================================================ */
 .sform{background:var(--p2);border-top:3px solid var(--j);border-bottom:3px solid var(--j);padding:28px 20px}
 .sform .sec-h{color:var(--j);border-left-color:var(--j)}
-.as-lbl{font-size:.32em;color:#aaaacc;margin-bottom:16px;letter-spacing:1px}
+.as-lbl{font-size:.32em;color:var(--dim);margin-bottom:16px;letter-spacing:1px}
 .as-lbl span{color:var(--j)}.as-lbl span.n{color:var(--n)}
 .fg{margin-bottom:14px}
 .fl{display:block;font-size:.3em;color:var(--dim);margin-bottom:6px;letter-spacing:1px}
@@ -488,65 +357,22 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.8}
 .sub-btn:hover{background:var(--j);color:#000;box-shadow:0 0 28px var(--jglow)}
 .sub-btn:active{transform:scale(.99)}
 
-/* settings + forgot password links */
+/* change password link */
 .chpw-link{
-  display:inline-block;margin-top:16px;font-size:.32em;color:#888;
-  cursor:pointer;letter-spacing:2px;border-bottom:1px solid #555;transition:color .2s;
+  display:inline-block;margin-top:16px;font-size:.28em;color:#333355;
+  cursor:pointer;letter-spacing:1px;border-bottom:1px solid #222244;transition:color .2s;
 }
-.chpw-link:hover{color:#FFD700}
-.forgot-link{
-  display:inline-block;margin-top:10px;font-size:.32em;color:#555;
-  cursor:pointer;letter-spacing:2px;transition:color .2s;
-}
-.forgot-link:hover{color:#aaa}
+.chpw-link:hover{color:#6666aa}
 
 /* ================================================
    EDIT / CHANGE PASSWORD MODALS
 ================================================ */
-/* card detail modal */
-#cardModal{
-  position:fixed;inset:0;background:rgba(0,0,0,.88);
-  display:none;align-items:center;justify-content:center;
-  z-index:7000;padding:20px;
-}
-#cardModal.open{display:flex}
-.cm-inner{
-  background:#0a0a12;border:2px solid rgba(255,215,0,.25);
-  max-width:560px;width:100%;max-height:90vh;overflow-y:auto;
-  position:relative;
-}
-.cm-close{
-  position:absolute;top:10px;right:10px;
-  background:rgba(0,0,0,.65);border:1px solid rgba(255,255,255,.15);
-  color:#cccccc;cursor:pointer;
-  font-size:1em;font-family:sans-serif;line-height:1;
-  width:28px;height:28px;display:flex;align-items:center;justify-content:center;
-  border-radius:50%;transition:background .15s,color .15s;z-index:10;
-}
-.cm-close:hover{background:rgba(0,0,0,.9);color:#fff}
-.cm-img{width:100%;max-height:260px;object-fit:cover;display:block}
-.cm-body{padding:22px 24px 28px}
-.cm-player{font-family:'Press Start 2P',monospace;font-size:.28em;letter-spacing:3px;margin-bottom:10px}
-.cm-title{font-family:'Press Start 2P',monospace;font-size:.38em;letter-spacing:2px;line-height:1.6;margin-bottom:14px}
-.cm-desc{font-family:Arial,sans-serif;font-size:13px;color:#bbbbcc;line-height:1.85;margin-bottom:18px}
-.cm-earn{font-family:'Press Start 2P',monospace;font-size:.28em;color:var(--j);margin-bottom:16px}
-.cm-links{display:flex;gap:10px;flex-wrap:wrap}
-.cm-link{
-  font-family:'Press Start 2P',monospace;font-size:.26em;
-  padding:8px 14px;text-decoration:none;letter-spacing:1px;
-  border:1px solid rgba(255,215,0,.35);color:var(--j);
-  transition:all .15s;
-}
-.cm-link:hover{background:rgba(255,215,0,.1)}
-.cm-link.social{border-color:rgba(0,200,255,.35);color:var(--n)}
-.cm-link.social:hover{background:rgba(0,200,255,.08)}
-
-#editModal,#pwModal,#recoveryModal{
+#editModal,#pwModal{
   position:fixed;inset:0;background:rgba(0,0,0,.85);
   display:flex;align-items:center;justify-content:center;
   z-index:5000;padding:20px;
 }
-#editModal.hidden,#pwModal.hidden,#recoveryModal.hidden{display:none}
+#editModal.hidden,#pwModal.hidden{display:none}
 .modal-box{
   background:var(--p1);border:3px solid var(--j);
   padding:28px;width:min(520px,95vw);
@@ -602,22 +428,14 @@ textarea.fi{resize:vertical;min-height:72px;line-height:1.8}
 .hist-controls{
   display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;
 }
-.hist-search-wrap{position:relative;flex:1;min-width:180px;display:flex}
 .hist-search{
-  flex:1;min-width:0;background:#040407;border:2px solid #444455;
+  flex:1;min-width:180px;background:#040407;border:2px solid #444455;
   color:#ccc;font-family:'Press Start 2P',monospace;font-size:.28em;
-  padding:9px 32px 9px 12px;outline:none;letter-spacing:1px;
+  padding:9px 12px;outline:none;letter-spacing:1px;
   transition:border-color .2s;
 }
 .hist-search:focus{border-color:var(--j)}
 .hist-search::placeholder{color:#666688}
-.hist-search-clear{
-  position:absolute;right:8px;top:50%;transform:translateY(-50%);
-  background:none;border:none;color:#666688;cursor:pointer;
-  font-size:1em;padding:2px 4px;line-height:1;font-family:sans-serif;
-  transition:color .15s;
-}
-.hist-search-clear:hover{color:#aaaacc}
 .hist-ctrl-btn{
   padding:9px 12px;background:none;border:1px solid #333355;
   color:#8888aa;font-family:'Press Start 2P',monospace;font-size:.26em;
@@ -673,37 +491,6 @@ footer span{color:#8888aa}
 }
 @media(min-width:681px){
   .mobile-combined{display:none!important}
-}
-
-/* ── iPhone / narrow mobile fixes ── */
-@media(max-width:480px){
-  /* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
-  .pw-inp,.fi,input[type="password"],input[type="email"],input[type="text"]{
-    font-size:15px!important;
-  }
-  /* Login title — tighter letter-spacing stops lightning bolt wrapping */
-  .lt{letter-spacing:1px}
-  /* "Who Are You, Soldier?" — bump up so it's legible */
-  .lq{font-size:clamp(.52em,4.5vw,.75em)}
-  /* Spectate link — center the wrapped text */
-  .spectate-link{text-align:center;display:block;box-sizing:border-box;width:100%}
-  /* Arena header — same letter-spacing fix + make subtitle readable */
-  .htitle{letter-spacing:2px}
-  .hsub{font-size:clamp(.38em,3.2vw,.5em);letter-spacing:2px}
-  /* Hall of Carnage — search bar full width, buttons share row below */
-  .hist-search-wrap{flex:0 0 100%;width:100%;min-width:0}
-  .hist-ctrl-btn{flex:1}
-  /* Dashboard body text — nudge up 1-2px equivalent */
-  .sc-title{font-size:.52em}
-  .sc-desc{font-size:.36em}
-  .mc-lbl{font-size:.30em}
-  .mc-val{font-size:.43em}
-  .cs-l{font-size:.27em}
-  .cs-v{font-size:.36em}
-  .is-lbl{font-size:.28em}
-  .is-val{font-size:.45em}
-  .sb-lbl{font-size:.31em}
-  .fl{font-size:.33em}
 }
 .mobile-combined{
   display:none;padding:18px 20px;
@@ -805,36 +592,11 @@ footer span{color:#8888aa}
   <!-- password step -->
   <div id="pwPanel">
     <div class="pw-who" id="pwWho"></div>
-    <div style="position:relative;width:100%">
-      <input class="pw-inp" id="pwInp" type="password" placeholder="PASSWORD" autocomplete="current-password" style="padding-right:42px">
-      <button type="button" id="pwToggle" onclick="togglePwVis()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#555577;cursor:pointer;padding:2px;line-height:0;transition:color .15s" title="Show/hide password">
-        <svg id="pwEyeIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-        </svg>
-        <svg id="pwEyeOffIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none">
-          <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>
-        </svg>
-      </button>
-    </div>
+    <input class="pw-inp" id="pwInp" type="password" placeholder="PASSWORD" autocomplete="current-password">
     <div class="pw-err" id="pwErr"></div>
     <div class="pw-row">
       <button class="pw-back" onclick="backToNames()">← BACK</button>
       <button class="pw-go" id="pwGoBtn" onclick="doLogin()">ENTER →</button>
-    </div>
-    <div style="text-align:center">
-      <span class="forgot-link" onclick="showForgotPw()">🔑 FORGOT PASSWORD?</span>
-    </div>
-  </div>
-
-  <!-- forgot password step -->
-  <div id="forgotPanel" style="display:none">
-    <div class="lq" style="font-size:.55em;margin-bottom:16px">PASSWORD RESET</div>
-    <div style="font-size:.3em;color:#888;letter-spacing:2px;margin-bottom:14px;line-height:1.8">ENTER THE EMAIL ON YOUR ACCOUNT.<br>WE'LL SEND A RESET LINK.</div>
-    <input class="pw-inp" id="forgotEmail" type="email" placeholder="YOUR EMAIL ADDRESS" autocomplete="email">
-    <div class="pw-err" id="forgotErr"></div>
-    <div class="pw-row">
-      <button class="pw-back" onclick="backFromForgot()">← BACK</button>
-      <button class="pw-go" onclick="doForgotPw()">SEND →</button>
     </div>
   </div>
 
@@ -878,171 +640,22 @@ footer span{color:#8888aa}
   </div>
 </div>
 
-<!-- ACCOUNT SETTINGS MODAL -->
+<!-- CHANGE PASSWORD MODAL -->
 <div id="pwModal" class="hidden">
   <div class="modal-box">
-    <div class="modal-title">⚙️ ACCOUNT SETTINGS</div>
-    <div class="fg">
-      <label class="fl">EMAIL (USED FOR PASSWORD RESET)</label>
-      <input class="fi" id="settingsEmail" type="email" placeholder="your@email.com" autocomplete="email">
-      <div style="font-size:.28em;color:#555;margin-top:4px;letter-spacing:1px">SET A REAL EMAIL TO ENABLE FORGOT PASSWORD</div>
-    </div>
+    <div class="modal-title">🔐 CHANGE PASSWORD</div>
     <div class="fg">
       <label class="fl">NEW PASSWORD</label>
-      <input class="fi" id="newPw1" type="password" placeholder="LEAVE BLANK TO KEEP CURRENT" autocomplete="new-password">
+      <input class="fi" id="newPw1" type="password" placeholder="MIN 6 CHARACTERS">
     </div>
     <div class="fg">
       <label class="fl">CONFIRM PASSWORD</label>
-      <input class="fi" id="newPw2" type="password" placeholder="REPEAT NEW PASSWORD" autocomplete="new-password">
+      <input class="fi" id="newPw2" type="password" placeholder="REPEAT PASSWORD">
     </div>
     <div class="pw-err" id="pwModalErr" style="margin-bottom:8px"></div>
     <div class="modal-btns">
-      <button class="modal-btn save" onclick="doChangeSettings()">💾 SAVE CHANGES</button>
-      <button class="modal-btn cancel" onclick="closeSettings()">✖ CANCEL</button>
-    </div>
-    <div id="testEmailRow" class="modal-btns" style="margin-top:8px">
-      <button class="modal-btn" style="border-color:#333355;color:#555577;font-size:.38em" onclick="sendTestEmail()">📧 SEND TEST EMAIL</button>
-    </div>
-    <div class="modal-btns" style="margin-top:8px">
-      <button class="modal-btn" style="border-color:#2a2a44;color:#6666aa;font-size:.38em" onclick="openReadme()">📖 HOW TO PLAY</button>
-    </div>
-  </div>
-</div>
-
-<!-- CARD DETAIL MODAL -->
-<div id="cardModal" onclick="if(event.target===this)closeCardModal()">
-  <div class="cm-inner">
-    <button class="cm-close" onclick="closeCardModal()">✕</button>
-    <div id="cmContent"></div>
-  </div>
-</div>
-
-<!-- README MODAL -->
-<div id="readmeModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);align-items:flex-start;justify-content:center;z-index:6000;padding:20px;overflow-y:auto">
-  <div style="background:#0a0a12;border:2px solid #222244;padding:32px;width:min(700px,95vw);margin:auto;position:relative">
-    <div style="font-size:.55em;color:var(--j);border-left:4px solid var(--j);padding-left:12px;margin-bottom:24px;letter-spacing:2px">📖 HOW TO PLAY — AI ARENA</div>
-    <button onclick="closeReadme()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:#666;font-size:1.2em;cursor:pointer;font-family:'Press Start 2P',monospace">✖</button>
-
-    <!-- TOC -->
-    <div style="background:#060608;border:1px solid #1a1a2a;padding:16px 20px;margin-bottom:28px">
-      <div style="font-size:.28em;color:var(--j);letter-spacing:2px;margin-bottom:10px">TABLE OF CONTENTS</div>
-      <div style="font-size:.24em;color:#8888aa;line-height:2.2;letter-spacing:1px">
-        1. THE GAME &nbsp;·&nbsp; 2. WEEKLY SUBMISSIONS &nbsp;·&nbsp; 3. WINNING &amp; CREDIT &nbsp;·&nbsp; 4. AVATAR STATES &amp; PERKS &nbsp;·&nbsp; 5. EMAIL NOTIFICATIONS &nbsp;·&nbsp; 6. SPECTATOR MODE &nbsp;·&nbsp; 7. HALL OF CARNAGE &nbsp;·&nbsp; 8. ACCOUNT SETTINGS
-      </div>
-    </div>
-
-    <!-- 1 -->
-    <div style="border-left:3px solid var(--red);padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:var(--red);letter-spacing:2px;margin-bottom:8px">1. THE GAME</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        AI Arena is a weekly head-to-head creativity challenge between John and Nick. Every week, both players build something with AI — an app, a video, a tool, an experiment, a short film, anything. The goal isn't to get rich. The goal is to <span style="color:#cccccc">show up, build real things, and push each other to keep going.</span><br><br>
-        Submitting is the win. A week where both players show up is a good week — full stop. If your creation earns money, that's a bonus and it counts toward the crown. But zero dollars and a finished project still beats sitting this one out.<br><br>
-        Don't go dark. Duke is watching.
-      </div>
-    </div>
-
-    <!-- 2 -->
-    <div style="border-left:3px solid var(--j);padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:var(--j);letter-spacing:2px;margin-bottom:8px">2. WEEKLY SUBMISSIONS</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        <span style="color:#cccccc">TITLE</span> — Give your creation a name. Required.<br><br>
-        <span style="color:#cccccc">DESCRIPTION</span> — Describe what you built and how AI was used.<br><br>
-        <span style="color:#cccccc">WEBSITE / PROJECT URL</span> — Link to your live project. <span style="color:var(--j)">Must start with https://</span> for the screenshot preview to load correctly. A screenshot is auto-captured from the URL when you submit — no need to upload one separately unless the URL doesn't load a visual.<br><br>
-        <span style="color:#cccccc">SOCIAL LINK</span> — Optional TikTok, Instagram, or X link if you posted about it.<br><br>
-        <span style="color:#cccccc">EARNINGS FROM AI THIS WEEK (USD)</span> — If your creation made money this week, log it here. It's the tiebreaker. Be honest — it's between you two. Zero is a perfectly valid answer.<br><br>
-        <span style="color:#cccccc">PHOTO UPLOAD</span> — If you don't have a URL, upload an image directly. Drag and drop or click to select. Max recommended size: 5MB.<br><br>
-        Submissions lock in for the current week. You can edit or re-submit any time before the week ends (Sunday midnight ET). Each submission card shows the day and time you locked in — 3am submissions are noted and respected.
-      </div>
-    </div>
-
-    <!-- 3 -->
-    <div style="border-left:3px solid var(--green);padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:var(--green);letter-spacing:2px;margin-bottom:8px">3. WINNING &amp; CREDIT</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        Here's how the week shakes out:<br><br>
-        <span style="color:#cccccc">BOTH SUBMIT, NO EARNINGS</span> — Tie. Both players get credit for showing up. No crown awarded, no shame. This is a good week.<br>
-        <span style="color:#cccccc">BOTH SUBMIT, ONE EARNS MORE</span> — The higher earner takes the crown. The other still gets full credit for submitting.<br>
-        <span style="color:#cccccc">ONLY ONE SUBMITS</span> — The submitter claims the crown by default. The other player gets nothing. Don't be the other player.<br>
-        <span style="color:#cccccc">NEITHER SUBMITS</span> — The week is marked DNF. Duke Nukem sends you both an email on Tuesday. Expect no sympathy.<br><br>
-        <span style="color:#cccccc">WEEKLY SCORE</span> — The scoreboard tracks crown weeks. Shown next to each player's name.<br>
-        <span style="color:#cccccc">COMBINED STATS</span> — The center panel shows total weeks played, apps built, weeks where both showed up, and total combined earnings. This is the record of what you've actually made together.
-      </div>
-    </div>
-
-    <!-- 4 -->
-    <div style="border-left:3px solid #aa44ff;padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:#aa44ff;letter-spacing:2px;margin-bottom:8px">4. AVATAR STATES &amp; PERKS</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        Your avatar changes based on your status. It's never subtle.<br><br>
-        <span style="color:var(--j)">🔥 LOCKED IN</span> — You've submitted this week. Your avatar glows gold (John) or blue (Nick). You're done. Feels good.<br><br>
-        <span style="color:#cc4455">💀 GET BUSY</span> — You skipped last week and still haven't submitted this week. Your avatar goes greyscale, shakes, and a skull appears on their chest. This is a warning. Fix it.<br><br>
-        <span style="color:#FFD700">👑 LAST CHAMP</span> — You won last week. A crown floats above your head and your avatar glows orange until someone else takes it.<br><br>
-        <span style="color:#ff9944">😰 LAST CHANCE</span> — It's Saturday and you still haven't submitted. Your goggles slide up to your forehead, revealing beady stressed eyes darting side to side with a sweat bead running down your temple. You have until midnight Sunday. This is not a drill.<br><br>
-        <span style="color:#ff4455">⏳ RUNNING OUT OF TIME</span> — Thursday through Sunday with no submission, your card flips from skull to urgency mode with a pulsing countdown message. The arena is getting impatient.<br><br>
-        <span style="color:#cccccc">⚔️ FIRST BLOOD</span> — First to submit in a given week gets a First Blood flash on screen and triggers a special taunt email to the other player. Strike first.<br><br>
-        <span style="color:#FF8800">🔥 STREAK MILESTONES</span> — Submit 3 weeks in a row: <span style="color:#cc6600">ON A ROLL</span>. Five weeks: <span style="color:#FF8800">UNSTOPPABLE</span>. Eight weeks straight: <span style="color:#FFD700">LEGENDARY</span> — your avatar glows harder than ever. The streak badge lives below the fire bar. Don't break the chain.
-      </div>
-    </div>
-
-    <!-- 5 -->
-    <div style="border-left:3px solid #4466cc;padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:#4466cc;letter-spacing:2px;margin-bottom:8px">5. EMAIL NOTIFICATIONS</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        <span style="color:#cccccc">SUBMISSION ALERTS</span> — When you submit, the other player gets an email immediately. It includes your creation title, description, a randomized trash-talk taunt, and a link back to the arena. If both players have already submitted that week, the email changes tone.<br><br>
-        <span style="color:#cccccc">DUKE'S WEEKLY CHECK-IN</span> — Every Tuesday at 9am ET, the system checks if either of you submitted the previous week. If <span style="color:#ff4455">neither player showed up</span>, Duke Nukem personally emails you both. He has seven rotating variations of disappointment and none of them are gentle. There is no opt-out. Submit or face the consequences.<br><br>
-        Emails go to the address in your Account Settings. Update it there to change where notifications land.
-      </div>
-    </div>
-
-    <!-- 6 -->
-    <div style="border-left:3px solid #336655;padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:#44aa77;letter-spacing:2px;margin-bottom:8px">6. SPECTATOR MODE</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        Anyone can watch without an account. On the login screen, click <span style="color:var(--green)">👁 SPECTATE</span> to enter the arena in read-only mode. You'll see all current and past submissions, scores, and stats — but cannot submit. Music plays for spectators too. The settings gear is hidden in spectator mode.
-      </div>
-    </div>
-
-    <!-- 7 -->
-    <div style="border-left:3px solid #553333;padding-left:14px;margin-bottom:24px">
-      <div style="font-size:.32em;color:#aa4444;letter-spacing:2px;margin-bottom:8px">7. HALL OF CARNAGE</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        Every completed week lives in the Hall of Carnage — the battle history at the bottom of the arena. Each week shows both submissions, the winner, and earnings. Weeks with only one submission show who showed up and who didn't. Expand any week to see the full cards, or click any card to open a full detail view. Use the search bar to find any past creation by title or description. This is the permanent record.
-      </div>
-    </div>
-
-    <!-- 8 -->
-    <div style="border-left:3px solid #444422;padding-left:14px;margin-bottom:8px">
-      <div style="font-size:.32em;color:#aaaa44;letter-spacing:2px;margin-bottom:8px">8. ACCOUNT SETTINGS</div>
-      <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        Access via the <span style="color:var(--j)">⚙️</span> gear button in the header (players only — hidden for spectators).<br><br>
-        <span style="color:#cccccc">CHANGE EMAIL</span> — Updates your login email and your notification address for weekly emails in one step.<br>
-        <span style="color:#cccccc">CHANGE PASSWORD</span> — Enter a new password (min 6 characters) and confirm it.<br>
-        <span style="color:#cccccc">FORGOT PASSWORD</span> — On the login screen, enter your email and a reset link will be sent. Click the link, then set a new password when the recovery screen appears.<br><br>
-        Both players log in with email + password. There are no shared accounts — each player has their own credentials.
-      </div>
-    </div>
-
-    <div style="margin-top:28px;text-align:center">
-      <button class="modal-btn cancel" onclick="closeReadme()" style="font-size:.35em">✖ CLOSE</button>
-    </div>
-  </div>
-</div>
-
-<!-- PASSWORD RECOVERY MODAL (arrives from reset email link) -->
-<div id="recoveryModal" class="hidden">
-  <div class="modal-box">
-    <div class="modal-title">🔐 SET NEW PASSWORD</div>
-    <div class="fg">
-      <label class="fl">NEW PASSWORD</label>
-      <input class="fi" id="recovPw1" type="password" placeholder="MIN 6 CHARACTERS" autocomplete="new-password">
-    </div>
-    <div class="fg">
-      <label class="fl">CONFIRM PASSWORD</label>
-      <input class="fi" id="recovPw2" type="password" placeholder="REPEAT PASSWORD" autocomplete="new-password">
-    </div>
-    <div class="pw-err" id="recovErr" style="margin-bottom:8px"></div>
-    <div class="modal-btns">
-      <button class="modal-btn save" onclick="doSetRecoveryPassword()">💾 SET PASSWORD</button>
+      <button class="modal-btn save" onclick="doChangePw()">💾 UPDATE</button>
+      <button class="modal-btn cancel" onclick="document.getElementById('pwModal').classList.add('hidden')">✖ CANCEL</button>
     </div>
   </div>
 </div>
@@ -1058,8 +671,7 @@ footer span{color:#8888aa}
     <div class="hmeta">
       <div class="week-tag" id="weekTag">WEEK 1</div>
       <div class="sess-tag" id="sessTag" onclick="switchUser()">👤 —</div>
-      <button class="mute-btn" id="muteBtn" onclick="toggleMute()">♫ MUTE</button>
-      <button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙️</button>
+      <button class="mute-btn" id="muteBtn" onclick="toggleMute()">♪ MUSIC</button>
     </div>
   </div>
 </div>
@@ -1112,13 +724,12 @@ footer span{color:#8888aa}
         <rect x="62" y="30" width="28" height="8" fill="#FF6633" opacity=".6"/>
         <!-- Bridge -->
         <rect x="55" y="33" width="6"  height="5"  fill="#661100" stroke="#441100" stroke-width="1"/>
-        <!-- MOUTH -->
-        <g id="jMouth">
+        <!-- MOUTH — clean block + cigarette -->
         <rect x="44" y="60" width="24" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
         <rect x="46" y="61" width="14" height="4" fill="#EDE0CC"/>
+        <!-- CIGARETTE — subtle, from corner of mouth -->
         <rect x="68" y="62" width="14" height="2" fill="#F0EDE0"/>
         <rect x="82" y="62" width="3"  height="2" fill="#FF4400" opacity=".85"/>
-        </g>
         <!-- CHIN CLEFT -->
         <rect x="55" y="68" width="6"  height="4"  fill="#FFAA77"/>
         <!-- NECK -->
@@ -1168,43 +779,12 @@ footer span{color:#8888aa}
         <!-- Knee pads -->
         <rect x="24" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <rect x="64" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
-        <!-- STRESSED STATE — Saturday panic (hidden by default, shown via JS) -->
-        <g id="jStress" display="none">
-          <!-- Cover original goggles with skin tone -->
-          <rect x="24" y="28" width="68" height="18" fill="#FFCC99"/>
-          <!-- Raised red goggles on forehead -->
-          <rect x="25" y="17" width="30" height="11" fill="#CC3300" stroke="#881100" stroke-width="1.5" rx="2"/>
-          <rect x="61" y="17" width="30" height="11" fill="#CC3300" stroke="#881100" stroke-width="1.5" rx="2"/>
-          <rect x="26" y="18" width="28" height="5" fill="#FF6633" opacity=".55"/>
-          <rect x="62" y="18" width="28" height="5" fill="#FF6633" opacity=".55"/>
-          <rect x="55" y="18" width="6" height="5" fill="#661100" stroke="#441100" stroke-width="1"/>
-          <!-- Beady left eye -->
-          <rect x="27" y="30" width="22" height="13" fill="#E8C090" rx="1"/>
-          <ellipse cx="37" cy="36" rx="6" ry="5" fill="#f5f5e8"/>
-          <circle cx="37" cy="36" r="3.5" fill="#1a1a22"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <circle cx="38.5" cy="34.5" r="1.2" fill="#fff" opacity=".7"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <!-- Beady right eye -->
-          <rect x="67" y="30" width="22" height="13" fill="#E8C090" rx="1"/>
-          <ellipse cx="77" cy="36" rx="6" ry="5" fill="#f5f5e8"/>
-          <circle cx="77" cy="36" r="3.5" fill="#1a1a22"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <circle cx="78.5" cy="34.5" r="1.2" fill="#fff" opacity=".7"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <!-- Worry lines -->
-          <line x1="37" y1="28" x2="46" y2="26" stroke="#AA7744" stroke-width="1.5" opacity=".55"/>
-          <line x1="65" y1="26" x2="74" y2="28" stroke="#AA7744" stroke-width="1.5" opacity=".55"/>
-          <!-- Sweat bead (right temple) -->
-          <g class="sweat-drip-anim">
-            <ellipse cx="88" cy="32" rx="2.5" ry="3.5" fill="#AADDFF" opacity=".9"/>
-            <path d="M88 36 Q85 40 88 44 Q91 40 88 36" fill="#AADDFF" opacity=".75"/>
-          </g>
-        </g>
       </svg>
     </div>
-    <div class="av-badge" id="johnBadge"></div>
     <div class="sb-wrap">
       <div class="sb-lbl">🔥 STREAK</div>
       <div class="sb-out"><div class="sb-in s0" id="jBar"></div></div>
       <div class="sb-n" id="jBarN">0 WEEKS</div>
-      <div class="sb-streak-badge" id="jStreakBadge"></div>
     </div>
     <div class="is">
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val jv" id="jApps">0</div></div>
@@ -1217,10 +797,6 @@ footer span{color:#8888aa}
   <!-- CENTER -->
   <div class="ccol">
     <div class="vs">VS</div>
-    <div class="cd-block">
-      <div class="countdown-timer" id="countdown">⏳ —</div>
-      <div class="cd-label">TO SUBMIT</div>
-    </div>
     <div class="score"><span class="j" id="jScore">0</span> — <span class="n" id="nScore">0</span></div>
     <div class="cdiv"></div>
     <div class="clbl">⚡ COMBINED ⚡</div>
@@ -1277,11 +853,9 @@ footer span{color:#8888aa}
         <rect x="62" y="30" width="28" height="8" fill="#3388FF" opacity=".6"/>
         <!-- Bridge -->
         <rect x="55" y="33" width="6"  height="5"  fill="#001144" stroke="#000C33" stroke-width="1"/>
-        <!-- MOUTH -->
-        <g id="nMouth">
-        <rect x="38" y="56" width="40" height="6" fill="#BB7733" stroke="#994411" stroke-width="1"/>
-        <rect x="42" y="57" width="32" height="4" fill="#EEEEDD"/>
-        </g>
+        <!-- MOUTH — clean block, same as John -->
+        <rect x="44" y="60" width="24" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
+        <rect x="46" y="61" width="14" height="4" fill="#EDE0CC"/>
         <!-- CHIN CLEFT -->
         <rect x="55" y="68" width="6"  height="4"  fill="#FFAA77"/>
         <!-- NECK -->
@@ -1331,43 +905,12 @@ footer span{color:#8888aa}
         <!-- Knee pads -->
         <rect x="24" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <rect x="64" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
-        <!-- STRESSED STATE — Saturday panic (hidden by default, shown via JS) -->
-        <g id="nStress" display="none">
-          <!-- Cover original goggles with skin tone -->
-          <rect x="24" y="28" width="68" height="18" fill="#FFCC99"/>
-          <!-- Raised blue goggles on forehead -->
-          <rect x="25" y="17" width="30" height="11" fill="#0044AA" stroke="#002266" stroke-width="1.5" rx="2"/>
-          <rect x="61" y="17" width="30" height="11" fill="#0044AA" stroke="#002266" stroke-width="1.5" rx="2"/>
-          <rect x="26" y="18" width="28" height="5" fill="#3388FF" opacity=".55"/>
-          <rect x="62" y="18" width="28" height="5" fill="#3388FF" opacity=".55"/>
-          <rect x="55" y="18" width="6" height="5" fill="#001144" stroke="#000C33" stroke-width="1"/>
-          <!-- Beady left eye -->
-          <rect x="27" y="30" width="22" height="13" fill="#E8C090" rx="1"/>
-          <ellipse cx="37" cy="36" rx="6" ry="5" fill="#f5f5e8"/>
-          <circle cx="37" cy="36" r="3.5" fill="#1a1a22"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <circle cx="38.5" cy="34.5" r="1.2" fill="#fff" opacity=".7"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <!-- Beady right eye -->
-          <rect x="67" y="30" width="22" height="13" fill="#E8C090" rx="1"/>
-          <ellipse cx="77" cy="36" rx="6" ry="5" fill="#f5f5e8"/>
-          <circle cx="77" cy="36" r="3.5" fill="#1a1a22"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <circle cx="78.5" cy="34.5" r="1.2" fill="#fff" opacity=".7"><animateTransform attributeName="transform" type="translate" values="0,0;-3,0;3,0;-4,1;2,-1;0,0;0,0;0,0" dur="2.8s" repeatCount="indefinite"/></circle>
-          <!-- Worry lines -->
-          <line x1="37" y1="28" x2="46" y2="26" stroke="#AA7744" stroke-width="1.5" opacity=".55"/>
-          <line x1="65" y1="26" x2="74" y2="28" stroke="#AA7744" stroke-width="1.5" opacity=".55"/>
-          <!-- Sweat bead (appears on left temple due to scaleX mirror) -->
-          <g class="sweat-drip-anim">
-            <ellipse cx="88" cy="32" rx="2.5" ry="3.5" fill="#AADDFF" opacity=".9"/>
-            <path d="M88 36 Q85 40 88 44 Q91 40 88 36" fill="#AADDFF" opacity=".75"/>
-          </g>
-        </g>
       </svg>
     </div>
-    <div class="av-badge" id="nickBadge"></div>
     <div class="sb-wrap">
       <div class="sb-lbl">🔥 STREAK</div>
       <div class="sb-out"><div class="sb-in s0" id="nBar"></div></div>
       <div class="sb-n" id="nBarN">0 WEEKS</div>
-      <div class="sb-streak-badge" id="nStreakBadge"></div>
     </div>
     <div class="is">
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val nv" id="nApps">0</div></div>
@@ -1392,7 +935,6 @@ footer span{color:#8888aa}
 <!-- ================================================
      THIS WEEK'S BATTLE
 ================================================ -->
-<div style="height:2px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.35),transparent);margin:0 20px"></div>
 <section class="sec" id="thisWeekSec" style="display:none">
   <div class="sec-h">▶ THIS WEEK'S BATTLE</div>
   <div class="wgrid" id="thisWeek"></div>
@@ -1433,13 +975,16 @@ footer span{color:#8888aa}
     <img id="imgPreview" alt="preview">
   </div>
   <div class="fg">
-    <label class="fl">💰 EARNINGS FROM AI THIS WEEK (USD)</label>
+    <label class="fl">💰 EARNINGS THIS WEEK (USD)</label>
     <div class="earn-row">
       <span class="d-sign">$</span>
       <input class="fi earn-fi" id="fEarn" type="number" min="0" step="0.01" placeholder="0.00">
     </div>
   </div>
   <button class="sub-btn" onclick="handleSubmit()">🎮 LOCK IN THIS WEEK'S CREATION</button>
+  <div style="text-align:center">
+    <span class="chpw-link" onclick="document.getElementById('pwModal').classList.remove('hidden')">🔐 CHANGE MY PASSWORD</span>
+  </div>
 </section>
 
 <!-- ================================================
@@ -1469,10 +1014,7 @@ footer span{color:#8888aa}
     <div class="hoc-bottom-bar"></div>
   </div>
   <div class="hist-controls">
-    <div class="hist-search-wrap">
-      <input class="hist-search" id="histSearch" type="text" placeholder="🔍 SEARCH HISTORY..." oninput="filterHistory()">
-      <button class="hist-search-clear" id="histSearchClear" style="display:none" onclick="clearHistSearch()">✕</button>
-    </div>
+    <input class="hist-search" id="histSearch" type="text" placeholder="🔍 SEARCH HISTORY..." oninput="filterHistory()">
     <button class="hist-ctrl-btn" onclick="expandAll()">EXPAND ALL</button>
     <button class="hist-ctrl-btn" onclick="collapseAll()">COLLAPSE ALL</button>
   </div>
@@ -1505,20 +1047,6 @@ let _histFilter = '';
 // ============================================================
 //  WEEK UTILS
 // ============================================================
-// ?devDay=N overrides the day-of-week for testing avatar states & urgency (0=Sun … 6=Sat)
-function _dayOfWeek(){
-  const v = parseInt(new URLSearchParams(location.search).get('devDay'));
-  return isNaN(v) ? new Date().getDay() : v % 7;
-}
-// Format a submission timestamp → "MON 2:47 AM"
-function fmtSubmitTime(dt){
-  if (!dt) return '';
-  const d = new Date(dt);
-  const days = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
-  const h = d.getHours(), m = d.getMinutes();
-  return `${days[d.getDay()]} ${h%12||12}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`;
-}
-
 function wid(dt){
   const d = dt ? new Date(dt) : new Date();
   const j = new Date(d.getFullYear(), 0, 1);
@@ -1600,23 +1128,6 @@ function pickPlayer(p){
   BOOT.play();
 }
 
-function togglePwVis(){
-  const inp = document.getElementById('pwInp');
-  const btn = document.getElementById('pwToggle');
-  const eyeOn  = document.getElementById('pwEyeIcon');
-  const eyeOff = document.getElementById('pwEyeOffIcon');
-  if (inp.type === 'password') {
-    inp.type = 'text';
-    eyeOn.style.display  = 'none';
-    eyeOff.style.display = '';
-    btn.style.color = '#aaaacc';
-  } else {
-    inp.type = 'password';
-    eyeOn.style.display  = '';
-    eyeOff.style.display = 'none';
-    btn.style.color = '#555577';
-  }
-}
 function backToNames(){
   _pendingPlayer = null;
   document.getElementById('pwPanel').classList.remove('show');
@@ -1630,27 +1141,21 @@ document.addEventListener('keydown', ev => {
 async function doLogin(){
   const pw = document.getElementById('pwInp').value;
   if (!pw){ document.getElementById('pwErr').textContent = 'ENTER YOUR PASSWORD'; return; }
-  MU.init(); // create AudioContext NOW while still in user-gesture context
-  const playerEmails = { john: 'jjurko@gmail.com', nick: 'nickarmyfilms@gmail.com' };
-  const email = playerEmails[_pendingPlayer] || `${_pendingPlayer}@aiarena.game`;
+  MU.prime(); // prime AudioContext NOW while still in user-gesture context
+  const email = `${_pendingPlayer}@aiarena.game`;
   const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
   if (error){
     document.getElementById('pwErr').textContent = 'WRONG PASSWORD, SOLDIER!';
     return;
   }
   _session = data.session;
-  MU.start();
+  MU.start(); // ctx already alive — starts the loop immediately
   await showArena();
 }
 
 async function spectate(){
   _session = null;
-  MU.init();
-  MU.start();
   await showArena();
-  // Hide settings gear for spectators
-  const sb2 = document.getElementById('settingsBtn');
-  if (sb2) sb2.style.display = 'none';
 }
 
 async function switchUser(){
@@ -1668,8 +1173,13 @@ async function switchUser(){
 //  BOOT — on page load, restore session
 // ============================================================
 window.addEventListener('DOMContentLoaded', async () => {
-  // Always start at login — clear any lingering Supabase session
-  await sb.auth.signOut();
+  const { data: { session } } = await sb.auth.getSession();
+  if (session){
+    _session = session;
+    MU.start();
+    await showArena();
+  }
+  // else: show login screen (already visible)
 });
 
 // ============================================================
@@ -1693,7 +1203,6 @@ async function showArena(){
     sp.className = p === 'john' ? '' : 'n';
   }
 
-  startCountdown();
   await loadAndRender();
 }
 
@@ -1728,14 +1237,14 @@ function renderArena(){
   // session tag
   const tag = document.getElementById('sessTag');
   const p = who();
-  if (p === 'john'){ tag.textContent = '⚡ JOHN — LOGOUT'; tag.className = 'sess-tag sess-j'; }
-  else if (p === 'nick'){ tag.textContent = '💙 NICK — LOGOUT'; tag.className = 'sess-tag sess-n'; }
+  if (p === 'john'){ tag.textContent = '⚡ JOHN — SWITCH'; tag.className = 'sess-tag sess-j'; }
+  else if (p === 'nick'){ tag.textContent = '💙 NICK — SWITCH'; tag.className = 'sess-tag sess-n'; }
   else { tag.textContent = '👁 SPECTATING — LOG IN'; tag.className = 'sess-tag sess-spec'; }
 
   // streaks
   const js = streak('john'), ns = streak('nick');
-  applyBar('jBar','jBarN', js, 'jStreakBadge');
-  applyBar('nBar','nBarN', ns, 'nStreakBadge');
+  applyBar('jBar','jBarN', js);
+  applyBar('nBar','nBarN', ns);
 
   // stats
   let ja=0, na=0, je=0, ne=0, bc=0;
@@ -1774,8 +1283,6 @@ function renderArena(){
   else if (w.john){ badge.textContent = '⚡ JOHN LOCKED IN'; badge.className='badge'; }
   else if (w.nick){ badge.textContent = '💙 NICK LOCKED IN'; badge.className='badge'; }
   else { badge.textContent = '💀 NO ENTRIES YET'; badge.className='badge w'; }
-
-  updateAvatarStates();
 }
 
 function streak(p){
@@ -1794,18 +1301,11 @@ function best(p){
   return $$(Math.max(...subs.map(s => parseFloat(s.earnings)||0)));
 }
 
-function applyBar(barId, nId, s, badgeId){
+function applyBar(barId, nId, s){
   const b = document.getElementById(barId), n = document.getElementById(nId);
   b.style.width = s === 0 ? '0%' : Math.min(100,(s/10)*100) + '%';
   b.className = 'sb-in ' + (s===0?'s0':s<=2?'slow':s<=5?'smid':'shit');
   n.textContent = s + (s===1?' WEEK':' WEEKS');
-  const bd = badgeId && document.getElementById(badgeId);
-  if (bd) {
-    if      (s >= 8) bd.innerHTML = '<span class="streak-legendary">🔥 LEGENDARY</span>';
-    else if (s >= 5) bd.innerHTML = '<span class="streak-unstop">⚡ UNSTOPPABLE</span>';
-    else if (s >= 3) bd.innerHTML = '<span class="streak-roll">🔥 ON A ROLL</span>';
-    else             bd.innerHTML = '';
-  }
 }
 
 function renderThisWeek(){
@@ -1814,38 +1314,31 @@ function renderThisWeek(){
   const w = weeks[cur] || {};
   const p = who();
   const div = document.getElementById('thisWeek');
-  div.innerHTML = ['john','nick'].map(pl => mkCard(w[pl], pl, cur, p, true)).join('');
+  div.innerHTML = ['john','nick'].map(pl => mkCard(w[pl], pl, cur, p)).join('');
 }
 
-function mkCard(sub, pl, weekId, currentUser, isCurrent=false){
+function mkCard(sub, pl, weekId, currentUser){
   const isJ = pl === 'john';
+  const col = isJ ? '--j' : '--n';
   const cls = isJ ? 'jc' : 'nc';
   const label = isJ ? '⚡ JOHN' : '💙 NICK';
   const pcls = isJ ? 'jp' : 'np';
 
   if (!sub){
-    // Thursday+ urgency on the current week's card only
-    const day = _dayOfWeek();
-    const isUrgent = isCurrent && (day === 4 || day === 5 || day === 6 || day === 0);
-    const ico  = isUrgent ? '⏳' : '💀';
-    const main = isUrgent ? 'RUNNING OUT OF TIME' : 'NOT SUBMITTED';
-    const sub2 = isUrgent
-      ? (currentUser === pl ? '⚡ SUBMIT NOW OR FORFEIT' : '⏳ TICK TOCK...')
-      : (currentUser === pl ? 'USE THE FORM BELOW' : 'AWAITING ENTRY...');
     return `<div class="sc ${cls} ec">
       <div class="sc-hdr"><span class="sc-player ${pcls}">${label}</span></div>
       <div class="noshow">
-        <div class="ns-ico${isUrgent?' urgent':''}">${ico}</div>
-        <div class="ns-t${isUrgent?' urgent':''}">${main}</div>
-        <div class="ns-s">${sub2}</div>
+        <div class="ns-ico">💀</div>
+        <div class="ns-t">NOT SUBMITTED</div>
+        <div class="ns-s">${currentUser === pl ? 'USE THE FORM BELOW' : 'AWAITING ENTRY...'}</div>
       </div>
     </div>`;
   }
 
   const canEdit = currentUser === pl;
   const acts = canEdit ? `<div class="sc-actions">
-    <button class="sc-btn" onclick='event.stopPropagation();openEdit(${JSON.stringify(sub.id)})'>✏️</button>
-    <button class="sc-btn del" onclick='event.stopPropagation();delEntry(${JSON.stringify(sub.id)})'>🗑</button>
+    <button class="sc-btn" onclick='openEdit(${JSON.stringify(sub.id)})'>✏️</button>
+    <button class="sc-btn del" onclick='delEntry(${JSON.stringify(sub.id)})'>🗑</button>
   </div>` : '';
 
   const img = sub.image_url
@@ -1856,13 +1349,11 @@ function mkCard(sub, pl, weekId, currentUser, isCurrent=false){
   if (sub.url) links.push(`<a class="sc-link" href="${e(sub.url)}" target="_blank" rel="noopener">▶ VIEW PROJECT</a>`);
   if (sub.social_url) links.push(`<a class="sc-link social" href="${e(sub.social_url)}" target="_blank" rel="noopener">📱 SOCIAL POST</a>`);
   const earn = sub.earnings > 0 ? `<span class="sc-earn">💰 ${$$(sub.earnings)}</span>` : '';
-  const ts = sub.submitted_at ? `<div class="sc-time">📅 ${fmtSubmitTime(sub.submitted_at)}</div>` : '';
 
-  return `<div class="sc ${cls}" style="cursor:pointer" onclick="openCardModal('${sub.id}')">
+  return `<div class="sc ${cls}">
     <div class="sc-hdr"><span class="sc-player ${pcls}">${label}</span>${acts}</div>
     ${img}
     <div class="sc-body">
-      ${ts}
       <div class="sc-title ${isJ?'jt':'nt'}">${e(sub.title)}</div>
       ${sub.description ? `<div class="sc-desc">${e(sub.description)}</div>` : ''}
     </div>
@@ -1886,10 +1377,10 @@ function renderHistory(){
     const w = weeks[id] || {};
     const badge = (w.john&&w.nick)?'⚔️ BOTH':w.john?'⚡ JOHN':w.nick?'💙 NICK':'💀 DNF';
     const mkHCard = (sub, pl) => sub
-      ? `<div class="hw-card" style="cursor:pointer" onclick="openCardModal('${sub.id}')">
+      ? `<div class="hw-card">
           <div class="hw-acts">
-            ${p===pl ? `<button class="hw-btn" onclick='event.stopPropagation();openEdit(${JSON.stringify(sub.id)})'>✏️</button>
-            <button class="hw-btn del" onclick='event.stopPropagation();delEntry(${JSON.stringify(sub.id)})'>🗑</button>` : ''}
+            ${p===pl ? `<button class="hw-btn" onclick='openEdit(${JSON.stringify(sub.id)})'>✏️</button>
+            <button class="hw-btn del" onclick='delEntry(${JSON.stringify(sub.id)})'>🗑</button>` : ''}
           </div>
           ${sub.image_url ? `<img class="hw-img" src="${e(sub.image_url)}" alt="${e(sub.title)}" onerror="this.style.display='none'">` : ''}
           <div class="hw-player" style="color:${pl==='john'?'var(--j)':'var(--n)'};margin-top:6px">${pl.toUpperCase()}</div>
@@ -1921,51 +1412,7 @@ function renderHistory(){
   div.innerHTML = rows || `<div style="font-size:.32em;color:#666688;text-align:center;padding:22px">NO RESULTS</div>`;
 }
 
-function filterHistory(){
-  const inp = document.getElementById('histSearch');
-  _histFilter = inp.value;
-  const clr = document.getElementById('histSearchClear');
-  if (clr) clr.style.display = inp.value ? '' : 'none';
-  renderHistory();
-}
-function clearHistSearch(){
-  const inp = document.getElementById('histSearch');
-  inp.value = '';
-  filterHistory();
-  inp.focus();
-}
-
-// ============================================================
-//  CARD DETAIL MODAL
-// ============================================================
-function openCardModal(id){
-  const sub = _subs.find(s => s.id === id);
-  if (!sub) return;
-  const isJ = sub.username === 'john';
-  const playerColor = isJ ? 'var(--j)' : 'var(--n)';
-  const playerLabel = isJ ? '⚡ JOHN' : '💙 NICK';
-  const img = sub.image_url
-    ? `<img class="cm-img" src="${e(sub.image_url)}" alt="${e(sub.title)}" onerror="this.style.display='none'">`
-    : '';
-  const links = [];
-  if (sub.url) links.push(`<a class="cm-link" href="${e(sub.url)}" target="_blank" rel="noopener">▶ VIEW PROJECT</a>`);
-  if (sub.social_url) links.push(`<a class="cm-link social" href="${e(sub.social_url)}" target="_blank" rel="noopener">📱 SOCIAL POST</a>`);
-  document.getElementById('cmContent').innerHTML = `
-    ${img}
-    <div class="cm-body">
-      <div class="cm-player" style="color:${playerColor}">${playerLabel}</div>
-      <div class="cm-title" style="color:${playerColor}">${e(sub.title)}</div>
-      ${sub.description ? `<div class="cm-desc">${e(sub.description)}</div>` : ''}
-      ${sub.earnings > 0 ? `<div class="cm-earn">💰 ${$$(sub.earnings)}</div>` : ''}
-      ${links.length ? `<div class="cm-links">${links.join('')}</div>` : ''}
-    </div>`;
-  document.getElementById('cardModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeCardModal(){
-  document.getElementById('cardModal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+function filterHistory(){ _histFilter = document.getElementById('histSearch').value; renderHistory(); }
 function expandAll(){ document.querySelectorAll('.hw-body').forEach(el => el.classList.add('open')); }
 function collapseAll(){ document.querySelectorAll('.hw-body').forEach(el => el.classList.remove('open')); }
 
@@ -1985,14 +1432,8 @@ async function handleSubmit(){
   // Upload image if preview is shown
   let imageUrl = existing?.image_url || null;
   const imgEl = document.getElementById('imgPreview');
-  if (imgEl.style.display !== 'none' && imgEl.src && imgEl.src !== window.location.href) {
-    if (imgEl.src.startsWith('data:')) {
-      // Local file upload — upload to Supabase storage
-      imageUrl = await uploadPreviewImage(weekId) || imageUrl;
-    } else if (imgEl.src.startsWith('http')) {
-      // External screenshot URL — save directly, no re-upload needed
-      imageUrl = imgEl.src;
-    }
+  if (imgEl.style.display !== 'none' && imgEl.src && !imgEl.src.startsWith('data:image') === false || imgEl.src.startsWith('http')) {
+    imageUrl = await uploadPreviewImage(weekId) || imageUrl;
   }
 
   const sub = {
@@ -2007,39 +1448,20 @@ async function handleSubmit(){
     earnings: parseFloat(document.getElementById('fEarn').value) || 0,
   };
 
-  // First blood check before insert
-  const isFirstBlood = _subs.filter(s => s.week_id === weekId).length === 0;
-
   const { error } = await sb.from('submissions').upsert(sub, { onConflict: 'user_id,week_id' });
   if (error){ flash('ERROR: ' + error.message); return; }
 
-  if (isFirstBlood) {
-    flash('⚔️ FIRST BLOOD! YOU STRUCK FIRST!');
-  } else {
-    flash('🎮 LOCKED IN!');
-  }
+  flash('🎮 LOCKED IN!');
   MU.sting();
-  DUKE.play();
   splat();
   clearForm();
   await loadAndRender();
-
-  // Check if the other player has already submitted this week
-  const otherPlayer = username === 'john' ? 'nick' : 'john';
-  const otherAlreadyIn = !!_subs.find(s => s.week_id === weekId && s.username === otherPlayer);
-
-  // Notify the other player (non-blocking)
-  notifyOtherPlayer(username, weekId, title, sub.description || '', otherAlreadyIn).catch(() => {});
 }
 
 function clearForm(){
   ['fTitle','fDesc','fUrl','fSocial','fEarn'].forEach(id => document.getElementById(id).value = '');
   const img = document.getElementById('imgPreview');
   img.src = ''; img.style.display = 'none';
-  const ldr = document.getElementById('ssLoading');
-  if (ldr) ldr.style.display = 'none';
-  const fi = document.getElementById('fileIn');
-  if (fi) fi.value = '';
 }
 
 async function uploadPreviewImage(weekId){
@@ -2084,45 +1506,58 @@ async function handleFileUpload(file){
 }
 
 // ============================================================
-//  SCREENSHOT (microlink.io)
+//  SCREENSHOT (thum.io)
 // ============================================================
-async function grabShot(){
+function grabShot(){
   const rawUrl = document.getElementById('fUrl').value.trim();
   if (!rawUrl){ flash('ENTER A URL FIRST!'); return; }
   const prv = document.getElementById('imgPreview');
   const ldr = document.getElementById('ssLoading');
+  const sep = rawUrl.includes('?') ? '&' : '?';
+  const ssUrl = `https://image.thum.io/get/width/1200/crop/630/delay/2000/${rawUrl + sep + '_ss=' + Date.now()}`;
 
   prv.onload = null; prv.onerror = null;
   prv.style.display = 'none'; prv.src = '';
-  ldr.style.display = 'block';
-  ldr.innerHTML = '📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">LOADING PAGE — PLEASE WAIT</span>';
 
-  let elapsed = 0;
+  const start = Date.now();
   const ticker = setInterval(() => {
-    elapsed++;
-    ldr.innerHTML = `📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">⏱ ${elapsed}s — PLEASE WAIT</span>`;
+    const s = Math.floor((Date.now() - start) / 1000);
+    ldr.innerHTML = `📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">⏱ ${s}s — VIDEO SITES CAN TAKE 20–30s</span>`;
   }, 1000);
+
+  ldr.innerHTML = '📸 CAPTURING SCREENSHOT...<br><span class="ss-bar">LOADING PAGE — PLEASE WAIT</span>';
+  ldr.style.display = 'block';
+
   const done = () => { clearInterval(ticker); ldr.style.display = 'none'; };
 
-  try {
-    // microlink.io: free, CORS-enabled, returns real screenshot URL
-    const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(rawUrl)}&screenshot=true&meta=false&waitFor=5000&waitUntil=networkidle2&force=true`);
-    const json = await res.json();
-    if (json.status === 'success' && json.data?.screenshot?.url) {
-      done();
-      prv.src = json.data.screenshot.url;
+  const reveal = (srcUrl) => {
+    done();
+    const tmp = new Image(); tmp.crossOrigin = 'anonymous';
+    tmp.onload = () => {
+      try {
+        const MAX = 900;
+        let w = tmp.naturalWidth || 1200, h = tmp.naturalHeight || 630;
+        if (w > MAX){ h = Math.round(h * MAX / w); w = MAX; }
+        const cv = document.createElement('canvas');
+        cv.width = w; cv.height = h;
+        cv.getContext('2d').drawImage(tmp, 0, 0, w, h);
+        prv.src = cv.toDataURL('image/jpeg', 0.78);
+      } catch(err){ prv.src = srcUrl; }
       prv.style.display = 'block';
       flash('📸 SCREENSHOT LOADED!');
-      return;
-    }
-  } catch(e){}
+    };
+    tmp.onerror = () => { prv.src = srcUrl; prv.style.display = 'block'; flash('📸 SCREENSHOT LOADED!'); };
+    tmp.src = srcUrl;
+  };
 
-  // Fallback: WordPress mshots
-  ldr.innerHTML = '📸 TRYING BACKUP SERVICE...<br><span class="ss-bar">PLEASE WAIT</span>';
-  const msUrl = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(rawUrl)}?w=900&h=473`;
-  prv.onload = () => { done(); prv.style.display = 'block'; flash('📸 SCREENSHOT LOADED!'); };
-  prv.onerror = () => { done(); flash('SCREENSHOT FAILED — UPLOAD AN IMAGE INSTEAD'); };
-  prv.src = msUrl;
+  prv.onload = () => reveal(ssUrl);
+  prv.onerror = () => {
+    ldr.innerHTML = '📸 TRYING BACKUP SERVICE...<br><span class="ss-bar">PLEASE WAIT</span>';
+    prv.onload = () => reveal(prv.src);
+    prv.onerror = () => { done(); flash('SCREENSHOT FAILED\nUPLOAD AN IMAGE INSTEAD'); };
+    prv.src = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(rawUrl)}?w=1200&h=630`;
+  };
+  prv.src = ssUrl;
 }
 
 // ============================================================
@@ -2170,375 +1605,19 @@ async function delEntry(subId){
 // ============================================================
 //  CHANGE PASSWORD
 // ============================================================
-// ============================================================
-//  COUNTDOWN TIMER — Sunday midnight Eastern time
-// ============================================================
-let _cdInterval = null;
-
-function getNextSundayMidnightEastern() {
-  // Parse "now" as Eastern time using the locale trick
-  const now = new Date();
-  const etNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-  const dow = etNow.getDay(); // 0=Sun, 1=Mon ... 6=Sat
-  // Days until the END of the coming Sunday (if today is Sunday, target end of today)
-  const daysUntilSunday = dow === 0 ? 0 : 7 - dow;
-  const etTarget = new Date(etNow);
-  etTarget.setDate(etNow.getDate() + daysUntilSunday);
-  etTarget.setHours(23, 59, 59, 0);
-  // Offset: eastern "fake UTC" minus real UTC = Eastern offset in ms
-  const offsetMs = etNow.getTime() - now.getTime();
-  return new Date(etTarget.getTime() - offsetMs);
-}
-
-function startCountdown() {
-  if (_cdInterval) clearInterval(_cdInterval);
-  function tick() {
-    const el = document.getElementById('countdown');
-    if (!el) return;
-    const now = new Date();
-    const target = getNextSundayMidnightEastern();
-    const diff = target - now;
-    if (diff <= 0) {
-      el.textContent = '⏰ WEEK OVER';
-      el.className = 'countdown-timer urgent';
-      return;
-    }
-    const days    = Math.floor(diff / 86400000);
-    const hours   = Math.floor((diff % 86400000) / 3600000);
-    const minutes = Math.floor((diff % 3600000) / 60000);
-    const seconds = Math.floor((diff % 60000) / 1000);
-    const hh = String(hours).padStart(2,'0');
-    const mm = String(minutes).padStart(2,'0');
-    const ss = String(seconds).padStart(2,'0');
-    el.textContent = days > 0 ? `${days}D ${hh}:${mm}:${ss}` : `${hh}:${mm}:${ss}`;
-    if (diff < 86400000) {
-      el.className = 'countdown-timer urgent';  // < 24h: red + pulse
-    } else if (diff < 172800000) {
-      el.className = 'countdown-timer warn';    // < 48h: yellow pulse
-    } else {
-      el.className = 'countdown-timer';
-    }
-  }
-  tick();
-  _cdInterval = setInterval(tick, 1000);
-}
-
-// ============================================================
-//  AVATAR POWER-UP STATES
-// ============================================================
-function updateAvatarStates() {
-  const cur = wid();
-  const weeks = grouped();
-  const w = weeks[cur] || {};
-
-  // This week submission status
-  const jLocked = !!w.john;
-  const nLocked = !!w.nick;
-
-  // Last week winner
-  const allIds = Object.keys(weeks).sort();
-  const curIdx = allIds.indexOf(cur);
-  const lastId = curIdx > 0 ? allIds[curIdx - 1] : null;
-  const lastW  = lastId ? (weeks[lastId] || {}) : {};
-  let lastChamp = null;
-  if (lastW.john && lastW.nick) {
-    const je = parseFloat(lastW.john.earnings) || 0;
-    const ne = parseFloat(lastW.nick.earnings) || 0;
-    if (je > ne) lastChamp = 'john';
-    else if (ne > je) lastChamp = 'nick';
-    // tie → no champ
-  } else if (lastW.john) lastChamp = 'john';
-  else if (lastW.nick)  lastChamp = 'nick';
-
-  // Cooked: didn't submit LAST week (only show if they haven't submitted THIS week yet)
-  const jCooked = !!lastId && !lastW.john && !jLocked;
-  const nCooked = !!lastId && !lastW.nick && !nLocked;
-
-  // Stressed: it's Saturday (day 6) and haven't submitted this week
-  const day = _dayOfWeek();
-  const isSat = (day === 6);
-  const jStressed = isSat && !jLocked;
-  const nStressed = isSat && !nLocked;
-
-  // Streak counts for escalation effects
-  const js = streak('john'), ns = streak('nick');
-
-  _applyAvatarState('john', jLocked, lastChamp === 'john', jCooked, jStressed, js);
-  _applyAvatarState('nick',  nLocked, lastChamp === 'nick',  nCooked, nStressed, ns);
-}
-
-function _applyAvatarState(player, lockedIn, isChamp, isCooked, isStressed=false, streakCount=0) {
-  const av    = document.getElementById(player === 'john' ? 'johnSvg' : 'nickSvg')?.parentElement;
-  const badge = document.getElementById(player === 'john' ? 'johnBadge' : 'nickBadge');
-  if (!av || !badge) return;
-
-  // Reset state
-  av.classList.remove('fired-up', 'cooked-out', 'is-champ', 'streak-hot', 'streak-epic');
-  badge.innerHTML = '';
-  av.querySelectorAll('.crown-overlay, .skull-overlay').forEach(el => el.remove());
-
-  if (lockedIn) {
-    av.classList.add('fired-up');
-    badge.innerHTML += '<div class="badge-fire">🔥 LOCKED IN</div>';
-  } else if (isCooked) {
-    av.classList.add('cooked-out');
-    badge.innerHTML += '<div class="badge-cooked">💀 GET BUSY</div>';
-    const skull = document.createElement('div');
-    skull.className = 'skull-overlay';
-    skull.textContent = '💀';
-    av.appendChild(skull);
-  }
-
-  if (isChamp) {
-    av.classList.add('is-champ');
-    const crown = document.createElement('div');
-    crown.className = 'crown-overlay';
-    crown.textContent = '👑';
-    av.appendChild(crown);
-    badge.innerHTML = '<div class="badge-champ">👑 LAST CHAMP</div>' + badge.innerHTML;
-  }
-
-  // Streak escalation — extra glow (only when locked in this week)
-  if (lockedIn && streakCount >= 8) av.classList.add('streak-epic');
-  else if (lockedIn && streakCount >= 5) av.classList.add('streak-hot');
-
-  // Stressed Saturday state — show panic face overlay
-  const stressEl = document.getElementById(player === 'john' ? 'jStress' : 'nStress');
-  if (stressEl) stressEl.setAttribute('display', (isStressed && !lockedIn) ? 'block' : 'none');
-}
-
-// ============================================================
-//  EMAIL NOTIFICATION — calls Supabase Edge Function
-// ============================================================
-const _ARENA_KEY = 'a7Kp-Xm3N-wQ9r-Tz6L';
-
-async function notifyOtherPlayer(submitter, weekId, title='', description='', bothSubmitted=false) {
-  try {
-    await sb.functions.invoke('notify-submission', {
-      body: { submitter, weekId, title, description, bothSubmitted },
-      headers: { 'x-arena-key': _ARENA_KEY }
-    });
-  } catch(e) {
-    // Non-critical — silently ignore
-  }
-}
-
-async function sendTestEmail() {
-  const p = who();
-  const err = document.getElementById('pwModalErr');
-  if (!p) { err.textContent = 'LOG IN FIRST'; err.style.color = 'var(--red)'; return; }
-  err.style.color = '#888888';
-  err.textContent = 'SENDING TEST EMAIL...';
-  try {
-    const res = await sb.functions.invoke('notify-submission', {
-      body: {
-        submitter: p,
-        weekId: wid(),
-        title: 'TEST ENTRY — WEEKLY CREATION',
-        description: 'This is a test notification from AI Arena. If you got this, emails are working!',
-        bothSubmitted: false,
-        isTest: true
-      },
-      headers: { 'x-arena-key': _ARENA_KEY }
-    });
-    err.style.color = 'var(--green)';
-    err.textContent = '✅ TEST SENT! CHECK THE OTHER INBOX.';
-  } catch(e) {
-    err.style.color = 'var(--red)';
-    err.textContent = 'FAILED — CHECK BREVO KEY';
-  }
-}
-
-// ============================================================
-//  ACCOUNT SETTINGS
-// ============================================================
-function openSettings(){
-  const modal = document.getElementById('pwModal');
-  modal.classList.remove('hidden');
-  // Pre-fill email from current session
-  const emailInp = document.getElementById('settingsEmail');
-  emailInp.value = _session?.user?.email || '';
-  document.getElementById('newPw1').value = '';
-  document.getElementById('newPw2').value = '';
-  const errEl = document.getElementById('pwModalErr');
-  errEl.textContent = '';
-  errEl.style.color = 'var(--red)';
-  // Test email button only visible to john
-  const testEmailRow = document.getElementById('testEmailRow');
-  if (testEmailRow) testEmailRow.style.display = who() === 'john' ? '' : 'none';
-}
-
-function openReadme(){
-  closeSettings();
-  const m = document.getElementById('readmeModal');
-  m.style.display = 'flex';
-}
-function closeReadme(){
-  document.getElementById('readmeModal').style.display = 'none';
-}
-
-function closeSettings(){
-  document.getElementById('pwModal').classList.add('hidden');
-  document.getElementById('settingsEmail').value = '';
-  document.getElementById('newPw1').value = '';
-  document.getElementById('newPw2').value = '';
-  document.getElementById('pwModalErr').textContent = '';
-}
-
-async function doChangeSettings(){
-  const newEmail = document.getElementById('settingsEmail').value.trim();
+async function doChangePw(){
   const p1 = document.getElementById('newPw1').value;
   const p2 = document.getElementById('newPw2').value;
   const err = document.getElementById('pwModalErr');
-  err.textContent = '';
-
-  // Validate password if provided
-  if (p1 || p2) {
-    if (p1.length < 6){ err.textContent = 'MIN 6 CHARACTERS'; return; }
-    if (p1 !== p2){ err.textContent = 'PASSWORDS DO NOT MATCH'; return; }
-  }
-
-  // Validate email
-  if (!newEmail){ err.textContent = 'EMAIL CANNOT BE EMPTY'; return; }
-
-  let changed = false;
-
-  // Update email if it changed
-  const currentEmail = _session?.user?.email || '';
-  if (newEmail !== currentEmail) {
-    const { error: emailErr } = await sb.auth.updateUser({ email: newEmail });
-    if (emailErr){ err.textContent = emailErr.message; return; }
-    // Also update notification email in player_emails table
-    const p = who();
-    if (p) {
-      await sb.from('player_emails').upsert({ player: p, notify_email: newEmail, updated_at: new Date().toISOString() });
-    }
-    changed = true;
-  }
-
-  // Update password if provided
-  if (p1) {
-    const { error: pwErr } = await sb.auth.updateUser({ password: p1 });
-    if (pwErr){ err.textContent = pwErr.message; return; }
-    changed = true;
-  }
-
-  if (!changed){ err.textContent = 'NOTHING TO CHANGE'; return; }
-
-  closeSettings();
-  flash(p1 && newEmail !== currentEmail ? '✅ EMAIL & PASSWORD UPDATED!' : p1 ? '🔐 PASSWORD UPDATED!' : '📧 CHECK YOUR NEW EMAIL TO CONFIRM!');
-}
-
-// ============================================================
-//  FORGOT PASSWORD (on login screen)
-// ============================================================
-function showForgotPw(){
-  document.getElementById('pwPanel').style.display = 'none';
-  document.getElementById('forgotPanel').style.display = '';
-  document.getElementById('forgotEmail').value = '';
-  document.getElementById('forgotErr').textContent = '';
-}
-
-function backFromForgot(){
-  document.getElementById('forgotPanel').style.display = 'none';
-  document.getElementById('pwPanel').style.display = '';
-}
-
-async function doForgotPw(){
-  const email = document.getElementById('forgotEmail').value.trim();
-  const err = document.getElementById('forgotErr');
-  err.textContent = '';
-  if (!email){ err.textContent = 'ENTER YOUR EMAIL ADDRESS'; return; }
-  const { error } = await sb.auth.resetPasswordForEmail(email, {
-    redirectTo: 'https://vanzosoai.github.io/ai-arena'
-  });
-  if (error){ err.textContent = error.message; return; }
-  err.style.color = 'var(--green)';
-  err.textContent = '✅ RESET LINK SENT! CHECK YOUR EMAIL.';
-}
-
-// ============================================================
-//  PASSWORD RECOVERY (arriving from reset email link)
-// ============================================================
-async function doSetRecoveryPassword(){
-  const p1 = document.getElementById('recovPw1').value;
-  const p2 = document.getElementById('recovPw2').value;
-  const err = document.getElementById('recovErr');
-  err.textContent = '';
   if (p1.length < 6){ err.textContent = 'MIN 6 CHARACTERS'; return; }
   if (p1 !== p2){ err.textContent = 'PASSWORDS DO NOT MATCH'; return; }
   const { error } = await sb.auth.updateUser({ password: p1 });
   if (error){ err.textContent = error.message; return; }
-  document.getElementById('recoveryModal').classList.add('hidden');
-  document.getElementById('recovPw1').value = '';
-  document.getElementById('recovPw2').value = '';
-  flash('🔐 PASSWORD SET! YOU CAN NOW LOG IN.');
+  document.getElementById('pwModal').classList.add('hidden');
+  document.getElementById('newPw1').value = '';
+  document.getElementById('newPw2').value = '';
+  flash('🔐 PASSWORD UPDATED!');
 }
-
-// Listen for PASSWORD_RECOVERY event (user clicked reset link in email)
-sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'PASSWORD_RECOVERY') {
-    document.getElementById('recoveryModal').classList.remove('hidden');
-  }
-});
-
-// ============================================================
-//  RANDOM MOUTHS
-// ============================================================
-const _MOUTHS = {
-  john: [
-    // cigarette (default)
-    `<rect x="44" y="60" width="24" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
-     <rect x="46" y="61" width="14" height="4" fill="#EDE0CC"/>
-     <rect x="68" y="62" width="14" height="2" fill="#F0EDE0"/>
-     <rect x="82" y="62" width="3"  height="2" fill="#FF4400" opacity=".85"/>`,
-    // wide grin
-    `<rect x="40" y="60" width="36" height="6" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
-     <rect x="43" y="61" width="30" height="4" fill="#EEEEDD"/>`,
-    // tongue out
-    `<rect x="42" y="59" width="30" height="9" fill="#8B3010" stroke="#6B2005" stroke-width="1"/>
-     <rect x="44" y="59" width="26" height="4" fill="#EEEEDD"/>
-     <rect x="49" y="62" width="16" height="6" fill="#EE5566" rx="2"/>`,
-    // smirk
-    `<rect x="44" y="62" width="26" height="5" fill="#C07840" stroke="#8B5520" stroke-width="1"/>
-     <rect x="46" y="63" width="20" height="3" fill="#EDE0CC"/>
-     <rect x="44" y="60" width="6"  height="3" fill="#C07840"/>`,
-    // stern flat
-    `<rect x="44" y="63" width="28" height="3" fill="#7A4010"/>
-     <rect x="45" y="64" width="26" height="1" fill="#5A2800" opacity=".6"/>`
-  ],
-  nick: [
-    // wide grin (default)
-    `<rect x="38" y="56" width="40" height="6" fill="#BB7733" stroke="#994411" stroke-width="1"/>
-     <rect x="42" y="57" width="32" height="4" fill="#EEEEDD"/>`,
-    // cigarette
-    `<rect x="40" y="56" width="24" height="6" fill="#BB7733" stroke="#994411" stroke-width="1"/>
-     <rect x="42" y="57" width="14" height="4" fill="#EDE0CC"/>
-     <rect x="64" y="58" width="14" height="2" fill="#F0EDE0"/>
-     <rect x="78" y="58" width="3"  height="2" fill="#FF4400" opacity=".85"/>`,
-    // tongue out
-    `<rect x="40" y="55" width="34" height="9" fill="#8B3010" stroke="#6B2005" stroke-width="1"/>
-     <rect x="42" y="55" width="30" height="4" fill="#EEEEDD"/>
-     <rect x="47" y="58" width="18" height="6" fill="#EE5566" rx="2"/>`,
-    // smirk
-    `<rect x="40" y="58" width="28" height="5" fill="#BB7733" stroke="#994411" stroke-width="1"/>
-     <rect x="42" y="59" width="22" height="3" fill="#EDE0CC"/>
-     <rect x="40" y="56" width="6"  height="3" fill="#BB7733"/>`,
-    // stern flat
-    `<rect x="40" y="59" width="32" height="3" fill="#7A4010"/>
-     <rect x="41" y="60" width="30" height="1" fill="#5A2800" opacity=".6"/>`
-  ]
-};
-
-function _randomizeMouths() {
-  const jEl = document.getElementById('jMouth');
-  const nEl = document.getElementById('nMouth');
-  if (jEl) jEl.innerHTML = _MOUTHS.john[Math.floor(Math.random() * _MOUTHS.john.length)];
-  if (nEl) nEl.innerHTML = _MOUTHS.nick[Math.floor(Math.random() * _MOUTHS.nick.length)];
-}
-
-// Randomize on page load
-_randomizeMouths();
 
 // ============================================================
 //  SPLAT
@@ -2554,14 +1633,24 @@ function splat(){
 //  MUTE
 // ============================================================
 function toggleMute(){
-  const m = MU.toggle();
+  if (!MU.ctx) return;
   const btn = document.getElementById('muteBtn');
-  btn.textContent = m ? '♫ UNMUTE' : '♫ MUTE';
-  btn.className = 'mute-btn' + (m ? '' : ' active');
+  if (MU.master.gain.value > 0){
+    MU.master.gain.setTargetAtTime(0, MU.ctx.currentTime, 0.1);
+    btn.textContent = '♪ MUTED';
+    btn.classList.remove('active');
+  } else {
+    MU.master.gain.setTargetAtTime(0.18, MU.ctx.currentTime, 0.1);
+    btn.textContent = '♪ MUSIC';
+    btn.classList.add('active');
+  }
 }
 
 // ============================================================
-//  BOOT FANFARE  — rising arpeggio on player select
+//  BOOT FANFARE
+// ============================================================
+// ============================================================
+//  BOOT FANFARE  — warm triangle stab on player select
 // ============================================================
 const BOOT = (() => {
   let _played = false;
@@ -2572,9 +1661,11 @@ const BOOT = (() => {
       _played = true;
       if (ac.state === 'suspended') ac.resume();
       const mg = ac.createGain(); mg.gain.value = 0.22; mg.connect(ac.destination);
+      // rising arpeggio fanfare
       const notes = [[220,.09],[277,.09],[330,.09],[440,.20],[392,.13],[440,.32]];
       let t = ac.currentTime + 0.05;
       notes.forEach(([f,d]) => {
+        // two oscillators: root + perfect 5th for richness
         [f, f * 1.5].forEach((freq, i) => {
           const o = ac.createOscillator(), g = ac.createGain();
           o.type = 'triangle'; o.frequency.value = freq;
@@ -2591,259 +1682,93 @@ const BOOT = (() => {
 })();
 
 // ============================================================
-//  MUSIC  — Grabbag riff, sawtooth guitar + bass + drums
+//  MUSIC  — Grabbag-inspired loop, warm triangle oscillators
 // ============================================================
-function _rep(pat,n){ const r=[]; for(let i=0;i<n;i++) r.push(...pat); return r; }
-const _KS=[1,0,0,0,1,0,0,0]; // kick pattern
-const _K2=[1,0,1,0,1,0,1,0]; // double kick
-const _SN=[0,0,1,0,0,0,1,0]; // snare
-const _HH=[1,1,1,1,1,1,1,1]; // hi-hat (all 8ths)
-const _HO=[1,0,1,0,1,0,1,0]; // sparse hi-hat
+const MU = (() => {
+  let ctx, master, _t, _running = false;
+  // 142 BPM — matches Grabbag's actual tempo feel
+  // STEP = one eighth note at 142 BPM
+  const BPM = 142, STEP = 60 / BPM / 2;
+  // Sequence: [frequency_hz, duration_in_8th_notes, volume]
+  // 0 = rest. Durations: 1=eighth, 2=quarter, 3=dotted-quarter, 4=half
+  const seq = [
+    // Phrase 1 — A minor groove
+    [440,1,0.24],[0,1,0],[440,1,0.22],[0,1,0],[440,1,0.24],[392,1,0.20],[440,2,0.24],[0,2,0],
+    [440,1,0.22],[0,1,0],[392,1,0.20],[0,1,0],[330,2,0.22],[0,1,0],[294,1,0.18],[0,1,0],
+    // Phrase 2
+    [392,1,0.24],[0,1,0],[392,1,0.22],[0,1,0],[392,1,0.24],[349,1,0.20],[392,2,0.24],[0,2,0],
+    [392,1,0.22],[0,1,0],[349,1,0.20],[0,1,0],[294,2,0.22],[0,1,0],[262,1,0.18],[0,1,0],
+    // Phrase 3 — climbing
+    [330,2,0.24],[294,1,0.20],[262,1,0.18],[294,2,0.22],[330,2,0.24],[0,2,0],
+    [330,1,0.22],[0,1,0],[294,1,0.20],[0,1,0],[262,1,0.20],[247,1,0.18],[220,4,0.24],[0,2,0],
+    // Phrase 4 — peak + resolve
+    [523,2,0.26],[494,1,0.22],[440,1,0.20],[494,2,0.24],[440,2,0.22],[0,2,0],
+    [392,1,0.22],[0,1,0],[440,1,0.24],[0,1,0],[392,1,0.22],[330,1,0.20],[294,4,0.24],[0,4,0]
+  ];
 
-const MUSIC_SEQ = {
-  bpm: 155,
-  steps: 160,
-
-  mel: [
-    // ── A  Main Grabbag riff (32 steps / 4 bars) ──────────────
-    330,330,294,277, 330,330,294,247,   // bars 1-2
-    330,330,294,277, 220,196,165,  0,   // bars 3-4
-    330,330,294,277, 330,330,294,247,   // bars 5-6
-    330,330,294,277, 220,196,165,  0,   // bars 7-8
-    // ── A2  Variation — different ending (32 steps / 4 bars) ──
-    330,330,294,277, 330,330,294,247,   // bars 9-10
-    330,330,294,277, 196,220,247,220,   // bars 11-12  (rising end)
-    330,330,294,277, 330,330,294,247,   // bars 13-14
-    196,220,247,220, 196,165,  0,  0,   // bars 15-16  (descent)
-    // ── B   Ascending / descending bridge (16 steps / 2 bars) ─
-    165,196,220,247, 277,294,330,330,   // bars 17-18  (climb)
-    330,294,277,247, 220,196,165,  0,   // bars 19-20  (fall)
-    // ── C   Lower staccato groove (32 steps / 4 bars) ─────────
-    220,  0,220,  0, 247,  0,220,  0,   // bars 21-22
-    196,  0,196,  0, 185,  0,165,  0,   // bars 23-24
-    220,  0,220,  0, 247,  0,277,  0,   // bars 25-26
-    294,277,247,220, 196,  0,165,  0,   // bars 27-28  (run down)
-    // ── A'  Return + intensity build (32 steps / 4 bars) ──────
-    330,330,294,277, 330,330,294,247,   // bars 29-30
-    330,330,294,277, 220,196,165,  0,   // bars 31-32
-    330,330,330,330, 330,330,392,  0,   // bars 33-34  (hammering → G4 jump)
-    392,370,330,294, 277,247,165,  0,   // bars 35-36  (big descend)
-    // ── End tag (16 steps / 2 bars) ───────────────────────────
-    165,  0,330,  0, 165,  0,  0,  0,   // bar 37
-      0,  0,  0,165,   0,  0,165,  0,   // bar 38
-  ],
-
-  bas: [
-    ..._rep([82,0,82,0, 82,0,73,0], 4), // A   (32) E2 with D2 walk
-    ..._rep([82,0,82,0, 82,0,73,0], 4), // A2  (32)
-    ..._rep([110,0,110,0, 82,0,82,0],2),// B   (16) A2 bass
-    ..._rep([110,0,82,0, 98,0,82,0], 4),// C   (32) groove movement
-    ..._rep([82,0,82,0, 82,0,73,0], 2), // A'  (16)
-    ..._rep([82,0,82,0, 82,0,82,0], 2), // A'  (16) steady for build
-    ..._rep([82,0,  0,0,  0,0,82,0], 2),// End (16) punchy
-  ],
-
-  kik: [
-    ..._rep(_KS,4), ..._rep(_KS,4), ..._rep(_KS,2),
-    ..._rep(_KS,4), ..._rep(_KS,2), ..._rep(_K2,2), ..._rep(_KS,2),
-  ],
-  snr: [
-    ..._rep(_SN,4), ..._rep(_SN,4), ..._rep(_SN,2),
-    ..._rep(_SN,4), ..._rep(_SN,4), ..._rep(_SN,2),
-  ],
-  hat: [
-    ..._rep(_HH,4), ..._rep(_HH,4), ..._rep(_HO,2),
-    ..._rep(_HH,4), ..._rep(_HH,2), ..._rep(_HH,2), ..._rep(_HO,2),
-  ],
-};
-
-const MU = {
-  ctx: null, master: null, muted: false,
-  _t: null, _step: 0, _nxt: 0, _dur: 0,
-  SEQ: MUSIC_SEQ,
-
-  init(){
-    if (this.ctx) return;
-    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    this.master = this.ctx.createGain();
-    this.master.gain.value = this.muted ? 0 : 0.45;
-    this.master.connect(this.ctx.destination);
-  },
-
-  start(){
-    this.init();
-    this._dur = (60 / this.SEQ.bpm) / 2;
-    this._step = 0;
-    this._nxt = this.ctx.currentTime + 0.08;
-    this._sched();
-    const btn = document.getElementById('muteBtn');
-    if (btn){ btn.textContent = '♫ MUTE'; btn.className = 'mute-btn active'; }
-  },
-
-  _sched(){
-    const LOOK = 0.25;
-    while (this._nxt < this.ctx.currentTime + LOOK){
-      this._play(this._step % this.SEQ.steps, this._nxt);
-      this._step++;
-      this._nxt += this._dur;
-    }
-    this._t = setTimeout(() => this._sched(), 55);
-  },
-
-  _play(s, t){
-    const S = this.SEQ, d = this._dur;
-    if (S.mel[s]) this._guitar(S.mel[s], t, d * 0.85);
-    if (S.bas[s]) this._bass(S.bas[s], t, d * 1.1);
-    if (S.kik[s]) this._kick(t);
-    if (S.snr[s]) this._snare(t);
-    if (S.hat[s]) this._hat(t);
-  },
-
-  _dc(k){
-    const n = 256, c = new Float32Array(n);
-    for (let i = 0; i < n; i++){
-      const x = i * 2 / n - 1;
-      c[i] = (3 + k) * x * 20 * (Math.PI / 180) / (Math.PI + k * Math.abs(x));
-    }
-    return c;
-  },
-
-  _guitar(f, t, d){
-    if (!f) return;
-    const mk = (freq, vol, dk) => {
-      const o = this.ctx.createOscillator(),
-            ws = this.ctx.createWaveShaper(),
-            g = this.ctx.createGain();
-      o.type = 'sawtooth'; o.frequency.value = freq;
-      ws.curve = this._dc(dk);
-      g.gain.setValueAtTime(0, t);
-      g.gain.linearRampToValueAtTime(vol, t + 0.005);
-      g.gain.setValueAtTime(vol, t + d * 0.8);
-      g.gain.linearRampToValueAtTime(0, t + d);
-      o.connect(ws); ws.connect(g); g.connect(this.master);
-      o.start(t); o.stop(t + d + 0.03);
-    };
-    mk(f, 0.26, 280);
-    mk(f * 1.498, 0.16, 220);
-  },
-
-  _bass(f, t, d){
-    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-    o.type = 'triangle'; o.frequency.value = f;
-    g.gain.setValueAtTime(0.38, t);
-    g.gain.setValueAtTime(0.28, t + d * 0.8);
-    g.gain.linearRampToValueAtTime(0, t + d);
-    o.connect(g); g.connect(this.master);
-    o.start(t); o.stop(t + d + 0.02);
-  },
-
-  _kick(t){
-    const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-    o.type = 'sine';
-    o.frequency.setValueAtTime(150, t);
-    o.frequency.exponentialRampToValueAtTime(0.01, t + 0.18);
-    g.gain.setValueAtTime(0.55, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
-    o.connect(g); g.connect(this.master);
-    o.start(t); o.stop(t + 0.22);
-  },
-
-  _noise(t, dur, hpf, vol){
-    const n = Math.ceil(dur * this.ctx.sampleRate),
-          buf = this.ctx.createBuffer(1, n, this.ctx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
-    const src = this.ctx.createBufferSource(),
-          f   = this.ctx.createBiquadFilter(),
-          g   = this.ctx.createGain();
-    src.buffer = buf;
-    f.type = 'highpass'; f.frequency.value = hpf;
-    g.gain.setValueAtTime(vol, t);
-    g.gain.exponentialRampToValueAtTime(0.001, t + dur);
-    src.connect(f); f.connect(g); g.connect(this.master);
-    src.start(t); src.stop(t + dur + 0.01);
-  },
-
-  _snare(t){ this._noise(t, 0.12, 900, 0.30); },
-  _hat(t)  { this._noise(t, 0.03, 9000, 0.065); },
-
-  stop(){
-    clearTimeout(this._t); this._t = null;
-  },
-
-  toggle(){
-    this.muted = !this.muted;
-    if (this.master){
-      this.master.gain.linearRampToValueAtTime(
-        this.muted ? 0 : 0.45,
-        this.ctx.currentTime + 0.15
-      );
-    }
-    if (this.muted) this.stop(); else this._sched();
-    return this.muted;
-  },
-
-  sting(){
-    if (!this.ctx) return;
-    // Victory stab — sawtooth power chord
-    const mg = this.ctx.createGain(); mg.gain.value = 0.28; mg.connect(this.ctx.destination);
-    const freqs = [220, 330, 440, 660];
-    let t = this.ctx.currentTime;
-    freqs.forEach((f, i) => {
-      const o = this.ctx.createOscillator(), g = this.ctx.createGain();
-      o.type = 'sawtooth'; o.frequency.value = f;
-      g.gain.setValueAtTime(0.22 - i * 0.03, t + i * 0.04);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.85);
-      o.connect(g); g.connect(mg);
-      o.start(t + i * 0.04); o.stop(t + 0.9);
-    });
-  },
-};
-
-// ============================================================
-//  DUKE NUKEM VOICE — random clip on submission
-// ============================================================
-const DUKE = {
-  _srcs: [
-    'Duke%20Nukem%20Slogans/bitchin.wav',
-    'Duke%20Nukem%20Slogans/come%20get%20some.wav',
-    'Duke%20Nukem%20Slogans/damn%20im%20good.wav',
-    'Duke%20Nukem%20Slogans/hail%20to%20the%20king%20baby.wav',
-    'Duke%20Nukem%20Slogans/lets%20rock.wav',
-    'Duke%20Nukem%20Slogans/see%20you%20in%20hell.wav',
-    'Duke%20Nukem%20Slogans/who%20wants%20some.wav',
-  ],
-  _loaded: [],
-
-  init(){
-    if (this._loaded.length) return;
-    this._loaded = this._srcs.map(src => {
-      const a = new Audio(src);
-      a.preload = 'auto';
-      return a;
-    });
-  },
-
-  play(){
-    if (MU.muted) return;          // respect mute button
-    this.init();
-    const a = this._loaded[Math.floor(Math.random() * this._loaded.length)];
-    // Fade music to near-silent while Duke speaks
-    if (MU.master && MU.ctx) {
-      MU.master.gain.cancelScheduledValues(MU.ctx.currentTime);
-      MU.master.gain.linearRampToValueAtTime(0.08, MU.ctx.currentTime + 0.25);
-    }
-    a.currentTime = 0;
-    a.volume = 1.0;
-    a.play().catch(() => {});      // silently swallow autoplay policy errors
-    a.onended = () => {
-      // Fade music back to full
-      if (MU.master && MU.ctx && !MU.muted) {
-        MU.master.gain.linearRampToValueAtTime(0.45, MU.ctx.currentTime + 0.4);
-      }
-    };
+  function note(f, dur, vol, t){
+    if (!f || !vol) return;
+    const len = dur * STEP;
+    // Main oscillator
+    const o1 = ctx.createOscillator(), g1 = ctx.createGain();
+    o1.type = 'triangle'; o1.frequency.value = f;
+    g1.gain.setValueAtTime(vol * 0.75, t);
+    g1.gain.exponentialRampToValueAtTime(0.001, t + len * 0.85);
+    o1.connect(g1); g1.connect(master);
+    o1.start(t); o1.stop(t + len);
+    // Harmony oscillator — perfect 5th, quieter, for warmth
+    const o2 = ctx.createOscillator(), g2 = ctx.createGain();
+    o2.type = 'triangle'; o2.frequency.value = f * 1.5;
+    g2.gain.setValueAtTime(vol * 0.18, t);
+    g2.gain.exponentialRampToValueAtTime(0.001, t + len * 0.75);
+    o2.connect(g2); g2.connect(master);
+    o2.start(t); o2.stop(t + len);
   }
-};
+
+  function loop(){
+    if (!_running) return;
+    let t = ctx.currentTime + 0.05;
+    for (const [f, d, v] of seq){ note(f, d, v, t); t += d * STEP; }
+    _t = setTimeout(loop, (t - ctx.currentTime - 0.1) * 1000);
+  }
+
+  function prime(){
+    if (ctx) return;
+    try {
+      ctx = new (window.AudioContext || window.webkitAudioContext)();
+      master = ctx.createGain(); master.gain.value = 0.16; master.connect(ctx.destination);
+      if (ctx.state === 'suspended') ctx.resume();
+    } catch(e){}
+  }
+
+  function start(){
+    if (_running) return;
+    try {
+      prime();
+      _running = true;
+      loop();
+      document.getElementById('muteBtn').classList.add('active');
+    } catch(e){}
+  }
+
+  function sting(){
+    if (!ctx) return;
+    // Victory stab — warm triangle chord
+    const mg = ctx.createGain(); mg.gain.value = 0.30; mg.connect(ctx.destination);
+    const chord = [440, 550, 659, 880];
+    let t = ctx.currentTime;
+    chord.forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.28 - i*0.04, t + i*0.05);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.9);
+      o.connect(g); g.connect(mg);
+      o.start(t + i * 0.05); o.stop(t + 0.95);
+    });
+  }
+
+  return { start, prime, sting, get ctx(){ return ctx; }, get master(){ return master; } };
+})();
 </script>
 </body>
 </html>
