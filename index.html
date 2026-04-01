@@ -1560,7 +1560,7 @@ footer span{color:#8888aa}
       <div class="sb-out"><div class="sb-in s0" id="jBar"></div></div>
       <div class="sb-n" id="jBarN">0 WEEKS</div>
       <div class="sb-streak-badge" id="jStreakBadge"></div>
-      <div class="sb-weapon-lbl" id="jWeaponLbl">⚔ KNIFE</div>
+      <div class="sb-weapon-lbl" id="jWeaponLbl"><span class="sb-weapon-hdr">WEAPON</span><span class="sb-weapon-name">KNIFE</span></div>
     </div>
     <div class="is">
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val jv" id="jApps">0</div></div>
@@ -2008,7 +2008,7 @@ footer span{color:#8888aa}
       <div class="sb-out"><div class="sb-in s0" id="nBar"></div></div>
       <div class="sb-n" id="nBarN">0 WEEKS</div>
       <div class="sb-streak-badge" id="nStreakBadge"></div>
-      <div class="sb-weapon-lbl" id="nWeaponLbl">⚔ KNIFE</div>
+      <div class="sb-weapon-lbl" id="nWeaponLbl"><span class="sb-weapon-hdr">WEAPON</span><span class="sb-weapon-name">KNIFE</span></div>
     </div>
     <div class="is">
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val nv" id="nApps">0</div></div>
@@ -2186,7 +2186,7 @@ function showWeapon(player, tier) {
     if (el) el.setAttribute('display', i === tier ? 'inline' : 'none');
   }
   const lbl = document.getElementById(`${p}WeaponLbl`);
-  if (lbl) lbl.textContent = '⚔ ' + (_weaponNames[tier] || '');
+  if (lbl) lbl.innerHTML = '<span class="sb-weapon-hdr">WEAPON</span><span class="sb-weapon-name">' + (_weaponNames[tier] || '') + '</span>';
 }
 
 function wid(dt){
