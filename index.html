@@ -1560,6 +1560,7 @@ footer span{color:#8888aa}
       <div class="sb-out"><div class="sb-in s0" id="jBar"></div></div>
       <div class="sb-n" id="jBarN">0 WEEKS</div>
       <div class="sb-streak-badge" id="jStreakBadge"></div>
+      <div class="sb-weapon-lbl" id="jWeaponLbl">⚔ KNIFE</div>
     </div>
     <div class="is">
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val jv" id="jApps">0</div></div>
@@ -2007,6 +2008,7 @@ footer span{color:#8888aa}
       <div class="sb-out"><div class="sb-in s0" id="nBar"></div></div>
       <div class="sb-n" id="nBarN">0 WEEKS</div>
       <div class="sb-streak-badge" id="nStreakBadge"></div>
+      <div class="sb-weapon-lbl" id="nWeaponLbl">⚔ KNIFE</div>
     </div>
     <div class="is">
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val nv" id="nApps">0</div></div>
@@ -2176,12 +2178,15 @@ function _streakToTier(s) {
   return 0;
 }
 // Show one weapon group, hide the rest (tiers 0–7)
+const _weaponNames = ['Knife','Pistol','Dual Pistols','Shotgun','SMG','Chaingun','Rail Gun','Devastator'];
 function showWeapon(player, tier) {
   const p = player === 'john' ? 'j' : 'n';
   for (let i = 0; i <= 7; i++) {
     const el = document.getElementById(`${p}Gun${i}`);
     if (el) el.setAttribute('display', i === tier ? 'inline' : 'none');
   }
+  const lbl = document.getElementById(`${p}WeaponLbl`);
+  if (lbl) lbl.textContent = '⚔ ' + (_weaponNames[tier] || '');
 }
 
 function wid(dt){
