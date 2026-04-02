@@ -1698,20 +1698,40 @@ footer span{color:#8888aa}
           <text x="61" y="116" font-size="3.5" fill="#444" text-anchor="middle" font-family="monospace">USA</text>
         </g>
 
-        <!-- JULY — RWB bandana (hugs head x=22-94, knot extends LEFT) -->
+        <!-- JULY — RWB bandana (shifted down 2px, knot LEFT) -->
         <g id="jOv_bandana" display="none">
-          <!-- Three stripes exactly fitting head width -->
-          <rect x="22" y="2" width="72" height="5" fill="#CC1111"/>
-          <rect x="22" y="7" width="72" height="5" fill="#EEEEEE"/>
-          <rect x="22" y="12" width="72" height="5" fill="#1133CC"/>
-          <!-- Stars on white stripe -->
-          <text x="36" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
-          <text x="58" y="11" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
-          <text x="80" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
-          <!-- Knot/tail on far LEFT -->
-          <polygon points="24,2 8,0 6,7 20,9 24,2" fill="#CC1111"/>
-          <polygon points="22,7 8,5 7,11 20,12 22,9" fill="#EEEEEE"/>
-          <polygon points="22,12 10,11 10,17 12,16" fill="#1133CC"/>
+          <rect x="22" y="4" width="72" height="5" fill="#CC1111"/>
+          <rect x="22" y="9" width="72" height="5" fill="#EEEEEE"/>
+          <rect x="22" y="14" width="72" height="5" fill="#1133CC"/>
+          <text x="36" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <text x="58" y="13" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
+          <text x="80" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <polygon points="24,4 8,2 6,9 20,11 24,4" fill="#CC1111"/>
+          <polygon points="22,9 8,7 7,13 20,14 22,11" fill="#EEEEEE"/>
+          <polygon points="22,14 10,13 10,19 12,18" fill="#1133CC"/>
+        </g>
+
+        <!-- JULY — Bandana + Shorts combined (used by _getSeasonOverlay for July) -->
+        <g id="jOv_bandana_shorts" display="none">
+          <!-- Bandana (same as above, 2px lower) -->
+          <rect x="22" y="4" width="72" height="5" fill="#CC1111"/>
+          <rect x="22" y="9" width="72" height="5" fill="#EEEEEE"/>
+          <rect x="22" y="14" width="72" height="5" fill="#1133CC"/>
+          <text x="36" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <text x="58" y="13" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
+          <text x="80" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <polygon points="24,4 8,2 6,9 20,11 24,4" fill="#CC1111"/>
+          <polygon points="22,9 8,7 7,13 20,14 22,11" fill="#EEEEEE"/>
+          <polygon points="22,14 10,13 10,19 12,18" fill="#1133CC"/>
+          <!-- Shorts (same as jOv_shorts) -->
+          <line x1="20" y1="181" x2="54" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <line x1="62" y1="181" x2="96" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <rect x="20" y="182" width="34" height="25" fill="#FFCC99"/>
+          <rect x="62" y="182" width="34" height="25" fill="#FFCC99"/>
+          <ellipse cx="37" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <ellipse cx="79" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <rect x="31" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <rect x="73" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
         </g>
 
         <!-- OCTOBER — Jason mask (John's base, Nick-style mouth holes, covers panic state) -->
@@ -2345,18 +2365,38 @@ footer span{color:#8888aa}
           <text x="61" y="116" font-size="3.5" fill="#444" text-anchor="middle" font-family="monospace">USA</text>
         </g>
 
-        <!-- JULY — RWB Bandana (hugs head x=22-94, knot extends LEFT) -->
+        <!-- JULY — RWB Bandana (shifted down 2px, knot LEFT, Nick auto-mirrors) -->
         <g id="nOv_bandana" display="none">
-          <rect x="22" y="2" width="72" height="5" fill="#CC1111"/>
-          <rect x="22" y="7" width="72" height="5" fill="#EEEEEE"/>
-          <rect x="22" y="12" width="72" height="5" fill="#1133CC"/>
-          <text x="36" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
-          <text x="58" y="11" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
-          <text x="80" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
-          <!-- Knot far LEFT (scaleX mirrors to Nick's right side) -->
-          <polygon points="24,2 8,0 6,7 20,9 24,2" fill="#CC1111"/>
-          <polygon points="22,7 8,5 7,11 20,12 22,9" fill="#EEEEEE"/>
-          <polygon points="22,12 10,11 10,17 12,16" fill="#1133CC"/>
+          <rect x="22" y="4" width="72" height="5" fill="#CC1111"/>
+          <rect x="22" y="9" width="72" height="5" fill="#EEEEEE"/>
+          <rect x="22" y="14" width="72" height="5" fill="#1133CC"/>
+          <text x="36" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <text x="58" y="13" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
+          <text x="80" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <polygon points="24,4 8,2 6,9 20,11 24,4" fill="#CC1111"/>
+          <polygon points="22,9 8,7 7,13 20,14 22,11" fill="#EEEEEE"/>
+          <polygon points="22,14 10,13 10,19 12,18" fill="#1133CC"/>
+        </g>
+
+        <!-- JULY — Bandana + Shorts combined (Nick auto-mirrors) -->
+        <g id="nOv_bandana_shorts" display="none">
+          <rect x="22" y="4" width="72" height="5" fill="#CC1111"/>
+          <rect x="22" y="9" width="72" height="5" fill="#EEEEEE"/>
+          <rect x="22" y="14" width="72" height="5" fill="#1133CC"/>
+          <text x="36" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <text x="58" y="13" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
+          <text x="80" y="13" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <polygon points="24,4 8,2 6,9 20,11 24,4" fill="#CC1111"/>
+          <polygon points="22,9 8,7 7,13 20,14 22,11" fill="#EEEEEE"/>
+          <polygon points="22,14 10,13 10,19 12,18" fill="#1133CC"/>
+          <line x1="20" y1="181" x2="54" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <line x1="62" y1="181" x2="96" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <rect x="20" y="182" width="34" height="25" fill="#FFCC99"/>
+          <rect x="62" y="182" width="34" height="25" fill="#FFCC99"/>
+          <ellipse cx="37" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <ellipse cx="79" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <rect x="31" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <rect x="73" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
         </g>
 
         <!-- OCTOBER — Jason mask (covers panic state, Nick-style mouth holes) -->
@@ -3516,9 +3556,10 @@ function _getSeasonOverlay(player) {
   if (_isEasterWeek())     return 'bunnyears'; // Easter Sun calendar week (Mar or Apr)
   if (m === 4 && d === 1)  return 'jester';    // April Fool's (if not Easter week)
   if (m === 6)  return 'shorts';
+  if (m === 8)  return 'shorts';
   if (m === 11) return 'mustache';
   if (m === 10) return 'jason';
-  if (m === 7)  return 'bandana';
+  if (m === 7)  return 'bandana_shorts';
   if (m === 5) {
     // Dog tags on Memorial Day weekend: Friday, Saturday, Sunday before + Monday (4 days)
     const mem = _memorialDay(now.getFullYear());
@@ -3531,7 +3572,7 @@ function _getSeasonOverlay(player) {
 }
 
 /** All overlay IDs for a given player prefix */
-const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','sombrero','clover','bunnyears','shorts','dogtags','bandana','jason','mustache','bday'];
+const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','sombrero','clover','bunnyears','shorts','dogtags','bandana','bandana_shorts','jason','mustache','bday'];
 
 /** Show correct overlay, hide all others. Also manages cake DOM overlay.
  *  @param {string} player
@@ -4348,12 +4389,87 @@ const MUSIC_SEQ_XMAS = {
   hat: [..._rep(_HH,8)], // dense hi-hats for festive feel
 };
 
+// March / St. Patrick's — lively Irish jig in D major (BPM 176)
+const MUSIC_SEQ_JIGS = {
+  bpm: 176, steps: 64,
+  mel: [
+    // A part — classic jig feel
+    587,523,440, 494,440,392, 440,494,523, 587,523,494,
+    587,523,440, 494,440,392, 523,494,440, 392,  0,  0,
+    // B part — move up to A
+    659,587,523, 587,523,494, 523,494,440, 494,440,392,
+    440,494,523, 587,523,494, 523,440,392, 330,  0,  0,
+  ],
+  bas: [
+    ..._rep([147,0,0, 110,0,0], 4),
+    ..._rep([147,0,0, 131,0,0], 4),
+  ],
+  kik: [..._rep([1,0,0, 0,0,0], 8), ..._rep([1,0,0, 1,0,0], 8)].slice(0,64),
+  snr: [..._rep([0,0,0, 1,0,0], 8), ..._rep([0,0,1, 0,0,0], 8)].slice(0,64),
+  hat: [..._rep([1,1,1, 1,1,1], 10)].slice(0,64),
+};
+
+// February / Valentine's — romantic swing in C major (BPM 108)
+const MUSIC_SEQ_SWING = {
+  bpm: 108, steps: 64,
+  mel: [
+    // Lazy swing 8ths — long-short-long-short feel via velocity/spacing
+    523,  0,494,440, 523,  0,392,  0,
+    349,  0,392,440, 494,  0,  0,  0,
+    523,  0,587,523, 494,440,392,  0,
+    440,  0,  0,392, 440,494,523,  0,
+    659,  0,587,  0, 523,  0,494,440,
+    523,  0,  0,440, 494,  0,523,  0,
+    440,392,349,  0, 392,440,494,523,
+    494,  0,  0,  0, 523,  0,  0,  0,
+  ],
+  bas: [
+    ..._rep([130,0,0,0, 165,0,0,0], 2),
+    ..._rep([110,0,0,0, 147,0,0,0], 2),
+    ..._rep([130,0,0,0, 196,0,0,0], 2),
+    ..._rep([110,0,0,0, 130,0,0,0], 2),
+  ],
+  kik: [..._rep([1,0,0,0, 0,0,1,0], 8)],
+  snr: [..._rep([0,0,1,0, 0,0,0,1], 8)],
+  hat: [..._rep([1,0,1,0, 1,1,1,0], 8)],
+};
+
+// November / mustache — Top Gun Danger Zone feel, F# minor (BPM 152)
+const MUSIC_SEQ_TOPGUN = {
+  bpm: 152, steps: 64,
+  mel: [
+    // Iconic synth-rock pulse
+    370,  0,370,  0, 370,  0,330,  0,
+    294,  0,294,  0, 330,  0,370,  0,
+    370,  0,370,330, 294,  0,247,  0,
+    294,  0,  0,  0,   0,  0,  0,  0,
+    415,  0,415,  0, 415,  0,370,  0,
+    330,  0,330,  0, 370,  0,415,  0,
+    494,  0,494,415, 370,  0,330,  0,
+    370,  0,  0,  0, 294,  0,  0,  0,
+  ],
+  bas: [
+    ..._rep([185,0,0,0, 185,0,0,0], 2),
+    ..._rep([147,0,0,0, 185,0,0,0], 2),
+    ..._rep([208,0,0,0, 208,0,0,0], 2),
+    ..._rep([185,0,0,0, 147,0,0,0], 2),
+  ],
+  kik: [..._rep(_KS,8)],
+  snr: [..._rep(_SN,8)],
+  hat: [..._rep(_HH,4), ..._rep(_HO,4)],
+};
+
 /** Pick the right music sequence for the current season / devSeason param */
 function _getMusicSeq() {
   const overlay = _getSeasonOverlay('john'); // seasons are calendar-global
-  if (overlay === 'bandana')  return MUSIC_SEQ_USA;
-  if (overlay === 'jason')    return MUSIC_SEQ_SPOOKY;
-  if (overlay === 'santahat') return MUSIC_SEQ_XMAS;
+  if (overlay === 'bandana_shorts') return MUSIC_SEQ_USA;  // July
+  if (overlay === 'bandana')        return MUSIC_SEQ_USA;  // fallback
+  if (overlay === 'dogtags')        return MUSIC_SEQ_USA;  // Memorial Day
+  if (overlay === 'clover')         return MUSIC_SEQ_JIGS; // March
+  if (overlay === 'heartglasses' || overlay === 'heartglasses_panic') return MUSIC_SEQ_SWING; // Feb
+  if (overlay === 'mustache')       return MUSIC_SEQ_TOPGUN; // November
+  if (overlay === 'jason')          return MUSIC_SEQ_SPOOKY;
+  if (overlay === 'santahat')       return MUSIC_SEQ_XMAS;
   return MUSIC_SEQ;
 }
 
