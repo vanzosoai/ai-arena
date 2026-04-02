@@ -349,7 +349,7 @@ body::after{
 /* ================================================
    DEV CHEAT SHEET (John-only, inside settings modal)
 ================================================ */
-#devCheatSheet{display:none;margin-top:14px;border:1px solid #1a1a33;padding:10px 12px;background:#07070e}
+#devCheatSheet{display:none}
 .dev-cs-title{font-size:.28em;color:#556699;letter-spacing:2px;margin-bottom:8px}
 .dev-cs-section{margin-bottom:8px}
 .dev-cs-lbl{font-size:.22em;color:#445577;letter-spacing:1px;margin-bottom:3px}
@@ -959,8 +959,10 @@ footer span{color:#8888aa}
     <div class="modal-btns" style="margin-top:8px">
       <button class="modal-btn" style="border-color:#2a2a44;color:#6666aa;font-size:.38em" onclick="openReadme()">📖 HOW TO PLAY</button>
     </div>
-    <!-- DEV CHEAT SHEET — John only -->
-    <div id="devCheatSheet">
+    <!-- DEV CHEAT SHEET — John only, collapsed by default -->
+    <div id="devCheatSheet" style="margin-top:10px">
+      <button onclick="(function(){var p=document.getElementById('devCheatSheetPanel');var b=document.getElementById('devCheatSheetBtn');var open=p.style.display!=='none';p.style.display=open?'none':'block';b.textContent=open?'🛠 DEV FLAGS ▸':'🛠 DEV FLAGS ▾';})()" id="devCheatSheetBtn" style="background:none;border:1px solid #1a1a33;color:#445577;font-family:'Press Start 2P',monospace;font-size:.22em;padding:4px 10px;cursor:pointer;letter-spacing:1px;width:100%;text-align:left">🛠 DEV FLAGS ▸</button>
+      <div id="devCheatSheetPanel" style="display:none;margin-top:6px;border:1px solid #1a1a33;padding:10px 12px;background:#07070e">
       <div class="dev-cs-title">🛠 DEV TEST FLAGS</div>
       <div class="dev-cs-section">
         <div class="dev-cs-lbl">WEAPONS — ?devStreak=N</div>
@@ -1025,7 +1027,8 @@ footer span{color:#8888aa}
           <button onclick="BULLETS.stopAll()" style="background:#0d0008;border:1px solid #550022;color:#CC3366;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">■ STOP</button>
         </div>
       </div>
-    </div>
+      </div><!-- /devCheatSheetPanel -->
+    </div><!-- /devCheatSheet -->
   </div>
 </div>
 
@@ -1111,9 +1114,9 @@ footer span{color:#8888aa}
         The arena dresses up automatically depending on the time of year. Both avatars change outfits and the background music shifts to match the season. No setup required — it just happens.<br><br>
         <span style="color:#cccccc">🎅 DECEMBER</span> — Santa hats. Jingle Bells loops in the background.<br>
         <span style="color:#ff6688">💕 FEBRUARY</span> — Heart-shaped glasses. Romantic jazz swing plays.<br>
-        <span style="color:#33bb55">🍀 ST. PATRICK'S WEEK</span> — 4-leaf clover necklaces for the calendar week containing March 17. Irish jig music kicks in.<br>
+        <span style="color:#33bb55">🍀 MARCH</span> — Clover necklaces all month. Irish jig music plays. Easter week overrides if it falls in March.<br>
         <span style="color:#ffccaa">🐣 EASTER WEEK</span> — Bunny ears for the calendar week containing Easter Sunday. Hippity-hoppity spring music plays.<br>
-        <span style="color:#ffaa44">🃏 APRIL FOOL'S DAY</span> — Jester hats on April 1st (unless it's Easter week — bunnies win).<br>
+        <span style="color:#ffaa44">🃏 APRIL FOOL'S DAY</span> — Jester hats on April 1st. Overrides Easter week if they overlap — April Fools rules.<br>
         <span style="color:#88ccff">🩳 JUNE &amp; AUGUST</span> — Shorts. First and last months of summer.<br>
         <span style="color:#cc2222">🇺🇸 JULY</span> — Flag bandana on their heads plus shorts. USA patriotic music plays. Same track fires during Memorial Day weekend in May with the dog tag chains.<br>
         <span style="color:#884400">🪖 MEMORIAL DAY WEEKEND</span> — Dog tag chains for the Friday–Monday of Memorial Day weekend.<br>
