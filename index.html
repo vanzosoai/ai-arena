@@ -293,7 +293,7 @@ body::after{
 @keyframes wcPulseN{0%,100%{box-shadow:0 0 10px rgba(0,200,255,.5),inset 0 0 4px rgba(0,200,255,.1)}50%{box-shadow:0 0 22px rgba(0,220,255,.9),0 0 8px rgba(0,200,255,.5),inset 0 0 8px rgba(0,220,255,.15)}}
 .wc-glow-j{border-color:#FF8800!important;animation:wcPulseJ 2.2s ease-in-out infinite}
 .wc-glow-n{border-color:#00C8FF!important;animation:wcPulseN 2.2s ease-in-out infinite}
-.wc-sel{width:100%;background:#05030a;border:none;color:#FF8800;font-family:'Press Start 2P',monospace;font-size:.26em;padding:4px 2px;cursor:pointer;outline:none;text-align:center;letter-spacing:1px;margin-top:2px}
+.wc-sel{width:100%;background:#05030a;border:none;color:#FF8800;font-family:'Press Start 2P',monospace;font-size:.38em;padding:1px 2px;cursor:pointer;outline:none;text-align:center;letter-spacing:1px;margin-top:0}
 .wc-sel option{background:#05030a;color:#FF8800}
 .wc-sel.nk{color:#00C8FF}.wc-sel.nk option{color:#00C8FF}
 /* Solo fire toggle (streak ≥ 15) */
@@ -3076,7 +3076,7 @@ function _initWeaponChooser(player, effectiveStreak) {
   if (isMe) {
     // Interactive dropdown for the logged-in player
     box.innerHTML =
-      `<div class="is-lbl" style="color:${isJ ? '#FF8800' : '#00C8FF'}">⚔️ CHOOSE</div>` +
+      `<div class="is-lbl" style="margin-bottom:1px">WEAPON</div>` +
       `<select class="wc-sel${isJ ? '' : ' nk'}" id="${p}WeaponSelect" ` +
       `onchange="_onWeaponChooserChange('${player}',this.value)">${opts}</select>`;
   } else {
@@ -3105,8 +3105,8 @@ async function _onWeaponChooserChange(player, val) {
   const tier = parseInt(val);
   _chosenWeapon[player] = tier;
   showWeapon(player, tier);
-  // Restart live animation with new weapon if active
-  if (PRESENCE._bothActive || _soloFireEnabled) BULLETS.start(player, tier);
+  // Restart animation if currently firing (works for presence, solo fire, and dev test buttons)
+  if (BULLETS._timers[player] && BULLETS._timers[player].length > 0) BULLETS.start(player, tier);
   await _saveChosenWeapon(player, tier);
 }
 
@@ -3135,7 +3135,7 @@ function _initSoloToggle(player) {
   const box = document.createElement('div');
   box.id = `${p}SoloBox`;
   box.style.cssText = [
-    'width:100%', 'max-width:210px', 'margin-top:7px',
+    'width:100%', 'max-width:210px',
     'background:rgba(0,0,0,.4)', 'border:1px solid var(--bdr)',
     'padding:8px 7px', 'text-align:center', 'box-sizing:border-box'
   ].join(';');
@@ -4276,32 +4276,39 @@ const BULLETS = {
     fire();
   },
 
-  // ── TIER 8: BARE FISTS — flying fist emojis, rapid punches ──
+  // ── TIER 8: BARE FISTS — deliberate alternating punches, front and back hand ──
   fists(player) {
     this.init(); this.stop(player);
     const color = player === 'john' ? '#FFD700' : '#00C8FF';
+    // front hand (right/closer): svgX=115, svgY=150
+    // back hand (left/further):  svgX=41,  svgY=154  (mirrors dual pistols back gun)
+    const hands = [{ x: 115, y: 150 }, { x: 41, y: 154 }];
+    let handIdx = 0; // alternates each punch
     const punch = () => {
-      const count = 3 + Math.floor(Math.random() * 4);
+      const count = 2 + Math.floor(Math.random() * 2); // 2–3 punches per combo
+      let d = 0;
       for (let i = 0; i < count; i++) {
-        const delay = i * (55 + Math.random() * 35);
+        d += 380 + Math.random() * 160; // ~0.38–0.54s between fists — actual punch pacing
+        const thisDelay = d;
+        const h = hands[handIdx % 2];
+        handIdx++;
         const tid = setTimeout(() => {
           this._snd('fists');
-          const m   = this.getMuzzle(player, 115, 150); // right fist
-          const tgt = this._tgt(player, 150);
+          const m   = this.getMuzzle(player, h.x, h.y);
+          const tgt = this._tgt(player, h.y);
           const el  = document.createElement('div');
-          const sz  = 16 + Math.floor(Math.random() * 8);
+          const sz  = 22 + Math.floor(Math.random() * 6); // bigger than bullets
           el.style.cssText = [
             'position:fixed', `font-size:${sz}px`, 'pointer-events:none',
             `left:${m.x}px`, `top:${m.y}px`,
             'transform:translate(-50%,-50%)',
             'z-index:9998', 'user-select:none',
-            // faint glow behind emoji
-            `filter:drop-shadow(0 0 4px ${color}99)`
+            `filter:drop-shadow(0 0 6px ${color}aa)`
           ].join(';');
           el.textContent = '👊';
           this.overlay.appendChild(el);
           const sx = m.x, sy = m.y, st2 = performance.now();
-          const dur = 190 + Math.random() * 70;
+          const dur = 310 + Math.random() * 80; // slower travel — fist speed, not bullet speed
           const tick = (now) => {
             const p2 = Math.min((now - st2) / dur, 1);
             const ease = p2 * p2;
@@ -4311,10 +4318,11 @@ const BULLETS = {
             if (p2 < 1) requestAnimationFrame(tick); else el.remove();
           };
           requestAnimationFrame(tick);
-        }, delay);
+        }, thisDelay);
         this._addTimer(player, tid);
       }
-      const next = setTimeout(() => punch(), count * 90 + 1600 + Math.random() * 1800);
+      // Pause between combos — time to wind up for another swing
+      const next = setTimeout(() => punch(), d + 2600 + Math.random() * 2200);
       this._addTimer(player, next);
     };
     punch();
