@@ -3870,11 +3870,11 @@ const BULLETS = {
     const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
     s.buffer = this._noise(ctx, 0.042);
     f.type = 'bandpass'; f.frequency.value = 850; f.Q.value = 2.2;
-    g.gain.setValueAtTime(0.48, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
+    g.gain.setValueAtTime(0.65, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
     s.connect(f); f.connect(g); g.connect(ctx.destination); s.start(t);
     const o = ctx.createOscillator(), g2 = ctx.createGain();
     o.type = 'sawtooth'; o.frequency.value = 62;
-    g2.gain.setValueAtTime(0.32, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
+    g2.gain.setValueAtTime(0.45, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
     o.connect(g2); g2.connect(ctx.destination); o.start(t); o.stop(t + 0.042);
   },
 
@@ -3919,8 +3919,8 @@ const BULLETS = {
       lfo.connect(lfoG); lfoG.connect(o.frequency);
       const g = ctx.createGain();
       g.gain.setValueAtTime(0.0, t);
-      g.gain.linearRampToValueAtTime(0.07, t + 0.04);
-      g.gain.setValueAtTime(0.07, t + 0.34);
+      g.gain.linearRampToValueAtTime(0.05, t + 0.04);
+      g.gain.setValueAtTime(0.05, t + 0.34);
       g.gain.exponentialRampToValueAtTime(0.0001, t + 0.43);
       o.connect(g); g.connect(ctx.destination);
       lfo.start(t); o.start(t); o.stop(t + 0.44);
@@ -3929,7 +3929,7 @@ const BULLETS = {
     const s = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
     s.buffer = this._noise(ctx, 0.4);
     bp.type = 'bandpass'; bp.frequency.value = 2400; bp.Q.value = 0.6;
-    g.gain.setValueAtTime(0.19, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+    g.gain.setValueAtTime(0.13, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
     s.connect(bp); bp.connect(g); g.connect(ctx.destination); s.start(t);
   },
 
@@ -3940,7 +3940,7 @@ const BULLETS = {
     this.init(); this.stop(player);
     const sparkle = () => {
       const flashes = 2 + Math.floor(Math.random() * 3);
-      this._snd('knife'); // single shink per pulse, regardless of flash count
+      // knife is silent — no sound is more realistic
       for (let i = 0; i < flashes; i++) {
         const t = setTimeout(() => {
           const p = this.getMuzzle(player, 135, 151);
