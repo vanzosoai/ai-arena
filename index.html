@@ -1809,15 +1809,19 @@ footer span{color:#8888aa}
 
         <!-- JUNE — Shorts (skin over lower legs, keep boots) -->
         <g id="jOv_shorts" display="none">
-          <!-- Left lower leg skin (knee to boot top) -->
-          <rect x="20" y="177" width="34" height="30" fill="#FFCC99"/>
-          <!-- Right lower leg skin -->
-          <rect x="62" y="177" width="34" height="30" fill="#FFCC99"/>
-          <!-- Cover center seam between legs -->
-          <rect x="54" y="177" width="10" height="30" fill="#FFCC99"/>
-          <!-- Shorts hem line (jeans blue) -->
-          <line x1="20" y1="182" x2="54" y2="182" stroke="#1A3A99" stroke-width="2"/>
-          <line x1="62" y1="182" x2="96" y2="182" stroke="#1A3A99" stroke-width="2"/>
+          <!-- Left lower leg skin — starts y=175 to cover leg-rect top stroke artifact -->
+          <rect x="20" y="175" width="34" height="32" fill="#FFCC99"/>
+          <!-- Right lower leg skin — gap x=54–62 stays dark = natural leg separation -->
+          <rect x="62" y="175" width="34" height="32" fill="#FFCC99"/>
+          <!-- Knee patches (slightly darker skin, replaces knee pads) -->
+          <ellipse cx="37" cy="186" rx="10" ry="6" fill="#DDA070"/>
+          <ellipse cx="79" cy="186" rx="10" ry="6" fill="#DDA070"/>
+          <!-- Shin highlight (light strip down center of each shin) -->
+          <rect x="31" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <rect x="73" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <!-- Shorts hem (jeans blue, sits at bottom of shorts fabric) -->
+          <line x1="20" y1="181" x2="54" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <line x1="62" y1="181" x2="96" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
         </g>
 
       </svg>
@@ -2430,11 +2434,14 @@ footer span{color:#8888aa}
 
         <!-- JUNE — Shorts (Nick SVG auto-mirrors) -->
         <g id="nOv_shorts" display="none">
-          <rect x="20" y="177" width="34" height="30" fill="#FFCC99"/>
-          <rect x="62" y="177" width="34" height="30" fill="#FFCC99"/>
-          <rect x="54" y="177" width="10" height="30" fill="#FFCC99"/>
-          <line x1="20" y1="182" x2="54" y2="182" stroke="#1A3A99" stroke-width="2"/>
-          <line x1="62" y1="182" x2="96" y2="182" stroke="#1A3A99" stroke-width="2"/>
+          <rect x="20" y="175" width="34" height="32" fill="#FFCC99"/>
+          <rect x="62" y="175" width="34" height="32" fill="#FFCC99"/>
+          <ellipse cx="37" cy="186" rx="10" ry="6" fill="#DDA070"/>
+          <ellipse cx="79" cy="186" rx="10" ry="6" fill="#DDA070"/>
+          <rect x="31" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <rect x="73" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <line x1="20" y1="181" x2="54" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <line x1="62" y1="181" x2="96" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
         </g>
 
       </svg>
