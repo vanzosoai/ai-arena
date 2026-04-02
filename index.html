@@ -1060,7 +1060,7 @@ footer span{color:#8888aa}
         <span style="color:var(--j)">🔥 LOCKED IN</span> — You've submitted this week. Your avatar glows gold (John) or blue (Nick). You're done. Feels good.<br><br>
         <span style="color:#cc4455">💀 GET BUSY</span> — You skipped last week and still haven't submitted this week. Your avatar goes greyscale, shakes, and a skull appears on their chest. This is a warning. Fix it.<br><br>
         <span style="color:#FFD700">👑 LAST CHAMP</span> — You won last week. A crown floats above your head and your avatar glows orange until someone else takes it.<br><br>
-        <span style="color:#ff9944">😰 LAST CHANCE</span> — It's Saturday and you still haven't submitted. Your goggles slide up to your forehead, revealing beady stressed eyes darting side to side with a sweat bead running down your temple. You have until midnight Sunday. This is not a drill.<br><br>
+        <span style="color:#ff9944">😰 LAST CHANCE</span> — It's Saturday or Sunday and you still haven't submitted. Your goggles slide up to your forehead, revealing beady stressed eyes darting side to side with a sweat bead running down your temple. You have until midnight Sunday. This is not a drill.<br><br>
         <span style="color:#ff4455">⏳ RUNNING OUT OF TIME</span> — Thursday through Sunday with no submission, your card flips from skull to urgency mode with a pulsing countdown message. The arena is getting impatient.<br><br>
         <span style="color:#cccccc">⚔️ FIRST BLOOD</span> — First to submit in a given week gets a First Blood flash on screen and triggers a special taunt email to the other player. Strike first.<br><br>
         <span style="color:#FF8800">🔥 STREAK MILESTONES</span> — Submit 3 weeks in a row: <span style="color:#cc6600">ON A ROLL</span>. Five weeks: <span style="color:#FF8800">UNSTOPPABLE</span>. Eight weeks straight: <span style="color:#FFD700">LEGENDARY</span> — your avatar glows harder than ever. The streak badge lives below the fire bar. Don't break the chain.
@@ -2967,11 +2967,11 @@ function updateAvatarStates() {
   const jCooked = _devCookedOn || (!!lastId && !lastW.john && !jLocked);
   const nCooked = _devCookedOn || (!!lastId && !lastW.nick && !nLocked);
 
-  // Stressed: it's Saturday (day 6) and haven't submitted this week
+  // Stressed: it's Saturday (day 6) or Sunday (day 0) and haven't submitted this week
   const day = _dayOfWeek();
-  const isSat = (day === 6);
-  const jStressed = isSat && !jLocked;
-  const nStressed = isSat && !nLocked;
+  const isSatOrSun = (day === 6 || day === 0);
+  const jStressed = isSatOrSun && !jLocked;
+  const nStressed = isSatOrSun && !nLocked;
 
   // Streak counts for escalation effects
   const js = streak('john'), ns = streak('nick');
@@ -2984,7 +2984,7 @@ function updateAvatarStates() {
   _applyAvatarState('john', jLocked, champJ, jCooked, jStressed, js);
   _applyAvatarState('nick',  nLocked, champN, nCooked, nStressed, ns);
 
-  // Saturday urgency music: 25% faster if the logged-in player hasn't submitted yet
+  // Saturday/Sunday urgency music: 25% faster if the logged-in player hasn't submitted yet
   const _me = who();
   const _iStressed = (_me === 'john' && jStressed) || (_me === 'nick' && nStressed);
   if (MU.ctx) MU.setSpeed(_iStressed ? 1.25 : 1.0);
