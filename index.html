@@ -1617,87 +1617,139 @@ footer span{color:#8888aa}
 
         <!-- ══ SEASONAL OVERLAYS — shown/hidden by _applySeasonalOverlay() ══ -->
 
-        <!-- DECEMBER — Santa hat -->
+        <!-- DECEMBER — Santa hat (low-profile cap covering hair, floppy tail right) -->
         <g id="jOv_santahat" display="none">
-          <polygon points="58,4 30,22 88,22" fill="#CC1111" stroke="#990000" stroke-width="1"/>
-          <polygon points="58,4 55,22 72,22" fill="#990000" opacity=".28"/>
-          <rect x="20" y="19" width="76" height="8" fill="#EEEEEE" rx="2"/>
-          <rect x="22" y="20" width="72" height="3" fill="white" opacity=".6" rx="1"/>
-          <circle cx="58" cy="4" r="5.5" fill="white"/>
+          <!-- Red cap body covering entire hair zone -->
+          <rect x="10" y="2" width="106" height="17" fill="#CC1111" rx="5 5 0 0"/>
+          <!-- Floppy tail drooping to the right -->
+          <path d="M88,4 Q108,2 118,14 Q122,22 114,28 Q106,30 100,22 Q94,12 88,4" fill="#CC1111"/>
+          <!-- White brim at base of cap -->
+          <rect x="8" y="16" width="108" height="7" fill="#EEEEEE" rx="3"/>
+          <rect x="10" y="16" width="104" height="3" fill="white" opacity=".5" rx="1.5"/>
+          <!-- White pom at tail tip -->
+          <circle cx="113" cy="26" r="7" fill="white"/>
         </g>
 
-        <!-- FEBRUARY — Heart-shaped glasses -->
+        <!-- FEBRUARY — Hot-pink heart glasses (no center line) -->
         <g id="jOv_heartglasses" display="none">
-          <rect x="24" y="28" width="68" height="18" fill="#FFCC99"/>
-          <circle cx="33" cy="33" r="7.5" fill="#DD0044" stroke="#111" stroke-width="1.5"/>
-          <circle cx="46" cy="33" r="7.5" fill="#DD0044" stroke="#111" stroke-width="1.5"/>
-          <polygon points="25,34 40,45 55,34" fill="#DD0044" stroke="#111" stroke-width="1"/>
-          <circle cx="31" cy="30" r="2.5" fill="#FF77AA" opacity=".6"/>
-          <circle cx="69" cy="33" r="7.5" fill="#DD0044" stroke="#111" stroke-width="1.5"/>
-          <circle cx="82" cy="33" r="7.5" fill="#DD0044" stroke="#111" stroke-width="1.5"/>
-          <polygon points="61,34 76,45 91,34" fill="#DD0044" stroke="#111" stroke-width="1"/>
-          <circle cx="67" cy="30" r="2.5" fill="#FF77AA" opacity=".6"/>
-          <rect x="54" y="32" width="7" height="3" fill="#222" rx="1"/>
-          <line x1="17" y1="33" x2="25" y2="33" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
-          <line x1="91" y1="33" x2="99" y2="33" stroke="#222" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Skin cover for goggle area -->
+          <rect x="20" y="26" width="76" height="22" fill="#FFCC99"/>
+          <!-- Left heart lens (path-based, single shape = no seam) -->
+          <path d="M40,47 Q23,39 23,31 Q23,25 31,25 Q35,25 40,30 Q45,25 49,25 Q57,25 57,31 Q57,39 40,47 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="32" cy="29" r="2.5" fill="#FF88CC" opacity=".6"/>
+          <!-- Right heart lens -->
+          <path d="M76,47 Q59,39 59,31 Q59,25 67,25 Q71,25 76,30 Q81,25 85,25 Q93,25 93,31 Q93,39 76,47 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="68" cy="29" r="2.5" fill="#FF88CC" opacity=".6"/>
+          <!-- Nose bridge -->
+          <rect x="57" y="30" width="2" height="3" fill="#444" rx="1"/>
+          <!-- Temple arms -->
+          <line x1="15" y1="32" x2="23" y2="32" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="93" y1="32" x2="101" y2="32" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
         </g>
 
-        <!-- APRIL 1 — Jester hat (1-day egg) -->
+        <!-- FEBRUARY — Heart glasses PANIC version (raised to forehead, panic eyes visible below) -->
+        <g id="jOv_heartglasses_panic" display="none">
+          <!-- Forehead skin background for raised glasses -->
+          <rect x="20" y="10" width="76" height="20" fill="#FFCC99"/>
+          <!-- Left heart raised to forehead -->
+          <path d="M40,31 Q23,23 23,16 Q23,10 31,10 Q35,10 40,15 Q45,10 49,10 Q57,10 57,16 Q57,23 40,31 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="32" cy="14" r="2" fill="#FF88CC" opacity=".6"/>
+          <!-- Right heart raised to forehead -->
+          <path d="M76,31 Q59,23 59,16 Q59,10 67,10 Q71,10 76,15 Q81,10 85,10 Q93,10 93,16 Q93,23 76,31 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="68" cy="14" r="2" fill="#FF88CC" opacity=".6"/>
+          <!-- Nose bridge -->
+          <rect x="57" y="15" width="2" height="3" fill="#444" rx="1"/>
+          <!-- Temple arms -->
+          <line x1="15" y1="17" x2="23" y2="17" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="93" y1="17" x2="101" y2="17" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- APRIL 1 — Jester hat (dark base covers hair, lobes sit in hair zone) -->
         <g id="jOv_jester" display="none">
-          <polygon points="30,18 16,3 44,18" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
-          <polygon points="58,18 58,1 76,18" fill="#CC1111" stroke="#990000" stroke-width="1"/>
-          <polygon points="82,18 100,3 72,18" fill="#8800BB" stroke="#660099" stroke-width="1"/>
-          <rect x="19" y="15" width="78" height="8" fill="#222"/>
-          <rect x="20" y="15" width="76" height="4" fill="#CC1111"/>
-          <rect x="32" y="15" width="13" height="8" fill="#FFD700"/>
-          <rect x="58" y="15" width="13" height="8" fill="#FFD700"/>
-          <rect x="71" y="15" width="6" height="8" fill="#8800BB"/>
-          <circle cx="16" cy="3" r="4" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
-          <circle cx="58" cy="1" r="4" fill="#CC1111" stroke="#990000" stroke-width="1"/>
-          <circle cx="100" cy="3" r="4" fill="#8800BB" stroke="#660099" stroke-width="1"/>
+          <!-- Dark cap base covering entire hair zone -->
+          <rect x="10" y="2" width="106" height="17" fill="#1a1020"/>
+          <!-- Three lobes in hair zone: gold left, red center, purple right -->
+          <polygon points="28,19 18,2 44,19" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
+          <polygon points="51,19 58,2 71,19" fill="#CC1111" stroke="#990000" stroke-width="1"/>
+          <polygon points="72,19 98,2 88,19" fill="#8800BB" stroke="#660099" stroke-width="1"/>
+          <!-- Colorful band at base of hat -->
+          <rect x="8" y="15" width="110" height="8" fill="#1a1020" rx="1"/>
+          <rect x="10" y="15" width="38" height="4" fill="#FFD700"/>
+          <rect x="48" y="15" width="20" height="4" fill="#CC1111"/>
+          <rect x="68" y="15" width="38" height="4" fill="#8800BB"/>
+          <rect x="8" y="19" width="110" height="4" fill="#111" opacity=".5" rx="1"/>
+          <!-- Bells at lobe tips -->
+          <circle cx="18" cy="2" r="4" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
+          <circle cx="58" cy="2" r="4" fill="#CC1111" stroke="#990000" stroke-width="1"/>
+          <circle cx="98" cy="2" r="4" fill="#8800BB" stroke="#660099" stroke-width="1"/>
         </g>
 
-        <!-- MAY — Sombrero -->
+        <!-- MAY — Sombrero (straight front-facing view, no perspective hole) -->
         <g id="jOv_sombrero" display="none">
-          <ellipse cx="58" cy="20" rx="60" ry="7" fill="#BB8800" stroke="#886600" stroke-width="1.5"/>
-          <ellipse cx="58" cy="20" rx="60" ry="4" fill="rgba(0,0,0,.25)"/>
-          <ellipse cx="58" cy="10" rx="30" ry="14" fill="#DDAA22" stroke="#996600" stroke-width="1.5"/>
-          <ellipse cx="58" cy="21" rx="30" ry="4" fill="#CC7700" stroke="#884400" stroke-width="1"/>
-          <line x1="28" y1="17" x2="88" y2="17" stroke="#CC9900" stroke-width="1" opacity=".5"/>
-          <circle cx="20" cy="20" r="2.5" fill="#FF4400"/>
-          <circle cx="38" cy="15" r="2" fill="#FF4400"/>
-          <circle cx="78" cy="15" r="2" fill="#FF4400"/>
-          <circle cx="96" cy="20" r="2.5" fill="#FF4400"/>
-          <circle cx="58" cy="0" r="4" fill="#FF4400" stroke="#CC2200" stroke-width="1"/>
+          <!-- Crown dome covering hair (front view = dome shape) -->
+          <ellipse cx="58" cy="12" rx="38" ry="14" fill="#DDAA22" stroke="#996600" stroke-width="1.5"/>
+          <!-- Fill rect to block hair gap under dome edges -->
+          <rect x="20" y="12" width="76" height="11" fill="#DDAA22"/>
+          <!-- Wide front-facing brim (horizontal oval) -->
+          <ellipse cx="58" cy="21" rx="64" ry="7" fill="#CC9900" stroke="#886600" stroke-width="1.5"/>
+          <!-- Solid fill so brim has no see-through -->
+          <rect x="22" y="15" width="72" height="10" fill="#DDAA22"/>
+          <!-- Red band at crown/brim junction -->
+          <rect x="22" y="18" width="72" height="5" fill="#CC3300" stroke="#882200" stroke-width=".5"/>
+          <!-- Decorative dots on brim -->
+          <circle cx="6" cy="22" r="2.5" fill="#FFDD44"/>
+          <circle cx="26" cy="18" r="2" fill="#FFDD44"/>
+          <circle cx="90" cy="18" r="2" fill="#FFDD44"/>
+          <circle cx="110" cy="22" r="2.5" fill="#FFDD44"/>
+          <!-- Red pompom at crown tip -->
+          <circle cx="58" cy="0" r="4" fill="#CC2200" stroke="#881100" stroke-width="1"/>
         </g>
 
-        <!-- MAY (MEMORIAL DAY) — Dog tags -->
+        <!-- MAY (MEMORIAL DAY WEEKEND) — Dog tags matching Nick's style -->
         <g id="jOv_dogtags" display="none">
-          <polyline points="50,72 46,87 58,85 70,87 66,72" fill="none" stroke="#BBBBBB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          <rect x="39" y="87" width="17" height="12" fill="#DDDDDD" stroke="#888" stroke-width="1" rx="2"/>
-          <circle cx="47.5" cy="88.5" r="1.5" fill="#888"/>
-          <text x="47.5" y="96" text-anchor="middle" font-size="3.5" fill="#555">★USA★</text>
-          <rect x="60" y="89" width="16" height="11" fill="#CCCCCC" stroke="#888" stroke-width="1" rx="2"/>
-          <circle cx="68" cy="90.5" r="1.5" fill="#888"/>
-          <text x="68" y="98" text-anchor="middle" font-size="3.5" fill="#555">★USA★</text>
+          <!-- Chain around neck (curved dashed) -->
+          <polyline points="38,71 34,82 42,90 52,94 58,95 64,94 74,90 82,82 78,71"
+                    fill="none" stroke="#AAAAAA" stroke-width="2" stroke-dasharray="3,2"/>
+          <!-- Tag 1 -->
+          <rect x="46" y="90" width="18" height="24" fill="#C0C0C0" stroke="#888" stroke-width="1" rx="3"/>
+          <circle cx="55" cy="92" r="1.5" fill="#888"/>
+          <text x="55" y="102" font-size="5" fill="#444" text-anchor="middle" font-family="monospace">★</text>
+          <text x="55" y="110" font-size="3.5" fill="#444" text-anchor="middle" font-family="monospace">USA</text>
+          <!-- Tag 2 (slightly offset) -->
+          <rect x="52" y="96" width="18" height="24" fill="#B8B8B8" stroke="#888" stroke-width="1" rx="3"/>
+          <circle cx="61" cy="98" r="1.5" fill="#888"/>
+          <text x="61" y="108" font-size="5" fill="#444" text-anchor="middle" font-family="monospace">★</text>
+          <text x="61" y="116" font-size="3.5" fill="#444" text-anchor="middle" font-family="monospace">USA</text>
         </g>
 
-        <!-- JULY — RWB bandana -->
+        <!-- JULY — RWB bandana (in hair zone, above goggles, knot right side) -->
         <g id="jOv_bandana" display="none">
-          <rect x="19" y="17" width="77" height="4" fill="#CC1111"/>
-          <rect x="19" y="21" width="77" height="3" fill="#EEEEEE"/>
-          <rect x="19" y="24" width="77" height="4" fill="#1133CC"/>
-          <text x="30" y="28" font-size="3.5" fill="white" opacity=".85">★</text>
-          <text x="50" y="28" font-size="3.5" fill="white" opacity=".85">★</text>
-          <text x="70" y="28" font-size="3.5" fill="white" opacity=".85">★</text>
-          <path d="M 93,17 L 103,13 L 105,19 L 98,21 Z" fill="#CC1111" stroke="#990000" stroke-width="1"/>
-          <path d="M 95,22 L 105,19 L 107,26 L 98,25 Z" fill="#EEEEEE" stroke="#CCCCCC" stroke-width="1"/>
-          <path d="M 94,26 L 103,26 L 101,33 L 93,30 Z" fill="#1133CC" stroke="#0022AA" stroke-width="1"/>
+          <!-- Three stripes in hair zone -->
+          <rect x="10" y="2" width="106" height="5" fill="#CC1111"/>
+          <rect x="10" y="7" width="106" height="5" fill="#EEEEEE"/>
+          <rect x="10" y="12" width="106" height="5" fill="#1133CC"/>
+          <!-- Stars on white stripe -->
+          <text x="30" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <text x="58" y="11" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
+          <text x="86" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <!-- Knot/tail on right side (John's right) -->
+          <polygon points="102,2 118,0 120,7 106,9 102,2" fill="#CC1111"/>
+          <polygon points="104,7 118,5 119,11 106,12 104,9" fill="#EEEEEE"/>
+          <polygon points="104,12 116,11 116,17 104,16" fill="#1133CC"/>
         </g>
 
-        <!-- OCTOBER — Jason mask -->
+        <!-- OCTOBER — Jason mask (John's base, Nick-style mouth holes, covers panic state) -->
         <g id="jOv_jason" display="none">
-          <path fill-rule="evenodd" d="M22,19 L94,19 L94,72 L22,72 Z M27,29 Q40,23 53,29 L53,45 Q40,51 27,45 Z M63,29 Q76,23 89,29 L89,45 Q76,51 63,45 Z" fill="#F0EFE6" stroke="#C8C7B8" stroke-width="1.5"/>
+          <!-- Mask face — top extended to y=15 to cover raised panic goggles -->
+          <path fill-rule="evenodd" fill="#F0EFE6" stroke="#C8C7B8" stroke-width="1.5"
+                d="M21,15 L95,15 L95,72 L21,72 Z
+                   M27,29 Q40,23 53,29 L53,45 Q40,51 27,45 Z
+                   M63,29 Q76,23 89,29 L89,45 Q76,51 63,45 Z"/>
+          <!-- Vertical mask lines (classic Jason ridges) -->
+          <line x1="58" y1="15" x2="58" y2="72" stroke="#C8C7B8" stroke-width=".8" opacity=".6"/>
+          <line x1="38" y1="22" x2="35" y2="68" stroke="#C8C7B8" stroke-width=".5" opacity=".4"/>
+          <line x1="78" y1="22" x2="81" y2="68" stroke="#C8C7B8" stroke-width=".5" opacity=".4"/>
+          <!-- Normal eyes (visible through holes) -->
           <ellipse cx="40" cy="37" rx="9" ry="7" fill="#1a1a28"/>
           <ellipse cx="40" cy="36" rx="5.5" ry="4.5" fill="#f0f0e0"/>
           <circle cx="40" cy="37" r="3" fill="#111118"/>
@@ -1706,33 +1758,38 @@ footer span{color:#8888aa}
           <ellipse cx="76" cy="36" rx="5.5" ry="4.5" fill="#f0f0e0"/>
           <circle cx="76" cy="37" r="3" fill="#111118"/>
           <circle cx="77.5" cy="35.5" r="1" fill="white" opacity=".7"/>
-          <ellipse cx="44" cy="57" rx="3" ry="4" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
-          <ellipse cx="52" cy="57" rx="3" ry="4" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
-          <ellipse cx="60" cy="57" rx="3" ry="4" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
-          <ellipse cx="68" cy="57" rx="3" ry="4" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
-          <rect x="17" y="35" width="6" height="6" fill="#C8C7B8" rx="1"/>
-          <rect x="93" y="35" width="6" height="6" fill="#C8C7B8" rx="1"/>
+          <!-- Nick-style mouth ventilation holes (triangular arrangement) -->
+          <ellipse cx="58" cy="55" rx="3.5" ry="3" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
+          <ellipse cx="46" cy="63" rx="3" ry="3.5" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
+          <ellipse cx="70" cy="63" rx="3" ry="3.5" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
+          <!-- Side strap nubs -->
+          <rect x="15" y="35" width="7" height="6" fill="#C8C7B8" rx="1"/>
+          <rect x="94" y="35" width="7" height="6" fill="#C8C7B8" rx="1"/>
         </g>
 
-        <!-- NOVEMBER — Movember mustache -->
+        <!-- NOVEMBER — Movember mustache (Top Gun Goose style, above mouth) -->
         <g id="jOv_mustache" display="none">
-          <path d="M 34,58 Q 40,53 58,56 Q 76,53 82,58 Q 78,61 70,63 Q 65,65 61,61 Q 59,59 58,61 Q 57,59 55,61 Q 51,65 46,63 Q 38,61 34,58 Z" fill="#3A2214" stroke="#1A0A06" stroke-width="1"/>
-          <path d="M 34,58 Q 25,54 22,61 Q 24,67 32,63" fill="none" stroke="#3A2214" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 82,58 Q 91,54 94,61 Q 92,67 84,63" fill="none" stroke="#3A2214" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 38,57 Q 48,55 58,57" fill="none" stroke="#5A3828" stroke-width="1" opacity=".4"/>
-          <path d="M 58,57 Q 68,55 78,57" fill="none" stroke="#5A3828" stroke-width="1" opacity=".4"/>
+          <!-- Fuller body above the mouth, no curly handlebars -->
+          <path d="M 30,56 Q 38,50 58,52 Q 78,50 86,56 Q 82,61 70,63 Q 64,64 58,63 Q 52,64 46,63 Q 34,61 30,56 Z" fill="#3A2214" stroke="#1A0A06" stroke-width=".5"/>
+          <!-- Center highlight for fullness -->
+          <path d="M 40,54 Q 58,51 76,54" fill="none" stroke="#5A3828" stroke-width="1.2" opacity=".5"/>
         </g>
 
-        <!-- BIRTHDAY WEEK — Party hat + cake (🎂 handled in JS as DOM overlay) -->
+        <!-- BIRTHDAY WEEK — Party hat (wide cone covers hair, white trim base) -->
         <g id="jOv_bday" display="none">
-          <polygon points="58,2 28,22 88,22" fill="#FF44AA" stroke="#CC2288" stroke-width="1"/>
-          <polygon points="40,22 46,11 52,22" fill="#FFD700" opacity=".75"/>
-          <polygon points="64,22 70,11 76,22" fill="#44CCFF" opacity=".75"/>
-          <polygon points="52,22 58,8 64,22" fill="#FF8800" opacity=".75"/>
-          <rect x="22" y="19" width="72" height="6" fill="white" rx="2"/>
-          <circle cx="37" cy="15" r="2" fill="#FFD700"/>
-          <circle cx="58" cy="8" r="2" fill="#44CCFF"/>
-          <circle cx="78" cy="15" r="2" fill="#FF8800"/>
+          <!-- Wide cone covering hair area -->
+          <polygon points="58,2 12,20 104,20" fill="#FF44AA" stroke="#CC2288" stroke-width="1"/>
+          <!-- Stripe decorations on cone -->
+          <polygon points="36,20 41,11 46,20" fill="#FFD700" opacity=".75"/>
+          <polygon points="70,20 75,11 80,20" fill="#44CCFF" opacity=".75"/>
+          <polygon points="53,20 58,8 63,20" fill="#FF8800" opacity=".75"/>
+          <!-- White trim band at base -->
+          <rect x="8" y="17" width="100" height="7" fill="white" rx="2" opacity=".95"/>
+          <!-- Polka dots on hat body -->
+          <circle cx="36" cy="14" r="2.5" fill="#FFD700"/>
+          <circle cx="80" cy="14" r="2.5" fill="#44CCFF"/>
+          <circle cx="58" cy="8" r="2" fill="#FF8800"/>
+          <!-- Gold pom-pom at tip -->
           <circle cx="58" cy="2" r="5" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
         </g>
 
@@ -2190,140 +2247,138 @@ footer span{color:#8888aa}
              Nick SVG is scaleX(-1) so same coords mirror automatically
              ═══════════════════════════════════════════════════════ -->
 
-        <!-- DECEMBER — Santa hat -->
+        <!-- DECEMBER — Santa hat (low-profile cap covering hair, floppy tail right) -->
         <g id="nOv_santahat" display="none">
-          <polygon points="58,2 28,22 88,22" fill="#CC0000" stroke="#AA0000" stroke-width="1"/>
-          <rect x="22" y="19" width="72" height="8" fill="#EEEEEE" rx="3"/>
-          <circle cx="58" cy="2" r="5" fill="#EEEEEE"/>
+          <rect x="10" y="2" width="106" height="17" fill="#CC1111" rx="5 5 0 0"/>
+          <path d="M88,4 Q108,2 118,14 Q122,22 114,28 Q106,30 100,22 Q94,12 88,4" fill="#CC1111"/>
+          <rect x="8" y="16" width="108" height="7" fill="#EEEEEE" rx="3"/>
+          <rect x="10" y="16" width="104" height="3" fill="white" opacity=".5" rx="1.5"/>
+          <circle cx="113" cy="26" r="7" fill="white"/>
         </g>
 
-        <!-- FEBRUARY — Heart glasses -->
+        <!-- FEBRUARY — Hot-pink heart glasses (no center line) -->
         <g id="nOv_heartglasses" display="none">
-          <!-- Skin cover over goggle area -->
-          <rect x="22" y="28" width="72" height="18" fill="#FFCC99"/>
-          <!-- Left heart (red, two circles + triangle) -->
-          <circle cx="33" cy="35" r="7" fill="#EE1133"/>
-          <circle cx="43" cy="35" r="7" fill="#EE1133"/>
-          <polygon points="26,37 50,37 38,50" fill="#EE1133"/>
-          <!-- Right heart -->
-          <circle cx="69" cy="35" r="7" fill="#EE1133"/>
-          <circle cx="79" cy="35" r="7" fill="#EE1133"/>
-          <polygon points="62,37 86,37 74,50" fill="#EE1133"/>
-          <!-- Bridge -->
-          <line x1="50" y1="34" x2="62" y2="34" stroke="#CC1122" stroke-width="2"/>
-          <!-- Temple lines -->
-          <line x1="26" y1="34" x2="20" y2="32" stroke="#CC1122" stroke-width="2"/>
-          <line x1="86" y1="34" x2="92" y2="32" stroke="#CC1122" stroke-width="2"/>
+          <rect x="20" y="26" width="76" height="22" fill="#FFCC99"/>
+          <path d="M40,47 Q23,39 23,31 Q23,25 31,25 Q35,25 40,30 Q45,25 49,25 Q57,25 57,31 Q57,39 40,47 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="32" cy="29" r="2.5" fill="#FF88CC" opacity=".6"/>
+          <path d="M76,47 Q59,39 59,31 Q59,25 67,25 Q71,25 76,30 Q81,25 85,25 Q93,25 93,31 Q93,39 76,47 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="68" cy="29" r="2.5" fill="#FF88CC" opacity=".6"/>
+          <rect x="57" y="30" width="2" height="3" fill="#444" rx="1"/>
+          <line x1="15" y1="32" x2="23" y2="32" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="93" y1="32" x2="101" y2="32" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
         </g>
 
-        <!-- APRIL 1 — Jester hat (1-day easter egg) -->
+        <!-- FEBRUARY — Heart glasses PANIC version (raised to forehead, panic eyes visible below) -->
+        <g id="nOv_heartglasses_panic" display="none">
+          <rect x="20" y="10" width="76" height="20" fill="#FFCC99"/>
+          <path d="M40,31 Q23,23 23,16 Q23,10 31,10 Q35,10 40,15 Q45,10 49,10 Q57,10 57,16 Q57,23 40,31 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="32" cy="14" r="2" fill="#FF88CC" opacity=".6"/>
+          <path d="M76,31 Q59,23 59,16 Q59,10 67,10 Q71,10 76,15 Q81,10 85,10 Q93,10 93,16 Q93,23 76,31 Z" fill="#FF1177" stroke="#880033" stroke-width="1.2"/>
+          <circle cx="68" cy="14" r="2" fill="#FF88CC" opacity=".6"/>
+          <rect x="57" y="15" width="2" height="3" fill="#444" rx="1"/>
+          <line x1="15" y1="17" x2="23" y2="17" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="93" y1="17" x2="101" y2="17" stroke="#444" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+
+        <!-- APRIL 1 — Jester hat (dark base covers hair, lobes sit in hair zone) -->
         <g id="nOv_jester" display="none">
-          <!-- Three floppy lobes: gold left, red center, purple right -->
-          <polygon points="30,22 38,2 46,22" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
-          <polygon points="52,22 58,0 64,22" fill="#CC2200" stroke="#881100" stroke-width="1"/>
-          <polygon points="70,22 78,2 86,22" fill="#6600CC" stroke="#440088" stroke-width="1"/>
-          <!-- Base band -->
-          <rect x="24" y="19" width="68" height="7" fill="#222244" stroke="#111133" stroke-width="1" rx="1"/>
-          <rect x="24" y="19" width="68" height="3" fill="#3333AA" opacity=".5" rx="1"/>
-          <!-- Tip bells -->
-          <circle cx="38" cy="2" r="4" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
-          <circle cx="58" cy="0" r="4" fill="#CC2200" stroke="#881100" stroke-width="1"/>
-          <circle cx="78" cy="2" r="4" fill="#6600CC" stroke="#440088" stroke-width="1"/>
+          <rect x="10" y="2" width="106" height="17" fill="#1a1020"/>
+          <polygon points="28,19 18,2 44,19" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
+          <polygon points="51,19 58,2 71,19" fill="#CC1111" stroke="#990000" stroke-width="1"/>
+          <polygon points="72,19 98,2 88,19" fill="#8800BB" stroke="#660099" stroke-width="1"/>
+          <rect x="8" y="15" width="110" height="8" fill="#1a1020" rx="1"/>
+          <rect x="10" y="15" width="38" height="4" fill="#FFD700"/>
+          <rect x="48" y="15" width="20" height="4" fill="#CC1111"/>
+          <rect x="68" y="15" width="38" height="4" fill="#8800BB"/>
+          <rect x="8" y="19" width="110" height="4" fill="#111" opacity=".5" rx="1"/>
+          <circle cx="18" cy="2" r="4" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
+          <circle cx="58" cy="2" r="4" fill="#CC1111" stroke="#990000" stroke-width="1"/>
+          <circle cx="98" cy="2" r="4" fill="#8800BB" stroke="#660099" stroke-width="1"/>
         </g>
 
-        <!-- MAY — Sombrero -->
+        <!-- MAY — Sombrero (straight front-facing view) -->
         <g id="nOv_sombrero" display="none">
-          <!-- Wide brim ellipse -->
-          <ellipse cx="58" cy="18" rx="52" ry="8" fill="#CC8800" stroke="#884400" stroke-width="1.5"/>
-          <!-- Crown dome -->
-          <ellipse cx="58" cy="14" rx="28" ry="14" fill="#DDAA00" stroke="#884400" stroke-width="1.5"/>
-          <!-- Band -->
-          <ellipse cx="58" cy="18" rx="28" ry="5" fill="#CC3300" stroke="#882200" stroke-width="1"/>
-          <!-- Decorative dots on brim -->
-          <circle cx="20" cy="19" r="2.5" fill="#FFDD44"/>
-          <circle cx="36" cy="15" r="2" fill="#FFDD44"/>
-          <circle cx="80" cy="15" r="2" fill="#FFDD44"/>
-          <circle cx="96" cy="19" r="2.5" fill="#FFDD44"/>
-          <!-- Red pompom tip -->
-          <circle cx="58" cy="0" r="5" fill="#CC2200" stroke="#881100" stroke-width="1"/>
+          <ellipse cx="58" cy="12" rx="38" ry="14" fill="#DDAA22" stroke="#996600" stroke-width="1.5"/>
+          <rect x="20" y="12" width="76" height="11" fill="#DDAA22"/>
+          <ellipse cx="58" cy="21" rx="64" ry="7" fill="#CC9900" stroke="#886600" stroke-width="1.5"/>
+          <rect x="22" y="15" width="72" height="10" fill="#DDAA22"/>
+          <rect x="22" y="18" width="72" height="5" fill="#CC3300" stroke="#882200" stroke-width=".5"/>
+          <circle cx="6" cy="22" r="2.5" fill="#FFDD44"/>
+          <circle cx="26" cy="18" r="2" fill="#FFDD44"/>
+          <circle cx="90" cy="18" r="2" fill="#FFDD44"/>
+          <circle cx="110" cy="22" r="2.5" fill="#FFDD44"/>
+          <circle cx="58" cy="0" r="4" fill="#CC2200" stroke="#881100" stroke-width="1"/>
         </g>
 
-        <!-- MEMORIAL DAY (last Mon of May) — Dog tags -->
+        <!-- MEMORIAL DAY WEEKEND — Dog tags (same as John, scaleX mirrors chain) -->
         <g id="nOv_dogtags" display="none">
-          <!-- Chain around neck -->
           <polyline points="38,71 34,82 42,90 52,94 58,95 64,94 74,90 82,82 78,71"
                     fill="none" stroke="#AAAAAA" stroke-width="2" stroke-dasharray="3,2"/>
-          <!-- Tag 1 -->
           <rect x="46" y="90" width="18" height="24" fill="#C0C0C0" stroke="#888" stroke-width="1" rx="3"/>
+          <circle cx="55" cy="92" r="1.5" fill="#888"/>
           <text x="55" y="102" font-size="5" fill="#444" text-anchor="middle" font-family="monospace">★</text>
           <text x="55" y="110" font-size="3.5" fill="#444" text-anchor="middle" font-family="monospace">USA</text>
-          <!-- Tag 2 (slightly offset) -->
           <rect x="52" y="96" width="18" height="24" fill="#B8B8B8" stroke="#888" stroke-width="1" rx="3"/>
+          <circle cx="61" cy="98" r="1.5" fill="#888"/>
           <text x="61" y="108" font-size="5" fill="#444" text-anchor="middle" font-family="monospace">★</text>
           <text x="61" y="116" font-size="3.5" fill="#444" text-anchor="middle" font-family="monospace">USA</text>
         </g>
 
-        <!-- JULY — RWB Bandana -->
+        <!-- JULY — RWB Bandana (in hair zone, knot on right = mirrors left for Nick) -->
         <g id="nOv_bandana" display="none">
-          <!-- Three horizontal stripe sections across forehead -->
-          <rect x="22" y="17" width="72" height="5" fill="#CC1111" rx="1"/>
-          <rect x="22" y="22" width="72" height="5" fill="#EEEEEE"/>
-          <rect x="22" y="27" width="72" height="5" fill="#1133CC" rx="1"/>
-          <!-- Stars on white stripe -->
-          <text x="34" y="28" font-size="5" fill="#1133CC" text-anchor="middle">★</text>
-          <text x="58" y="28" font-size="5" fill="#CC1111" text-anchor="middle">★</text>
-          <text x="82" y="28" font-size="5" fill="#1133CC" text-anchor="middle">★</text>
-          <!-- Knot/tie on right side (appears left due to scaleX mirror) -->
-          <polygon points="22,17 6,22 22,27" fill="#CC1111"/>
-          <polygon points="22,20 8,22 22,24" fill="#EEEEEE"/>
+          <rect x="10" y="2" width="106" height="5" fill="#CC1111"/>
+          <rect x="10" y="7" width="106" height="5" fill="#EEEEEE"/>
+          <rect x="10" y="12" width="106" height="5" fill="#1133CC"/>
+          <text x="30" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <text x="58" y="11" font-size="4" fill="#CC1111" text-anchor="middle">★</text>
+          <text x="86" y="11" font-size="4" fill="#1133CC" text-anchor="middle">★</text>
+          <!-- Knot on right (scaleX mirrors to Nick's left) -->
+          <polygon points="102,2 118,0 120,7 106,9 102,2" fill="#CC1111"/>
+          <polygon points="104,7 118,5 119,11 106,12 104,9" fill="#EEEEEE"/>
+          <polygon points="104,12 116,11 116,17 104,16" fill="#1133CC"/>
         </g>
 
-        <!-- OCTOBER — Jason mask -->
+        <!-- OCTOBER — Jason mask (covers panic state, Nick-style mouth holes) -->
         <g id="nOv_jason" display="none">
-          <!-- White mask face using evenodd to cut eye holes -->
-          <path fill-rule="evenodd" fill="#EEEECC" stroke="#BBBB99" stroke-width="1.5"
-                d="M20,25 L20,68 Q58,76 96,68 L96,25 Q58,14 20,25 Z
-                   M30,30 Q40,27 50,30 L50,44 Q40,47 30,44 Z
-                   M66,30 Q76,27 86,30 L86,44 Q76,47 66,44 Z"/>
-          <!-- Eyes re-drawn inside holes (visible through mask) -->
-          <ellipse cx="40" cy="37" rx="8" ry="7" fill="#f5f5e8"/>
-          <circle cx="40" cy="37" r="4" fill="#1a1a22"/>
-          <circle cx="42" cy="35" r="1.5" fill="#fff" opacity=".7"/>
-          <ellipse cx="76" cy="37" rx="8" ry="7" fill="#f5f5e8"/>
-          <circle cx="76" cy="37" r="4" fill="#1a1a22"/>
-          <circle cx="78" cy="35" r="1.5" fill="#fff" opacity=".7"/>
-          <!-- Ventilation holes -->
-          <ellipse cx="58" cy="52" rx="3" ry="2" fill="#CCCCAA" stroke="#AAAAAA" stroke-width=".5"/>
-          <ellipse cx="44" cy="58" rx="2.5" ry="1.5" fill="#CCCCAA" stroke="#AAAAAA" stroke-width=".5"/>
-          <ellipse cx="72" cy="58" rx="2.5" ry="1.5" fill="#CCCCAA" stroke="#AAAAAA" stroke-width=".5"/>
-          <!-- Strap across forehead -->
-          <rect x="20" y="17" width="76" height="6" fill="#333" opacity=".7" rx="1"/>
-          <rect x="20" y="68" width="76" height="4" fill="#333" opacity=".5" rx="1"/>
+          <path fill-rule="evenodd" fill="#F0EFE6" stroke="#C8C7B8" stroke-width="1.5"
+                d="M21,15 L95,15 L95,72 L21,72 Z
+                   M27,29 Q40,23 53,29 L53,45 Q40,51 27,45 Z
+                   M63,29 Q76,23 89,29 L89,45 Q76,51 63,45 Z"/>
+          <line x1="58" y1="15" x2="58" y2="72" stroke="#C8C7B8" stroke-width=".8" opacity=".6"/>
+          <line x1="38" y1="22" x2="35" y2="68" stroke="#C8C7B8" stroke-width=".5" opacity=".4"/>
+          <line x1="78" y1="22" x2="81" y2="68" stroke="#C8C7B8" stroke-width=".5" opacity=".4"/>
+          <ellipse cx="40" cy="37" rx="9" ry="7" fill="#1a1a28"/>
+          <ellipse cx="40" cy="36" rx="5.5" ry="4.5" fill="#f0f0e0"/>
+          <circle cx="40" cy="37" r="3" fill="#111118"/>
+          <circle cx="41.5" cy="35.5" r="1" fill="white" opacity=".7"/>
+          <ellipse cx="76" cy="37" rx="9" ry="7" fill="#1a1a28"/>
+          <ellipse cx="76" cy="36" rx="5.5" ry="4.5" fill="#f0f0e0"/>
+          <circle cx="76" cy="37" r="3" fill="#111118"/>
+          <circle cx="77.5" cy="35.5" r="1" fill="white" opacity=".7"/>
+          <!-- Triangular vent holes (Jason-style) -->
+          <ellipse cx="58" cy="55" rx="3.5" ry="3" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
+          <ellipse cx="46" cy="63" rx="3" ry="3.5" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
+          <ellipse cx="70" cy="63" rx="3" ry="3.5" fill="#DDDCCA" stroke="#BCBBA8" stroke-width="1"/>
+          <rect x="15" y="35" width="7" height="6" fill="#C8C7B8" rx="1"/>
+          <rect x="94" y="35" width="7" height="6" fill="#C8C7B8" rx="1"/>
         </g>
 
-        <!-- NOVEMBER — Movember mustache -->
+        <!-- NOVEMBER — Movember mustache (Top Gun Goose style, above mouth) -->
         <g id="nOv_mustache" display="none">
-          <!-- Mustache body -->
-          <path d="M36,62 Q44,58 52,62 Q58,65 64,62 Q72,58 80,62 Q76,68 64,65 Q58,68 52,65 Q40,68 36,62 Z"
-                fill="#3A2A1A" stroke="#2A1A0A" stroke-width=".5"/>
-          <!-- Left handlebar curl -->
-          <path d="M36,62 Q28,58 24,52 Q22,46 28,44" fill="none" stroke="#3A2A1A" stroke-width="2.5" stroke-linecap="round"/>
-          <!-- Right handlebar curl -->
-          <path d="M80,62 Q88,58 92,52 Q94,46 88,44" fill="none" stroke="#3A2A1A" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M 30,56 Q 38,50 58,52 Q 78,50 86,56 Q 82,61 70,63 Q 64,64 58,63 Q 52,64 46,63 Q 34,61 30,56 Z" fill="#3A2214" stroke="#1A0A06" stroke-width=".5"/>
+          <path d="M 40,54 Q 58,51 76,54" fill="none" stroke="#5A3828" stroke-width="1.2" opacity=".5"/>
         </g>
 
-        <!-- BIRTHDAY WEEK — Party hat + cake (🎂 handled in JS as DOM overlay) -->
+        <!-- BIRTHDAY WEEK — Party hat (wide cone covers hair, white trim base) -->
         <g id="nOv_bday" display="none">
-          <polygon points="58,2 28,22 88,22" fill="#FF44AA" stroke="#CC2288" stroke-width="1"/>
-          <polygon points="40,22 46,11 52,22" fill="#FFD700" opacity=".75"/>
-          <polygon points="64,22 70,11 76,22" fill="#44CCFF" opacity=".75"/>
-          <!-- White trim at base -->
-          <rect x="24" y="19" width="68" height="6" fill="#FFFFFF" rx="2" opacity=".9"/>
-          <!-- Polka dots on hat -->
-          <circle cx="46" cy="10" r="2.5" fill="#FFD700"/>
-          <circle cx="70" cy="10" r="2.5" fill="#44CCFF"/>
-          <circle cx="58" cy="15" r="2" fill="#FFFFFF" opacity=".8"/>
-          <!-- Gold pom-pom -->
+          <polygon points="58,2 12,20 104,20" fill="#FF44AA" stroke="#CC2288" stroke-width="1"/>
+          <polygon points="36,20 41,11 46,20" fill="#FFD700" opacity=".75"/>
+          <polygon points="70,20 75,11 80,20" fill="#44CCFF" opacity=".75"/>
+          <polygon points="53,20 58,8 63,20" fill="#FF8800" opacity=".75"/>
+          <rect x="8" y="17" width="100" height="7" fill="white" rx="2" opacity=".95"/>
+          <circle cx="36" cy="14" r="2.5" fill="#FFD700"/>
+          <circle cx="80" cy="14" r="2.5" fill="#44CCFF"/>
+          <circle cx="58" cy="8" r="2" fill="#FF8800"/>
           <circle cx="58" cy="2" r="5" fill="#FFD700" stroke="#CC9900" stroke-width="1"/>
         </g>
 
@@ -3357,26 +3412,34 @@ function _getSeasonOverlay(player) {
   if (m === 10) return 'jason';
   if (m === 7)  return 'bandana';
   if (m === 5) {
-    // Check Memorial Day (last Monday of May) — 1-day overlay
+    // Dog tags on Memorial Day weekend: Friday, Saturday, Sunday before + Monday (4 days)
     const mem = _memorialDay(now.getFullYear());
-    if (now.getDate() === mem.getDate()) return 'dogtags';
+    const memD = mem.getDate();
+    const d = now.getDate();
+    if (d === memD || d === memD - 1 || d === memD - 2 || d === memD - 3) return 'dogtags';
     return 'sombrero';
   }
   return null;
 }
 
 /** All overlay IDs for a given player prefix */
-const _OVERLAY_KEYS = ['santahat','heartglasses','jester','sombrero','dogtags','bandana','jason','mustache','bday'];
+const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','sombrero','dogtags','bandana','jason','mustache','bday'];
 
-/** Show correct overlay, hide all others. Also manages cake DOM overlay. */
-function _applySeasonalOverlay(player) {
+/** Show correct overlay, hide all others. Also manages cake DOM overlay.
+ *  @param {string} player
+ *  @param {boolean} isStressed - true when panic state is active (Sat/Sun, not locked in)
+ */
+function _applySeasonalOverlay(player, isStressed = false) {
   const p = player === 'john' ? 'j' : 'n';
   const key = _getSeasonOverlay(player);
+
+  // Heart glasses: swap to panic variant when stressed
+  const activeKey = (key === 'heartglasses' && isStressed) ? 'heartglasses_panic' : key;
 
   // Show/hide SVG overlay groups
   for (const k of _OVERLAY_KEYS) {
     const el = document.getElementById(`${p}Ov_${k}`);
-    if (el) el.setAttribute('display', k === key ? 'inline' : 'none');
+    if (el) el.setAttribute('display', k === activeKey ? 'inline' : 'none');
   }
 
   // Birthday cake DOM overlay (replaces skull position when birthday week)
@@ -3396,10 +3459,15 @@ function _applySeasonalOverlay(player) {
 //  Called from showArena() when the logged-in player's birthday
 // ============================================================
 
-/** Play a short happy-birthday melody using Web Audio */
+/** Play a short happy-birthday melody using Web Audio.
+ *  Stops the arena music first, plays the melody, then fades it back in. */
 function _playHappyBirthday() {
   if (!MU.ctx) { try { MU.ctx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e) { return; } }
   const ctx = MU.ctx;
+  // Stop arena music and silence master gain
+  const wasPlaying = MU._t !== null;
+  MU.stop();
+  if (MU.master) MU.master.gain.setValueAtTime(0, ctx.currentTime);
   // Happy Birthday notes: C C D C F E  / C C D C G F  / C C C5 A F E D  / Bb Bb A F G F
   const notes = [
     261.6,261.6,293.7,261.6,349.2,329.6,0,
@@ -3430,6 +3498,18 @@ function _playHappyBirthday() {
     }
     t += dur + 0.04;
   });
+  // Total melody duration ≈ 11s — restart arena music with 2s fade-in after it ends
+  if (wasPlaying) {
+    const MELODY_MS = 11500;
+    setTimeout(() => {
+      MU.start();
+      // Fade master gain from 0 → 0.45 over 2 seconds
+      if (MU.master && !MU.muted) {
+        MU.master.gain.setValueAtTime(0, MU.ctx.currentTime);
+        MU.master.gain.linearRampToValueAtTime(0.45, MU.ctx.currentTime + 2.0);
+      }
+    }, MELODY_MS);
+  }
 }
 
 /** Spawn confetti particles over the arena */
@@ -3577,8 +3657,8 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked, isStressed=false
     _initSoloToggle(player);
   }
 
-  // Seasonal / birthday SVG overlays
-  _applySeasonalOverlay(player);
+  // Seasonal / birthday SVG overlays (pass stress state for heart glasses panic swap)
+  _applySeasonalOverlay(player, isStressed && !lockedIn);
 }
 
 // ============================================================
