@@ -2195,7 +2195,8 @@ function _streakToTier(s) {
 const _weaponNames = ['Knife','Pistol','Dual Pistols','Shotgun','SMG','Chaingun','Rail Gun','Devastator'];
 function showWeapon(player, tier) {
   // Track tier so BULLETS.start() and PRESENCE know which weapon to use
-  if (window.BULLETS) BULLETS._tier[player] = tier;
+  // Note: BULLETS is const, not on window — access directly
+  BULLETS._tier[player] = tier;
   const p = player === 'john' ? 'j' : 'n';
   for (let i = 0; i <= 7; i++) {
     const el = document.getElementById(`${p}Gun${i}`);
@@ -3745,16 +3746,15 @@ const BULLETS = {
   stop(player) { (this._timers[player]||[]).forEach(id => clearTimeout(id)); this._timers[player] = []; },
   stopAll() { this.stop('john'); this.stop('nick'); },
 
-  // ── TIER 0: KNIFE — sparkle glint near blade tip ──
+  // ── TIER 0: KNIFE — neutral white light glint near blade tip ──
   knife(player) {
     this.init(); this.stop(player);
-    const color = player === 'john' ? '#FFD700' : '#00C8FF';
     const sparkle = () => {
       const flashes = 2 + Math.floor(Math.random() * 3);
       for (let i = 0; i < flashes; i++) {
         const t = setTimeout(() => {
           const p = this.getMuzzle(player, 135, 151);
-          this._glint(p.x, p.y, color);
+          this._glint(p.x, p.y, '#ffffff'); // pure white — light catching steel
         }, i * 130);
         this._addTimer(player, t);
       }
