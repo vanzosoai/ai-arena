@@ -367,6 +367,8 @@ body::after{
 .dev-cs-key{color:#99bbdd}
 .dev-cs-val{color:#556677}
 .dev-cs-divider{border:none;border-top:1px solid #111122;margin:6px 0}
+.dev-season-btn{background:#07070e;border:1px solid #1a2a44;color:#5588bb;font-family:'Press Start 2P',monospace;font-size:.24em;padding:4px 7px;cursor:pointer;letter-spacing:.5px;transition:border-color .15s,color .15s}
+.dev-season-btn:hover{border-color:#4477aa;color:#88bbee}
 
 /* ================================================
    ARENA — 3 COL DESKTOP / STACK MOBILE
@@ -1014,9 +1016,39 @@ footer span{color:#8888aa}
       </div>
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
-        <div class="dev-cs-lbl">🎭 SEASONAL — ?devSeason=KEY</div>
-        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache</div>
-        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em">?devBday=john &nbsp;|&nbsp; ?devBday=nick &nbsp;|&nbsp; ?devBday=both → birthday week + splash</div>
+        <div class="dev-cs-lbl">🎭 SEASONAL OVERLAY</div>
+        <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">
+          <button onclick="_devSetParam('devSeason','santahat')"    class="dev-season-btn">🎅 santahat</button>
+          <button onclick="_devSetParam('devSeason','heartglasses')" class="dev-season-btn">💕 heartglasses</button>
+          <button onclick="_devSetParam('devSeason','clover')"       class="dev-season-btn">☘️ clover</button>
+          <button onclick="_devSetParam('devSeason','bunnyears')"    class="dev-season-btn">🐰 bunnyears</button>
+          <button onclick="_devSetParam('devSeason','jester')"       class="dev-season-btn">🃏 jester</button>
+          <button onclick="_devSetParam('devSeason','shorts')"       class="dev-season-btn">🩳 shorts</button>
+          <button onclick="_devSetParam('devSeason','bandana')"      class="dev-season-btn">🎗️ bandana</button>
+          <button onclick="_devSetParam('devSeason','bandana_shorts')" class="dev-season-btn">🇺🇸 bandana_shorts</button>
+          <button onclick="_devSetParam('devSeason','dogtags')"      class="dev-season-btn">🪖 dogtags</button>
+          <button onclick="_devSetParam('devSeason','jason')"        class="dev-season-btn">🎃 jason</button>
+          <button onclick="_devSetParam('devSeason','mustache')"     class="dev-season-btn">👨 mustache</button>
+        </div>
+        <div class="dev-cs-lbl" style="margin-top:8px">🎂 BIRTHDAY</div>
+        <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">
+          <button onclick="_devSetParam('devBday','john')" class="dev-season-btn">🎂 john</button>
+          <button onclick="_devSetParam('devBday','nick')" class="dev-season-btn">🎂 nick</button>
+          <button onclick="_devSetParam('devBday','both')" class="dev-season-btn">🎂 both</button>
+        </div>
+        <div class="dev-cs-lbl" style="margin-top:8px">🎆 HOLIDAY SPLASH</div>
+        <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:4px">
+          <button onclick="_devSetParam('devHoliday','newyears')"   class="dev-season-btn">🎆 new year's</button>
+          <button onclick="_devSetParam('devHoliday','stpatricks')" class="dev-season-btn">☘️ st. paddy's</button>
+          <button onclick="_devSetParam('devHoliday','easter')"     class="dev-season-btn">🐣 easter</button>
+          <button onclick="_devSetParam('devHoliday','aprilfools')" class="dev-season-btn">🃏 april fools</button>
+          <button onclick="_devSetParam('devHoliday','july4')"      class="dev-season-btn">🇺🇸 july 4th</button>
+          <button onclick="_devSetParam('devHoliday','halloween')"  class="dev-season-btn">🎃 halloween</button>
+          <button onclick="_devSetParam('devHoliday','christmas')"  class="dev-season-btn">🎄 christmas</button>
+        </div>
+        <div class="dev-cs-row" style="margin-top:8px">
+          <button onclick="_devClearSeasonal()" style="background:#1a0005;border:1px solid #660022;color:#FF4466;font-family:'Press Start 2P',monospace;font-size:.26em;padding:4px 10px;cursor:pointer;letter-spacing:1px">✕ CLEAR SEASONAL</button>
+        </div>
       </div>
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
@@ -3574,6 +3606,21 @@ function _isStPatricksWeek() {
  *   (use ?devBday=john|nick|both for birthday — fires the splash too)
  * ?devBday=PLAYER forces birthday week for that player (john | nick | both)
  */
+/** Set a dev URL param and reload (clears sessionStorage so splashes re-fire) */
+function _devSetParam(key, val) {
+  sessionStorage.clear();
+  const u = new URL(location.href);
+  u.searchParams.set(key, val);
+  location.href = u.href;
+}
+/** Remove devSeason / devBday / devHoliday params and reload */
+function _devClearSeasonal() {
+  sessionStorage.clear();
+  const u = new URL(location.href);
+  ['devSeason','devBday','devHoliday'].forEach(k => u.searchParams.delete(k));
+  location.href = u.href;
+}
+
 function _getSeasonOverlay(player) {
   const p = new URLSearchParams(location.search);
   // Dev overrides
