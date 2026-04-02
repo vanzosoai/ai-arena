@@ -3578,54 +3578,68 @@ const BULLETS = {
     const y = rect.top + (svgY / vbH) * rect.height;
     let x;
     if (player === 'john') {
-      // Normal SVG — x maps directly
       x = rect.left + (svgX / vbW) * rect.width;
     } else {
       // Nick's SVG has style="transform:scaleX(-1)" — x axis is flipped
-      // SVG x=148 (8px past right edge) appears at 8/140 to the LEFT of rect.left
       x = rect.left + (1 - svgX / vbW) * rect.width;
     }
     return { x, y };
   },
 
+  // Aim point: center of the VS element — correct for both wide (horizontal) and stacked (vertical) layouts
+  getVSCenter() {
+    const el = document.querySelector('.vs') || document.querySelector('.ccol');
+    if (el) {
+      const r = el.getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    }
+    return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+  },
+
   spawnBullet(player, targetX, targetY) {
     if (!this.overlay) return;
     const muzzle = this.getMuzzle(player, 148, 133);
-    const color   = player === 'john' ? '#FFD700' : '#00C8FF';
-    const dirRight = player === 'john'; // John fires rightward toward center
+    const color  = player === 'john' ? '#FFD700' : '#00C8FF';
+
+    // Spread: perpendicular to travel direction
+    const dx0 = targetX - muzzle.x;
+    const dy0 = targetY - muzzle.y;
+    const angle = Math.atan2(dy0, dx0); // radians — used to orient bullet rect
+    // Add slight perpendicular spread to end point
+    const perpAngle = angle + Math.PI / 2;
+    const spread = (Math.random() - 0.5) * 10;
+    const endX = targetX + Math.cos(perpAngle) * spread;
+    const endY = targetY + Math.sin(perpAngle) * spread;
 
     const bullet = document.createElement('div');
     bullet.style.cssText = [
       'position:fixed',
       'width:14px',
       'height:4px',
-      `background:linear-gradient(${dirRight ? '90deg' : '270deg'},transparent 0%,${color} 55%,#fff 100%)`,
+      // Gradient always 90deg inside the element; rotation is handled by transform
+      `background:linear-gradient(90deg,transparent 0%,${color} 55%,#fff 100%)`,
       'border-radius:3px',
       `box-shadow:0 0 7px ${color},0 0 14px ${color}66`,
       'pointer-events:none',
       'will-change:transform',
       `left:${muzzle.x}px`,
       `top:${muzzle.y}px`,
-      'transform:translate(-50%,-50%)'
+      `transform:translate(-50%,-50%) rotate(${angle}rad)`
     ].join(';');
     this.overlay.appendChild(bullet);
 
-    const duration = 260 + Math.random() * 60; // 260-320ms travel time
+    const duration = 260 + Math.random() * 60;
     const startTime = performance.now();
     const startX = muzzle.x;
     const startY = muzzle.y;
-    const endX   = targetX;
-    const endY   = targetY + (Math.random() - 0.5) * 12; // slight vertical spread
 
     const tick = (now) => {
       const t = Math.min((now - startTime) / duration, 1);
-      // Ease-in — bullets accelerate out of barrel
-      const ease = t * t;
+      const ease = t * t; // ease-in — accelerates out of barrel
       const cx = startX + (endX - startX) * ease;
-      const cy = startY + (endY - startY) * t;
+      const cy = startY + (endY - startY) * ease;
       bullet.style.left = cx + 'px';
       bullet.style.top  = cy + 'px';
-      // Fade out as bullet reaches target
       bullet.style.opacity = t > 0.8 ? String(1 - (t - 0.8) / 0.2) : '1';
       if (t < 1) {
         requestAnimationFrame(tick);
@@ -3654,10 +3668,8 @@ const BULLETS = {
   pistol(player) {
     this.init();
     this.stop(player);
-    const getTarget = () => ({
-      x: window.innerWidth / 2,
-      y: this.getMuzzle(player, 148, 133).y
-    });
+    // Capture target at burst time so it updates if layout changes (resize/scroll)
+    const getTarget = () => this.getVSCenter();
 
     const burst = () => {
       const rounds = 1 + Math.floor(Math.random() * 4); // 1-4 rounds per burst
