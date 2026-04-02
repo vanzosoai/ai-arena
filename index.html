@@ -3569,6 +3569,8 @@ const BULLETS = {
   overlay: null,
   _timers: { john: [], nick: [] },
   _tier:   { john: 0,  nick: 0  }, // current weapon tier per player
+  _ctx: null,        // AudioContext for weapon sounds
+  _nBufs: {},        // cached noise buffers keyed by duration-ms
 
   init() {
     if (this.overlay) return;
@@ -3747,6 +3749,184 @@ const BULLETS = {
   stop(player) { (this._timers[player]||[]).forEach(id => clearTimeout(id)); this._timers[player] = []; },
   stopAll() { this.stop('john'); this.stop('nick'); },
 
+  // ── AUDIO SYNTHESIS ──────────────────────────────────────────
+
+  _getCtx() {
+    // Prefer MU's already-unlocked context; fall back to our own
+    if (window.MU && MU.ctx) return MU.ctx;
+    if (!this._ctx) {
+      try { this._ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch(e) {}
+    }
+    return this._ctx;
+  },
+
+  // Cached white-noise buffer (reuse per duration bucket to avoid GC churn)
+  _noise(ctx, dur) {
+    const key = Math.round(dur * 1000);
+    if (!this._nBufs[key]) {
+      const n = Math.ceil(ctx.sampleRate * dur);
+      const buf = ctx.createBuffer(1, n, ctx.sampleRate);
+      const d = buf.getChannelData(0);
+      for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+      this._nBufs[key] = buf;
+    }
+    return this._nBufs[key];
+  },
+
+  // Master sound dispatcher — respects mute button
+  _snd(type) {
+    if (window.MU && MU.muted) return;
+    const ctx = this._getCtx();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume().catch(() => {});
+    const t = ctx.currentTime;
+    switch (type) {
+      case 'knife':       this._sKnife(ctx, t);        break;
+      case 'pistol':      this._sPistol(ctx, t, 1.0);  break;
+      case 'pistol2':     this._sPistol(ctx, t, 0.88); break; // back gun — slightly lower
+      case 'shotgun':     this._sShotgun(ctx, t);       break;
+      case 'smg':         this._sSmg(ctx, t);           break;
+      case 'chaingun':    this._sChaingun(ctx, t);      break;
+      case 'railgun':     this._sRailgun(ctx, t);       break;
+      case 'devastator':  this._sDevastator(ctx, t);    break;
+    }
+  },
+
+  // KNIFE — metallic ching (3 harmonic sines, fast decay)
+  _sKnife(ctx, t) {
+    [2100, 3300, 4900].forEach((f, i) => {
+      const o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = 'sine'; o.frequency.value = f;
+      g.gain.setValueAtTime(0.16 - i * 0.04, t);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.19);
+      o.connect(g); g.connect(ctx.destination);
+      o.start(t); o.stop(t + 0.2);
+    });
+  },
+
+  // PISTOL — noise crack + dropping sine thump (pitch shifts for dual pistol alt-gun)
+  _sPistol(ctx, t, pitch) {
+    // Crack
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.13);
+    f.type = 'bandpass'; f.frequency.value = 1100 * pitch; f.Q.value = 0.8;
+    g.gain.setValueAtTime(0.52, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+    s.connect(f); f.connect(g); g.connect(ctx.destination); s.start(t);
+    // Body thump
+    const o = ctx.createOscillator(), g2 = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(130 * pitch, t);
+    o.frequency.exponentialRampToValueAtTime(28, t + 0.11);
+    g2.gain.setValueAtTime(0.42, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.11);
+    o.connect(g2); g2.connect(ctx.destination); o.start(t); o.stop(t + 0.13);
+  },
+
+  // SHOTGUN — deep rumble + high crack + heavy low thump
+  _sShotgun(ctx, t) {
+    // Rumble
+    const s = ctx.createBufferSource(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.34);
+    lp.type = 'lowpass'; lp.frequency.value = 320;
+    g.gain.setValueAtTime(0.72, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+    s.connect(lp); lp.connect(g); g.connect(ctx.destination); s.start(t);
+    // Crack
+    const s2 = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g2 = ctx.createGain();
+    s2.buffer = this._noise(ctx, 0.06);
+    hp.type = 'highpass'; hp.frequency.value = 2200;
+    g2.gain.setValueAtTime(0.38, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.06);
+    s2.connect(hp); hp.connect(g2); g2.connect(ctx.destination); s2.start(t);
+    // Deep thump
+    const o = ctx.createOscillator(), g3 = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(75, t); o.frequency.exponentialRampToValueAtTime(16, t + 0.26);
+    g3.gain.setValueAtTime(0.68, t); g3.gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+    o.connect(g3); g3.connect(ctx.destination); o.start(t); o.stop(t + 0.3);
+  },
+
+  // SMG — light pop (quiet per-shot so rapid bursts blend into a rattle)
+  _sSmg(ctx, t) {
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.07);
+    f.type = 'bandpass'; f.frequency.value = 1700; f.Q.value = 1.1;
+    g.gain.setValueAtTime(0.26, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+    s.connect(f); f.connect(g); g.connect(ctx.destination); s.start(t);
+    const o = ctx.createOscillator(), g2 = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(95, t); o.frequency.exponentialRampToValueAtTime(30, t + 0.06);
+    g2.gain.setValueAtTime(0.2, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
+    o.connect(g2); g2.connect(ctx.destination); o.start(t); o.stop(t + 0.07);
+  },
+
+  // CHAINGUN — very short mechanical click (fast enough to blur into brrrt)
+  _sChaingun(ctx, t) {
+    const s = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.042);
+    f.type = 'bandpass'; f.frequency.value = 850; f.Q.value = 2.2;
+    g.gain.setValueAtTime(0.17, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
+    s.connect(f); f.connect(g); g.connect(ctx.destination); s.start(t);
+    const o = ctx.createOscillator(), g2 = ctx.createGain();
+    o.type = 'sawtooth'; o.frequency.value = 62;
+    g2.gain.setValueAtTime(0.11, t); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.038);
+    o.connect(g2); g2.connect(ctx.destination); o.start(t); o.stop(t + 0.042);
+  },
+
+  // RAIL GUN — rising electronic whine then sharp crack + deep boom
+  _sRailgun(ctx, t) {
+    // Whine (charge)
+    const o = ctx.createOscillator(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = 'sawtooth';
+    o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(3400, t + 0.21);
+    f.type = 'bandpass'; f.frequency.value = 1400; f.Q.value = 1.8;
+    g.gain.setValueAtTime(0.0, t);
+    g.gain.linearRampToValueAtTime(0.32, t + 0.14);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.26);
+    o.connect(f); f.connect(g); g.connect(ctx.destination); o.start(t); o.stop(t + 0.28);
+    // Crack discharge
+    const s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g2 = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.1);
+    hp.type = 'highpass'; hp.frequency.value = 2800;
+    g2.gain.setValueAtTime(0.0, t);
+    g2.gain.setValueAtTime(0.48, t + 0.19);
+    g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.29);
+    s.connect(hp); hp.connect(g2); g2.connect(ctx.destination); s.start(t);
+    // Deep boom on discharge
+    const o2 = ctx.createOscillator(), g3 = ctx.createGain();
+    o2.type = 'sine';
+    o2.frequency.setValueAtTime(55, t + 0.19); o2.frequency.exponentialRampToValueAtTime(18, t + 0.38);
+    g3.gain.setValueAtTime(0.0, t);
+    g3.gain.setValueAtTime(0.45, t + 0.19);
+    g3.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+    o2.connect(g3); g3.connect(ctx.destination); o2.start(t); o2.stop(t + 0.42);
+  },
+
+  // DEVASTATOR — electrical plasma buzz with LFO tremolo + crackle
+  _sDevastator(ctx, t) {
+    // Detuned buzz stack
+    [78, 117, 156, 234].forEach((f, i) => {
+      const o = ctx.createOscillator();
+      o.type = 'sawtooth'; o.frequency.value = f;
+      // LFO vibrato per layer
+      const lfo = ctx.createOscillator(), lfoG = ctx.createGain();
+      lfo.frequency.value = 35 + i * 14; lfoG.gain.value = 7;
+      lfo.connect(lfoG); lfoG.connect(o.frequency);
+      const g = ctx.createGain();
+      g.gain.setValueAtTime(0.0, t);
+      g.gain.linearRampToValueAtTime(0.1, t + 0.04);
+      g.gain.setValueAtTime(0.1, t + 0.34);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + 0.43);
+      o.connect(g); g.connect(ctx.destination);
+      lfo.start(t); o.start(t); o.stop(t + 0.44);
+    });
+    // Electric crackle noise
+    const s = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.4);
+    bp.type = 'bandpass'; bp.frequency.value = 2400; bp.Q.value = 0.6;
+    g.gain.setValueAtTime(0.28, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+    s.connect(bp); bp.connect(g); g.connect(ctx.destination); s.start(t);
+  },
+
+  // ─────────────────────────────────────────────────────────────
+
   // ── TIER 0: KNIFE — neutral white light glint near blade tip ──
   knife(player) {
     this.init(); this.stop(player);
@@ -3756,6 +3936,7 @@ const BULLETS = {
         const t = setTimeout(() => {
           const p = this.getMuzzle(player, 135, 151);
           this._glint(p.x, p.y, '#ffffff'); // pure white — light catching steel
+          this._snd('knife');
         }, i * 130);
         this._addTimer(player, t);
       }
@@ -3772,7 +3953,7 @@ const BULLETS = {
       const rounds = 1 + Math.floor(Math.random() * 3);
       let d = 0;
       for (let i = 0; i < rounds; i++) {
-        const t = setTimeout(() => this._fire(player, 148, 133), d);
+        const t = setTimeout(() => { this._fire(player, 148, 133); this._snd('pistol'); }, d);
         this._addTimer(player, t);
         d += 350 + Math.random() * 350;
       }
@@ -3794,8 +3975,9 @@ const BULLETS = {
       let d = 0;
       for (let i = 0; i < rounds; i++) {
         const svgX = gun === 0 ? 148 : 41;
+        const snd  = gun === 0 ? 'pistol' : 'pistol2'; // front vs back gun — slight pitch diff
         gun = 1 - gun;
-        const t = setTimeout(() => this._fire(player, svgX, 133), d);
+        const t = setTimeout(() => { this._fire(player, svgX, 133); this._snd(snd); }, d);
         this._addTimer(player, t);
         d += 300 + Math.random() * 250;
       }
@@ -3810,6 +3992,7 @@ const BULLETS = {
     this.init(); this.stop(player);
     const color = player === 'john' ? '#FFD700' : '#00C8FF';
     const fire = () => {
+      this._snd('shotgun');
       const muzzle  = this.getMuzzle(player, 147, 131);
       const center  = this._tgt(player, 131);
       const baseAng = Math.atan2(center.y - muzzle.y, center.x - muzzle.x);
@@ -3835,7 +4018,7 @@ const BULLETS = {
       const rounds = 5 + Math.floor(Math.random() * 4);
       let d = 0;
       for (let i = 0; i < rounds; i++) {
-        const t = setTimeout(() => this._fire(player, 134, 137, { w: 10, h: 3 }), d);
+        const t = setTimeout(() => { this._fire(player, 134, 137, { w: 10, h: 3 }); this._snd('smg'); }, d);
         this._addTimer(player, t);
         d += 55 + Math.random() * 35;
       }
@@ -3855,7 +4038,7 @@ const BULLETS = {
       let d = 0;
       for (let i = 0; i < rounds; i++) {
         const svgY = barrels[bi++ % barrels.length];
-        const t = setTimeout(() => this._fire(player, 148, svgY, { w: 15, h: 4 }), d);
+        const t = setTimeout(() => { this._fire(player, 148, svgY, { w: 15, h: 4 }); this._snd('chaingun'); }, d);
         this._addTimer(player, t);
         d += 38 + Math.random() * 28;
       }
@@ -3870,6 +4053,7 @@ const BULLETS = {
     this.init(); this.stop(player);
     const color = player === 'john' ? '#FFD700' : '#00C8FF';
     const fire = () => {
+      this._snd('railgun');
       this._fire(player, 148, 137, { color, w: 26, h: 7, dur: 340, spiral: true });
       const t = setTimeout(() => fire(), 2800 + Math.random() * 1800);
       this._addTimer(player, t);
@@ -3888,7 +4072,7 @@ const BULLETS = {
       const ey = muzzle.y + (vs.y - muzzle.y) * 0.68;
       // 3 successive lightning pulses
       for (let i = 0; i < 3; i++) {
-        const t = setTimeout(() => this._lightning(muzzle.x, muzzle.y, ex, ey, color, 440), i * 190);
+        const t = setTimeout(() => { this._lightning(muzzle.x, muzzle.y, ex, ey, color, 440); this._snd('devastator'); }, i * 190);
         this._addTimer(player, t);
       }
       const t = setTimeout(() => fire(), 3 * 190 + 2000 + Math.random() * 1800);
