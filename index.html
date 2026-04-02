@@ -1116,7 +1116,7 @@ footer span{color:#8888aa}
         <span style="color:#ff6688">💕 FEBRUARY</span> — Heart-shaped glasses. Romantic jazz swing plays.<br>
         <span style="color:#33bb55">🍀 MARCH</span> — Clover necklaces all month. Irish jig music plays. Easter week overrides if it falls in March.<br>
         <span style="color:#ffccaa">🐣 EASTER WEEK</span> — Bunny ears for the calendar week containing Easter Sunday. Hippity-hoppity spring music plays.<br>
-        <span style="color:#ffaa44">🃏 APRIL FOOL'S DAY</span> — Jester hats on April 1st. Overrides Easter week if they overlap — April Fools rules.<br>
+        <span style="color:#ffaa44">🃏 APRIL FOOL'S DAY</span> — Jester hats on April 1st. Overrides Easter week if they overlap. The music goes completely off the rails — no key, no rules, no regrets.<br>
         <span style="color:#88ccff">🩳 JUNE &amp; AUGUST</span> — Shorts. First and last months of summer.<br>
         <span style="color:#cc2222">🇺🇸 JULY</span> — Flag bandana on their heads plus shorts. USA patriotic music plays. Same track fires during Memorial Day weekend in May with the dog tag chains.<br>
         <span style="color:#884400">🪖 MEMORIAL DAY WEEKEND</span> — Dog tag chains for the Friday–Monday of Memorial Day weekend.<br>
@@ -4459,6 +4459,37 @@ const MUSIC_SEQ_SWING = {
   hat: [..._rep([1,0,1,0, 1,1,1,0], 8)],
 };
 
+// April Fool's Day — total chaos. No key. No rules. No regrets. (BPM 197)
+const MUSIC_SEQ_JESTER = {
+  bpm: 197, steps: 64,
+  mel: [
+    // Opens almost normally... then immediately betrays you
+    523,  0,523,  0,  659,  0,523,  0,
+    1047, 0, 65,  0,  880,131,415,784,
+    // Chromatic descent that derails completely
+    494,466,440,415,  131,  0,1047, 0,
+    // Intervals that make zero sense
+    262,880,196,659,  311,784,  0,  0,
+    // A tiny moment of false hope
+    392,440,494,523,
+    // ...instantly betrayed
+    65,1047, 65,1047,
+    // Pure goblin energy
+    277,831,196,622,  370,880,247,740,
+    // One held note, silence, then one last act of violence
+    523,  0,  0,  0, 1047, 65,523,  0,
+  ],
+  bas: [
+    ..._rep([ 65,0,0,0, 523,0,0,0], 2),
+    ..._rep([131,0,880,0,  65,0,392,0], 2),
+    ..._rep([  0,196,0,784, 0,131,0, 65], 2),
+    ..._rep([523,0, 65,0, 262,0,1047,0], 2),
+  ],
+  kik: [..._rep([1,0,1,1, 0,0,1,0], 8)],
+  snr: [..._rep([0,1,1,0, 1,0,1,1], 8)],
+  hat: [..._rep([1,1,0,0, 1,1,0,1], 8)],
+};
+
 // Easter week — hippity-hoppity spring bounce, C major (BPM 148)
 const MUSIC_SEQ_EASTER = {
   bpm: 148, steps: 64,
@@ -4512,6 +4543,7 @@ function _getMusicSeq() {
   if (overlay === 'bandana_shorts') return MUSIC_SEQ_USA;  // July
   if (overlay === 'bandana')        return MUSIC_SEQ_USA;  // fallback
   if (overlay === 'dogtags')        return MUSIC_SEQ_USA;  // Memorial Day
+  if (overlay === 'jester')         return MUSIC_SEQ_JESTER; // April Fool's
   if (overlay === 'clover')         return MUSIC_SEQ_JIGS;   // March
   if (overlay === 'bunnyears')      return MUSIC_SEQ_EASTER; // Easter week
   if (overlay === 'heartglasses' || overlay === 'heartglasses_panic') return MUSIC_SEQ_SWING; // Feb
