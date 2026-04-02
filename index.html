@@ -288,6 +288,17 @@ body::after{
 .badge-champ{font-size:.26em;color:#FFD700;letter-spacing:1px;text-shadow:0 0 10px rgba(255,215,0,.8),0 0 4px rgba(255,200,0,.6)}
 /* Streak escalation badges */
 .sb-streak-badge{min-height:1.2em;text-align:center;margin-top:3px}
+/* Weapon chooser unlock (streak ≥ 13) */
+@keyframes wcPulseJ{0%,100%{box-shadow:0 0 10px rgba(255,136,0,.5),inset 0 0 4px rgba(255,136,0,.1)}50%{box-shadow:0 0 22px rgba(255,200,0,.9),0 0 8px rgba(255,136,0,.5),inset 0 0 8px rgba(255,180,0,.15)}}
+@keyframes wcPulseN{0%,100%{box-shadow:0 0 10px rgba(0,200,255,.5),inset 0 0 4px rgba(0,200,255,.1)}50%{box-shadow:0 0 22px rgba(0,220,255,.9),0 0 8px rgba(0,200,255,.5),inset 0 0 8px rgba(0,220,255,.15)}}
+.wc-glow-j{border-color:#FF8800!important;animation:wcPulseJ 2.2s ease-in-out infinite}
+.wc-glow-n{border-color:#00C8FF!important;animation:wcPulseN 2.2s ease-in-out infinite}
+.wc-sel{width:100%;background:#05030a;border:none;color:#FF8800;font-family:'Press Start 2P',monospace;font-size:.26em;padding:4px 2px;cursor:pointer;outline:none;text-align:center;letter-spacing:1px;margin-top:2px}
+.wc-sel option{background:#05030a;color:#FF8800}
+.wc-sel.nk{color:#00C8FF}.wc-sel.nk option{color:#00C8FF}
+/* Solo fire toggle (streak ≥ 15) */
+@keyframes soloGlowJ{0%,100%{box-shadow:0 0 8px rgba(255,215,0,.4)}50%{box-shadow:0 0 18px rgba(255,215,0,.8)}}
+@keyframes soloGlowN{0%,100%{box-shadow:0 0 8px rgba(0,200,255,.4)}50%{box-shadow:0 0 18px rgba(0,200,255,.8)}}
 .streak-roll{font-size:.26em;color:#cc6600;letter-spacing:1px}
 .streak-unstop{font-size:.26em;color:#FF8800;letter-spacing:1px;animation:fbadge 1.4s ease-in-out infinite}
 .streak-legendary{font-size:.28em;color:#FFD700;letter-spacing:1px;text-shadow:0 0 8px rgba(255,215,0,.8);animation:fbadge 1s ease-in-out infinite}
@@ -969,7 +980,7 @@ footer span{color:#8888aa}
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
         <div class="dev-cs-lbl">🔫 WEAPON ANIMATIONS</div>
-        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:4px">uses ?devStreak=N to pick weapon</div>
+        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:4px">?devStreak=N → weapon tier &nbsp;|&nbsp; ≥13 → chooser unlocks &nbsp;|&nbsp; ≥15 → solo fire toggle</div>
         <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px">
           <button onclick="BULLETS.start('john',BULLETS._tier.john)" style="background:#1a1000;border:1px solid #AA8800;color:#FFD700;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ JOHN</button>
           <button onclick="BULLETS.start('nick',BULLETS._tier.nick)" style="background:#001020;border:1px solid #0088BB;color:#00C8FF;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ NICK</button>
@@ -1576,7 +1587,7 @@ footer span{color:#8888aa}
       <div class="sb-streak-badge" id="jStreakBadge"></div>
     </div>
     <div class="is">
-      <div class="is-box" style="grid-column:span 2"><div class="is-lbl">WEAPON</div><div class="is-val jv" id="jWeaponLbl">KNIFE</div></div>
+      <div class="is-box" id="jWeaponBox" style="grid-column:span 2"><div class="is-lbl">WEAPON</div><div class="is-val jv" id="jWeaponLbl">KNIFE</div></div>
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val jv" id="jApps">0</div></div>
       <div class="is-box"><div class="is-lbl">BEST</div><div class="is-val jv" id="jBest">—</div></div>
       <div class="is-box"><div class="is-lbl">EARNED</div><div class="is-val gv" id="jEarn">$0</div></div>
@@ -2024,7 +2035,7 @@ footer span{color:#8888aa}
       <div class="sb-streak-badge" id="nStreakBadge"></div>
     </div>
     <div class="is">
-      <div class="is-box" style="grid-column:span 2"><div class="is-lbl">WEAPON</div><div class="is-val nv" id="nWeaponLbl">KNIFE</div></div>
+      <div class="is-box" id="nWeaponBox" style="grid-column:span 2"><div class="is-lbl">WEAPON</div><div class="is-val nv" id="nWeaponLbl">KNIFE</div></div>
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val nv" id="nApps">0</div></div>
       <div class="is-box"><div class="is-lbl">BEST</div><div class="is-val nv" id="nBest">—</div></div>
       <div class="is-box"><div class="is-lbl">EARNED</div><div class="is-val gv" id="nEarn">$0</div></div>
@@ -2174,13 +2185,18 @@ function fmtSubmitTime(dt){
   return `${days[d.getDay()]} ${h%12||12}:${String(m).padStart(2,'0')} ${h>=12?'PM':'AM'}`;
 }
 
+// Chosen weapon per player (null = auto by streak). Loaded from player_emails on init.
+let _chosenWeapon = { john: null, nick: null };
+// Solo fire: session-only toggle — lets logged-in player fire alone (streak ≥ 15)
+let _soloFireEnabled = false;
+
 // ?devStreak=N overrides streak count for testing weapon tiers (applies to both players)
 function _devStreak(realStreak) {
   const v = parseInt(new URLSearchParams(location.search).get('devStreak'));
   return isNaN(v) ? realStreak : Math.max(0, v);
 }
-// Map streak count → weapon tier
-//   0=knife  1=pistol  2=double pistols  3=shotgun  4=SMG  5=chaingun  6=rail gun  7=devastator
+// Map streak count → weapon tier (auto-assign, caps at 7; tier 8=bare fists only via chooser)
+//   0=knife  1=pistol  2=dual pistols  3=shotgun  4=SMG  5=chaingun  6=rail gun  7=devastator  8=bare fists
 function _streakToTier(s) {
   if (s >= 10) return 7;
   if (s >= 7) return 6;
@@ -2191,19 +2207,20 @@ function _streakToTier(s) {
   if (s >= 1) return 1;
   return 0;
 }
-// Show one weapon group, hide the rest (tiers 0–7)
-const _weaponNames = ['Knife','Pistol','Dual Pistols','Shotgun','SMG','Chaingun','Rail Gun','Devastator'];
+// Show one weapon group, hide the rest. Tier 8 = bare fists (no SVG gun, just hide all).
+const _weaponNames = ['Knife','Pistol','Dual Pistols','Shotgun','SMG','Chaingun','Rail Gun','Devastator','Bare Fists'];
 function showWeapon(player, tier) {
-  // Track tier so BULLETS.start() and PRESENCE know which weapon to use
-  // Note: BULLETS is const, not on window — access directly
   BULLETS._tier[player] = tier;
   const p = player === 'john' ? 'j' : 'n';
   for (let i = 0; i <= 7; i++) {
     const el = document.getElementById(`${p}Gun${i}`);
-    if (el) el.setAttribute('display', i === tier ? 'inline' : 'none');
+    if (el) el.setAttribute('display', (i === tier && tier < 8) ? 'inline' : 'none');
   }
   const lbl = document.getElementById(`${p}WeaponLbl`);
   if (lbl) lbl.textContent = _weaponNames[tier] || '';
+  // Sync select if chooser is active
+  const sel = document.getElementById(`${p}WeaponSelect`);
+  if (sel) sel.value = String(tier);
 }
 
 function wid(dt){
@@ -2388,11 +2405,16 @@ async function showArena(){
 //  DATA — LOAD FROM SUPABASE
 // ============================================================
 async function loadAndRender(){
-  const { data, error } = await sb.from('submissions')
-    .select('*')
-    .order('week_id', { ascending: false })
-    .order('submitted_at', { ascending: false });
+  const [{ data, error }, { data: peData }] = await Promise.all([
+    sb.from('submissions').select('*').order('week_id', { ascending: false }).order('submitted_at', { ascending: false }),
+    sb.from('player_emails').select('player,chosen_weapon')
+  ]);
   if (!error) _subs = data || [];
+  // Load each player's chosen weapon (null means auto-assign by streak)
+  _chosenWeapon = { john: null, nick: null };
+  if (peData) peData.forEach(row => {
+    if (row.player && row.chosen_weapon != null) _chosenWeapon[row.player] = row.chosen_weapon;
+  });
   render();
   // Start live features after data loads
   PRESENCE.init();
@@ -3007,8 +3029,154 @@ function _applyAvatarState(player, lockedIn, isChamp, isCooked, isStressed=false
   const stressEl = document.getElementById(player === 'john' ? 'jStress' : 'nStress');
   if (stressEl) stressEl.setAttribute('display', (isStressed && !lockedIn) ? 'block' : 'none');
 
-  // Weapon tier escalates with streak (?devStreak=N to test)
-  showWeapon(player, _streakToTier(_devStreak(streakCount)));
+  // Weapon tier — at streak 13+ use chosen weapon if set, else auto-assign
+  const effectiveStreak = _devStreak(streakCount);
+  const tier = (effectiveStreak >= 13 && _chosenWeapon[player] != null)
+    ? _chosenWeapon[player]
+    : _streakToTier(effectiveStreak);
+  showWeapon(player, tier);
+
+  // Weapon chooser unlocks at streak 13
+  if (effectiveStreak >= 13) {
+    _initWeaponChooser(player, effectiveStreak);
+  } else {
+    _resetWeaponBox(player);
+  }
+
+  // Solo fire toggle unlocks at streak 15 (only for the logged-in player)
+  if (effectiveStreak >= 15 && who() === player) {
+    _initSoloToggle(player);
+  }
+}
+
+// ============================================================
+//  WEAPON CHOOSER — unlocks at streak 13, persists to DB
+// ============================================================
+
+// Activate glowing weapon chooser dropdown on a player's card
+function _initWeaponChooser(player, effectiveStreak) {
+  const isJ = player === 'john';
+  const p   = isJ ? 'j' : 'n';
+  const box = document.getElementById(`${p}WeaponBox`);
+  if (!box) return;
+  if (box.dataset.chooserActive === '1') return; // already set up — showWeapon syncs select value
+  box.dataset.chooserActive = '1';
+
+  // Glow border
+  box.classList.add(isJ ? 'wc-glow-j' : 'wc-glow-n');
+
+  const isMe = who() === player;
+  const curTier = BULLETS._tier[player] != null ? BULLETS._tier[player] : (isJ ? 0 : 0);
+
+  // Build option list
+  const opts = _weaponNames.map((n, i) =>
+    `<option value="${i}"${i === curTier ? ' selected' : ''}>${n.toUpperCase()}</option>`
+  ).join('');
+
+  if (isMe) {
+    // Interactive dropdown for the logged-in player
+    box.innerHTML =
+      `<div class="is-lbl" style="color:${isJ ? '#FF8800' : '#00C8FF'}">⚔️ CHOOSE</div>` +
+      `<select class="wc-sel${isJ ? '' : ' nk'}" id="${p}WeaponSelect" ` +
+      `onchange="_onWeaponChooserChange('${player}',this.value)">${opts}</select>`;
+  } else {
+    // Opponent card — show their chosen weapon with glow, read-only
+    box.innerHTML =
+      `<div class="is-lbl">WEAPON</div>` +
+      `<div class="is-val ${isJ ? 'jv' : 'nv'}" id="${p}WeaponLbl">${_weaponNames[curTier]||''}</div>`;
+  }
+}
+
+// Revert weapon box to plain display (streak dropped below 13)
+function _resetWeaponBox(player) {
+  const p   = player === 'john' ? 'j' : 'n';
+  const box = document.getElementById(`${p}WeaponBox`);
+  if (!box || box.dataset.chooserActive !== '1') return;
+  box.dataset.chooserActive = '0';
+  box.classList.remove('wc-glow-j', 'wc-glow-n');
+  const cur = _weaponNames[BULLETS._tier[player]] || '';
+  box.innerHTML =
+    `<div class="is-lbl">WEAPON</div>` +
+    `<div class="is-val ${player === 'john' ? 'jv' : 'nv'}" id="${p}WeaponLbl">${cur}</div>`;
+}
+
+// Called when the player changes their weapon in the dropdown
+async function _onWeaponChooserChange(player, val) {
+  const tier = parseInt(val);
+  _chosenWeapon[player] = tier;
+  showWeapon(player, tier);
+  // Restart live animation with new weapon if active
+  if (PRESENCE._bothActive || _soloFireEnabled) BULLETS.start(player, tier);
+  await _saveChosenWeapon(player, tier);
+}
+
+// Persist chosen weapon to Supabase (own card only)
+async function _saveChosenWeapon(player, tier) {
+  if (!who() || who() !== player) return;
+  await sb.from('player_emails').upsert(
+    { player, chosen_weapon: tier, updated_at: new Date().toISOString() },
+    { onConflict: 'player' }
+  );
+}
+
+// ============================================================
+//  SOLO FIRE TOGGLE — unlocks at streak 15, session-only
+// ============================================================
+
+function _initSoloToggle(player) {
+  const p = player === 'john' ? 'j' : 'n';
+  if (document.getElementById(`${p}SoloBox`)) return; // already exists
+
+  const isJ = player === 'john';
+  const color = isJ ? '#FFD700' : '#00C8FF';
+  const statsGrid = document.getElementById(`${p}WeaponBox`)?.closest('.is');
+  if (!statsGrid) return;
+
+  const box = document.createElement('div');
+  box.id = `${p}SoloBox`;
+  box.style.cssText = [
+    'width:100%', 'max-width:210px', 'margin-top:7px',
+    'background:rgba(0,0,0,.4)', 'border:1px solid var(--bdr)',
+    'padding:8px 7px', 'text-align:center', 'box-sizing:border-box'
+  ].join(';');
+  box.innerHTML =
+    `<div style="font-size:.25em;color:var(--dim);margin-bottom:5px;letter-spacing:1px">🎯 SOLO FIRE</div>` +
+    `<button id="${p}SoloBtn" onclick="_toggleSoloFire('${player}')" style="` +
+      `background:#0a0005;border:2px solid #333;color:#555;` +
+      `font-family:'Press Start 2P',monospace;font-size:.24em;` +
+      `padding:5px 10px;cursor:pointer;letter-spacing:1px;width:100%;transition:all .2s">` +
+      `OFF</button>`;
+  statsGrid.after(box);
+}
+
+function _toggleSoloFire(player) {
+  const p     = player === 'john' ? 'j' : 'n';
+  const isJ   = player === 'john';
+  const color = isJ ? '#FFD700' : '#00C8FF';
+  const anim  = isJ ? 'soloGlowJ' : 'soloGlowN';
+  const btn   = document.getElementById(`${p}SoloBtn`);
+  const box   = document.getElementById(`${p}SoloBox`);
+  if (!btn) return;
+
+  _soloFireEnabled = !_soloFireEnabled;
+
+  if (_soloFireEnabled) {
+    btn.textContent = '● FIRING';
+    btn.style.borderColor = color;
+    btn.style.color = color;
+    btn.style.boxShadow = `0 0 12px ${color}88`;
+    if (box) { box.style.borderColor = color; box.style.animation = `${anim} 1.8s ease-in-out infinite`; }
+    // Start firing if not already in presence mode
+    if (!PRESENCE._bothActive) BULLETS.start(player, BULLETS._tier[player]);
+  } else {
+    btn.textContent = 'OFF';
+    btn.style.borderColor = '#333';
+    btn.style.color = '#555';
+    btn.style.boxShadow = '';
+    if (box) { box.style.borderColor = 'var(--bdr)'; box.style.animation = ''; }
+    // Stop only if not kept alive by presence
+    if (!PRESENCE._bothActive) BULLETS.stop(player);
+  }
 }
 
 // ============================================================
@@ -3789,6 +3957,7 @@ const BULLETS = {
       case 'chaingun':    this._sChaingun(ctx, t);      break;
       case 'railgun':     this._sRailgun(ctx, t);       break;
       case 'devastator':  this._sDevastator(ctx, t);    break;
+      case 'fists':       this._sFists(ctx, t);          break;
     }
   },
 
@@ -3931,6 +4100,24 @@ const BULLETS = {
     bp.type = 'bandpass'; bp.frequency.value = 2400; bp.Q.value = 0.6;
     g.gain.setValueAtTime(0.13, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
     s.connect(bp); bp.connect(g); g.connect(ctx.destination); s.start(t);
+  },
+
+  // BARE FISTS — air whoosh + meaty impact thud
+  _sFists(ctx, t) {
+    // Whoosh: highpass noise sweep (air being cut)
+    const s = ctx.createBufferSource(), hp = ctx.createBiquadFilter(), g = ctx.createGain();
+    s.buffer = this._noise(ctx, 0.11);
+    hp.type = 'highpass';
+    hp.frequency.setValueAtTime(1800, t); hp.frequency.linearRampToValueAtTime(300, t + 0.09);
+    g.gain.setValueAtTime(0.22, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.1);
+    s.connect(hp); hp.connect(g); g.connect(ctx.destination); s.start(t);
+    // Impact thud: low sine drop
+    const o = ctx.createOscillator(), g2 = ctx.createGain();
+    o.type = 'sine';
+    o.frequency.setValueAtTime(100, t + 0.07); o.frequency.exponentialRampToValueAtTime(28, t + 0.22);
+    g2.gain.setValueAtTime(0.0, t);
+    g2.gain.setValueAtTime(0.38, t + 0.07); g2.gain.exponentialRampToValueAtTime(0.0001, t + 0.24);
+    o.connect(g2); g2.connect(ctx.destination); o.start(t); o.stop(t + 0.26);
   },
 
   // ─────────────────────────────────────────────────────────────
@@ -4089,12 +4276,56 @@ const BULLETS = {
     fire();
   },
 
+  // ── TIER 8: BARE FISTS — flying fist emojis, rapid punches ──
+  fists(player) {
+    this.init(); this.stop(player);
+    const color = player === 'john' ? '#FFD700' : '#00C8FF';
+    const punch = () => {
+      const count = 3 + Math.floor(Math.random() * 4);
+      for (let i = 0; i < count; i++) {
+        const delay = i * (55 + Math.random() * 35);
+        const tid = setTimeout(() => {
+          this._snd('fists');
+          const m   = this.getMuzzle(player, 115, 150); // right fist
+          const tgt = this._tgt(player, 150);
+          const el  = document.createElement('div');
+          const sz  = 16 + Math.floor(Math.random() * 8);
+          el.style.cssText = [
+            'position:fixed', `font-size:${sz}px`, 'pointer-events:none',
+            `left:${m.x}px`, `top:${m.y}px`,
+            'transform:translate(-50%,-50%)',
+            'z-index:9998', 'user-select:none',
+            // faint glow behind emoji
+            `filter:drop-shadow(0 0 4px ${color}99)`
+          ].join(';');
+          el.textContent = '👊';
+          this.overlay.appendChild(el);
+          const sx = m.x, sy = m.y, st2 = performance.now();
+          const dur = 190 + Math.random() * 70;
+          const tick = (now) => {
+            const p2 = Math.min((now - st2) / dur, 1);
+            const ease = p2 * p2;
+            el.style.left = (sx + (tgt.x - sx) * ease) + 'px';
+            el.style.top  = (sy + (tgt.y - sy) * ease) + 'px';
+            el.style.opacity = p2 > 0.65 ? String(1 - (p2 - 0.65) / 0.35) : '1';
+            if (p2 < 1) requestAnimationFrame(tick); else el.remove();
+          };
+          requestAnimationFrame(tick);
+        }, delay);
+        this._addTimer(player, tid);
+      }
+      const next = setTimeout(() => punch(), count * 90 + 1600 + Math.random() * 1800);
+      this._addTimer(player, next);
+    };
+    punch();
+  },
+
   // Entry point — dispatch to weapon function, track tier
   start(player, tier) {
     this._tier[player] = tier;
     this.stop(player);
     const fns = [this.knife, this.pistol, this.dualPistols, this.shotgun,
-                 this.smg, this.chaingun, this.railGun, this.devastator];
+                 this.smg, this.chaingun, this.railGun, this.devastator, this.fists];
     (fns[tier] || this.pistol).call(this, player);
   }
 };
