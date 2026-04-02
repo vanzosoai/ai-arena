@@ -3598,13 +3598,14 @@ const BULLETS = {
     return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
   },
 
-  // Target: VS center in wide mode; off-screen in stacked mobile mode
+  // Target: perfectly horizontal from the barrel — same y as muzzle, to screen center x.
+  // In stacked mobile mode, fire off-screen in the direction the gun is aimed.
   _tgt(player, svgY) {
+    const m = this.getMuzzle(player, 148, svgY || 133);
     if (window.innerWidth <= 680) {
-      const m = this.getMuzzle(player, 148, svgY || 133);
       return { x: player === 'john' ? window.innerWidth + 220 : -220, y: m.y };
     }
-    return this.getVSCenter();
+    return { x: window.innerWidth / 2, y: m.y };
   },
 
   // ── Core projectile spawner ──
@@ -3781,16 +3782,20 @@ const BULLETS = {
     burst();
   },
 
-  // ── TIER 2: DUAL PISTOLS — alternating barrels, slightly offset y ──
+  // ── TIER 2: DUAL PISTOLS — alternating between front and back gun ──
+  // Front gun muzzle: svgX=148 (right edge, same as single pistol)
+  // Back/far gun muzzle: svgX=41 (left barrel end — further from screen center)
+  // Both aim toward screen center horizontally — different start x, same destination
   dualPistols(player) {
     this.init(); this.stop(player);
-    let gun = 0;
+    let gun = 0; // 0 = front (svgX=148), 1 = back/far (svgX=41)
     const burst = () => {
       const rounds = 2 + Math.floor(Math.random() * 3);
       let d = 0;
       for (let i = 0; i < rounds; i++) {
-        const svgY = gun === 0 ? 130 : 136; gun = 1 - gun;
-        const t = setTimeout(() => this._fire(player, 148, svgY), d);
+        const svgX = gun === 0 ? 148 : 41;
+        gun = 1 - gun;
+        const t = setTimeout(() => this._fire(player, svgX, 133), d);
         this._addTimer(player, t);
         d += 300 + Math.random() * 250;
       }
