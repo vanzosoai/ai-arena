@@ -1809,19 +1809,18 @@ footer span{color:#8888aa}
 
         <!-- JUNE — Shorts (skin over lower legs, keep boots) -->
         <g id="jOv_shorts" display="none">
-          <!-- Left lower leg skin — starts y=175 to cover leg-rect top stroke artifact -->
-          <rect x="20" y="175" width="34" height="32" fill="#FFCC99"/>
-          <!-- Right lower leg skin — gap x=54–62 stays dark = natural leg separation -->
-          <rect x="62" y="175" width="34" height="32" fill="#FFCC99"/>
-          <!-- Knee patches (slightly darker skin, replaces knee pads) -->
-          <ellipse cx="37" cy="186" rx="10" ry="6" fill="#DDA070"/>
-          <ellipse cx="79" cy="186" rx="10" ry="6" fill="#DDA070"/>
-          <!-- Shin highlight (light strip down center of each shin) -->
-          <rect x="31" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
-          <rect x="73" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
-          <!-- Shorts hem (jeans blue, sits at bottom of shorts fabric) -->
+          <!-- Shorts hem at bottom of jeans fabric -->
           <line x1="20" y1="181" x2="54" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
           <line x1="62" y1="181" x2="96" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <!-- Skin starts BELOW the hem — gap x=54–62 stays dark for leg separation -->
+          <rect x="20" y="182" width="34" height="25" fill="#FFCC99"/>
+          <rect x="62" y="182" width="34" height="25" fill="#FFCC99"/>
+          <!-- Knee patches (darker skin, mid-leg) -->
+          <ellipse cx="37" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <ellipse cx="79" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <!-- Shin highlight (light center strip below knee) -->
+          <rect x="31" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <rect x="73" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
         </g>
 
       </svg>
@@ -2434,14 +2433,14 @@ footer span{color:#8888aa}
 
         <!-- JUNE — Shorts (Nick SVG auto-mirrors) -->
         <g id="nOv_shorts" display="none">
-          <rect x="20" y="175" width="34" height="32" fill="#FFCC99"/>
-          <rect x="62" y="175" width="34" height="32" fill="#FFCC99"/>
-          <ellipse cx="37" cy="186" rx="10" ry="6" fill="#DDA070"/>
-          <ellipse cx="79" cy="186" rx="10" ry="6" fill="#DDA070"/>
-          <rect x="31" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
-          <rect x="73" y="192" width="7" height="12" fill="#FFE0C0" rx="3" opacity=".55"/>
           <line x1="20" y1="181" x2="54" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
           <line x1="62" y1="181" x2="96" y2="181" stroke="#1A3A99" stroke-width="2.5"/>
+          <rect x="20" y="182" width="34" height="25" fill="#FFCC99"/>
+          <rect x="62" y="182" width="34" height="25" fill="#FFCC99"/>
+          <ellipse cx="37" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <ellipse cx="79" cy="191" rx="10" ry="6" fill="#DDA070"/>
+          <rect x="31" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
+          <rect x="73" y="196" width="7" height="10" fill="#FFE0C0" rx="3" opacity=".55"/>
         </g>
 
       </svg>
@@ -4253,6 +4252,111 @@ const MUSIC_SEQ = {
   ],
 };
 
+// ── JULY / BANDANA — Patriotic rock march, G major ────────────────────────
+const MUSIC_SEQ_USA = {
+  bpm: 160, steps: 64,
+  mel: [
+    // Heroic opening call (G4 G4 E4 C4 | G4 A4 G4 -)
+    392,392,330,262, 392,440,392,  0,
+    // Answering phrase (E4 D4 C4 - | G3 A3 B3 C4)
+    330,294,262,  0, 196,220,247,262,
+    // Ascending march (E4 E4 D4 C4 | D4 E4 G4 -)
+    330,330,294,262, 294,330,392,  0,
+    // Peak + resolve (G4 G4 A4 G4 | E4 D4 C4 -)
+    392,392,440,392, 330,294,262,  0,
+    // Lower groove (G3 - G3 - | A3 - B3 -)
+    196,  0,196,  0, 220,  0,247,  0,
+    // Build up (C4 - D4 - | E4 - G4 -)
+    262,  0,294,  0, 330,  0,392,  0,
+    // Intensity hammer (G4 G4 G4 A4 | A4 A4 G4 -)
+    392,392,392,440, 440,440,392,  0,
+    // Final descent (A4 G4 E4 D4 | C4 G3 - -)
+    440,392,330,294, 262,196,  0,  0,
+  ],
+  bas: [
+    ..._rep([98,0,98,0, 98,0,73,0], 2),   // G2 with D2 walkdown
+    ..._rep([130,0,130,0, 98,0,98,0], 2), // C3 / G2
+    ..._rep([98,0,98,0, 147,0,98,0], 2),  // G2 / D3
+    ..._rep([98,0,98,0, 98,0,98,0], 2),   // steady G2
+  ],
+  kik: [..._rep(_KS,8)],
+  snr: [..._rep(_SN,8)],
+  hat: [..._rep(_HH,4), ..._rep(_HO,4)],
+};
+
+// ── OCTOBER / JASON — Horror, A minor, sparse and chromatic ───────────────
+const MUSIC_SEQ_SPOOKY = {
+  bpm: 128, steps: 64,
+  mel: [
+    // Tritone tension (A3 - - - | Eb4 - - -)
+    220,  0,  0,  0, 311,  0,  0,  0,
+    // Chromatic descent (E4 Eb4 D4 Db4 | C4 B3 Bb3 A3)
+    330,311,294,277, 262,247,233,220,
+    // Chromatic crawl (A3 - A3 - | G3 - F3 -)
+    220,  0,220,  0, 196,  0,175,  0,
+    // Minor arpeggio up (E3 - A3 - | C4 - E4 -)
+    165,  0,220,  0, 262,  0,330,  0,
+    // Tritone stab (A3 - - - | A3 - Eb4 -)
+    220,  0,  0,  0, 220,  0,311,  0,
+    // Chromatic fall (E4 - D4 C4 | B3 Bb3 A3 -)
+    330,  0,294,262, 247,233,220,  0,
+    // Chromatic creep up (F3 F#3 G3 Ab3 | A3 Bb3 B3 C4)
+    175,185,196,208, 220,233,247,262,
+    // Sparse ending (E4 - - E3 | - A3 - -)
+    330,  0,  0,165,   0,220,  0,  0,
+  ],
+  bas: [
+    ..._rep([110,0,0,0, 110,0,0,0], 2), // A2 very sparse
+    ..._rep([82, 0,0,0,   0,0,82,0], 2),// E2 ghost hits
+    ..._rep([110,0,82,0, 110,0,0,0], 2),// A2 / E2
+    ..._rep([110,0,0,0,  82,0,0,0], 2), // sparse to end
+  ],
+  kik: [..._rep([1,0,0,0, 0,0,0,0], 8)], // very sparse — one kick per 8 steps
+  snr: [..._rep([0,0,0,0, 0,0,1,0], 8)], // rare ghost snare
+  hat: [..._rep([1,0,0,0, 1,0,0,0], 8)], // sparse hi-hat (every 4 steps)
+};
+
+// ── DECEMBER / SANTAHAT — Jingle Bells-inspired, C major ──────────────────
+const MUSIC_SEQ_XMAS = {
+  bpm: 158, steps: 64,
+  mel: [
+    // Jingle jingle (E4 E4 E4 - | E4 E4 E4 -)
+    330,330,330,  0, 330,330,330,  0,
+    // Bells! (E4 G4 C4 D4 | E4 - - -)
+    330,392,262,294, 330,  0,  0,  0,
+    // Second phrase (F4 F4 F4 F4 | F4 E4 E4 E4)
+    349,349,349,349, 349,330,330,330,
+    // Resolution (E4 D4 D4 E4 | D4 - G4 -)
+    330,294,294,330, 294,  0,392,  0,
+    // Festive descend (G4 G4 F4 D4 | C4 - - -)
+    392,392,349,294, 262,  0,  0,  0,
+    // Walking home (E4 D4 C4 G3 | E4 D4 C4 -)
+    330,294,262,196, 330,294,262,  0,
+    // Ascending figure (C4 D4 E4 C4 | D4 E4 G4 -)
+    262,294,330,262, 294,330,392,  0,
+    // Final jingle (E4 E4 E4 G4 | C4 D4 E4 -)
+    330,330,330,392, 262,294,330,  0,
+  ],
+  bas: [
+    ..._rep([130,0,130,0,  98,0, 98,0], 2), // C3 / G2
+    ..._rep([130,0,130,0, 165,0,130,0], 2), // C3 / E3 (bright third)
+    ..._rep([175,0,175,0,  98,0, 98,0], 2), // F3 / G2
+    ..._rep([130,0, 98,0, 110,0,130,0], 2), // C3 / G2 / A2
+  ],
+  kik: [..._rep(_KS,8)],
+  snr: [..._rep(_SN,8)],
+  hat: [..._rep(_HH,8)], // dense hi-hats for festive feel
+};
+
+/** Pick the right music sequence for the current season / devSeason param */
+function _getMusicSeq() {
+  const overlay = _getSeasonOverlay('john'); // seasons are calendar-global
+  if (overlay === 'bandana')  return MUSIC_SEQ_USA;
+  if (overlay === 'jason')    return MUSIC_SEQ_SPOOKY;
+  if (overlay === 'santahat') return MUSIC_SEQ_XMAS;
+  return MUSIC_SEQ;
+}
+
 const MU = {
   ctx: null, master: null, muted: false,
   _t: null, _step: 0, _nxt: 0, _dur: 0,
@@ -4274,6 +4378,7 @@ const MU = {
 
   start(){
     this.init();
+    this.SEQ = _getMusicSeq(); // pick seasonal variant (bandana/jason/santahat or default)
     this._dur = this._baseDur();
     this._step = 0;
     this._nxt = this.ctx.currentTime + 0.08;
