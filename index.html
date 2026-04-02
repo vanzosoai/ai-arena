@@ -1050,7 +1050,7 @@ footer span{color:#8888aa}
     <div style="background:#060608;border:1px solid #1a1a2a;padding:16px 20px;margin-bottom:28px">
       <div style="font-size:.28em;color:var(--j);letter-spacing:2px;margin-bottom:10px">TABLE OF CONTENTS</div>
       <div style="font-size:.24em;color:#8888aa;line-height:2.2;letter-spacing:1px">
-        1. THE GAME &nbsp;·&nbsp; 2. WEEKLY SUBMISSIONS &nbsp;·&nbsp; 3. WINNING &amp; CREDIT &nbsp;·&nbsp; 4. AVATAR STATES &amp; PERKS &nbsp;·&nbsp; 5. SEASONAL COSTUMES &amp; MUSIC &nbsp;·&nbsp; 6. EMAIL NOTIFICATIONS &nbsp;·&nbsp; 7. SPECTATOR MODE &nbsp;·&nbsp; 8. HALL OF CARNAGE &nbsp;·&nbsp; 9. ACCOUNT SETTINGS
+        1. THE GAME &nbsp;·&nbsp; 2. WEEKLY SUBMISSIONS &nbsp;·&nbsp; 3. WINNING &amp; CREDIT &nbsp;·&nbsp; 4. AVATAR STATES &amp; PERKS &nbsp;·&nbsp; 5. SEASONAL COSTUMES &amp; MUSIC &nbsp;·&nbsp; 6. EMAIL NOTIFICATIONS &nbsp;·&nbsp; 7. SPECTATOR MODE &nbsp;·&nbsp; 8. HALL OF CARNAGE<span id="readmeAcctToc"> &nbsp;·&nbsp; 9. ACCOUNT SETTINGS</span>
       </div>
     </div>
 
@@ -1143,7 +1143,7 @@ footer span{color:#8888aa}
     <div style="border-left:3px solid #336655;padding-left:14px;margin-bottom:24px">
       <div style="font-size:.32em;color:#44aa77;letter-spacing:2px;margin-bottom:8px">7. SPECTATOR MODE</div>
       <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
-        Anyone can watch without an account. On the login screen, click <span style="color:var(--green)">👁 SPECTATE</span> to enter the arena in read-only mode. You'll see all current and past submissions, scores, and stats — but cannot submit. Music plays for spectators too. The settings gear is hidden in spectator mode.
+        Anyone can watch without an account. On the login screen, click <span style="color:var(--green)">👁 SPECTATE</span> to enter the arena in read-only mode. You'll see all current and past submissions, scores, and stats — but cannot submit. Music plays for spectators too. The settings gear is replaced with a <span style="color:var(--j)">📖 HOW TO PLAY</span> button so spectators can learn the rules.
       </div>
     </div>
 
@@ -1155,8 +1155,8 @@ footer span{color:#8888aa}
       </div>
     </div>
 
-    <!-- 9 -->
-    <div style="border-left:3px solid #444422;padding-left:14px;margin-bottom:8px">
+    <!-- 9 — players only -->
+    <div id="readmeAcctSection" style="border-left:3px solid #444422;padding-left:14px;margin-bottom:8px">
       <div style="font-size:.32em;color:#aaaa44;letter-spacing:2px;margin-bottom:8px">9. ACCOUNT SETTINGS</div>
       <div style="font-size:.24em;color:#aaaaaa;line-height:1.9;letter-spacing:.5px">
         Access via the <span style="color:var(--j)">⚙️</span> gear button in the header (players only — hidden for spectators).<br><br>
@@ -1205,6 +1205,7 @@ footer span{color:#8888aa}
       <div class="sess-tag" id="sessTag" onclick="switchUser()">👤 —</div>
       <button class="mute-btn" id="muteBtn" onclick="toggleMute()">♫ MUTE</button>
       <button class="settings-btn" id="settingsBtn" onclick="openSettings()">⚙️</button>
+      <button class="settings-btn" id="spectatorHTPBtn" onclick="openReadme()" style="display:none;font-size:.28em;letter-spacing:1px;padding:4px 10px">📖 HOW TO PLAY</button>
     </div>
   </div>
 </div>
@@ -2833,9 +2834,11 @@ async function spectate(){
   MU.init();
   MU.start();
   await showArena();
-  // Hide settings gear for spectators
+  // Hide gear, show HOW TO PLAY button for spectators
   const sb2 = document.getElementById('settingsBtn');
   if (sb2) sb2.style.display = 'none';
+  const htp = document.getElementById('spectatorHTPBtn');
+  if (htp) htp.style.display = '';
 }
 
 async function switchUser(){
@@ -4029,6 +4032,12 @@ function openSettings(){
 
 function openReadme(){
   closeSettings();
+  // Show/hide player-only sections based on login state
+  const isPlayer = !!_session;
+  ['readmeAcctSection','readmeAcctToc'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = isPlayer ? '' : 'none';
+  });
   const m = document.getElementById('readmeModal');
   m.style.display = 'flex';
 }
