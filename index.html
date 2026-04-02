@@ -968,11 +968,12 @@ footer span{color:#8888aa}
       </div>
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
-        <div class="dev-cs-lbl">🔫 BULLET ANIMATIONS</div>
-        <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
-          <button onclick="BULLETS.pistol('john')" style="background:#1a1000;border:1px solid #AA8800;color:#FFD700;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ JOHN</button>
-          <button onclick="BULLETS.pistol('nick')" style="background:#001020;border:1px solid #0088BB;color:#00C8FF;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ NICK</button>
-          <button onclick="BULLETS.pistol('john');BULLETS.pistol('nick')" style="background:#0d0d14;border:1px solid #334;color:#aaa;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ BOTH</button>
+        <div class="dev-cs-lbl">🔫 WEAPON ANIMATIONS</div>
+        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:4px">uses ?devStreak=N to pick weapon</div>
+        <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:2px">
+          <button onclick="BULLETS.start('john',BULLETS._tier.john)" style="background:#1a1000;border:1px solid #AA8800;color:#FFD700;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ JOHN</button>
+          <button onclick="BULLETS.start('nick',BULLETS._tier.nick)" style="background:#001020;border:1px solid #0088BB;color:#00C8FF;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ NICK</button>
+          <button onclick="BULLETS.start('john',BULLETS._tier.john);BULLETS.start('nick',BULLETS._tier.nick)" style="background:#0d0d14;border:1px solid #334;color:#aaa;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ BOTH</button>
           <button onclick="BULLETS.stopAll()" style="background:#0d0008;border:1px solid #550022;color:#CC3366;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">■ STOP</button>
         </div>
       </div>
@@ -2193,6 +2194,8 @@ function _streakToTier(s) {
 // Show one weapon group, hide the rest (tiers 0–7)
 const _weaponNames = ['Knife','Pistol','Dual Pistols','Shotgun','SMG','Chaingun','Rail Gun','Devastator'];
 function showWeapon(player, tier) {
+  // Track tier so BULLETS.start() and PRESENCE know which weapon to use
+  if (window.BULLETS) BULLETS._tier[player] = tier;
   const p = player === 'john' ? 'j' : 'n';
   for (let i = 0; i <= 7; i++) {
     const el = document.getElementById(`${p}Gun${i}`);
@@ -2390,6 +2393,9 @@ async function loadAndRender(){
     .order('submitted_at', { ascending: false });
   if (!error) _subs = data || [];
   render();
+  // Start live features after data loads
+  PRESENCE.init();
+  REALTIME.init();
 }
 
 // ============================================================
@@ -3551,14 +3557,17 @@ const DUKE = {
 };
 
 /* ================================================
-   BULLETS — Weapon animation overlay system
-   Pistol (tier 1) implemented first for testing.
-   SVG muzzle coords: cx=148, cy=133 (viewBox 0 0 140 230)
+   BULLETS — Full 8-weapon animation overlay system
+   Muzzle SVG coords (viewBox 0 0 140 230):
+     knife tip ≈ (135,151) | pistol (148,133) | dual (148,130/136)
+     shotgun (147,131) | SMG (134,137) | chaingun (148,122-147)
+     rail gun (148,137) | devastator (150,132)
    John: normal SVG | Nick: scaleX(-1) mirrored SVG
 ================================================ */
 const BULLETS = {
   overlay: null,
   _timers: { john: [], nick: [] },
+  _tier:   { john: 0,  nick: 0  }, // current weapon tier per player
 
   init() {
     if (this.overlay) return;
@@ -3569,147 +3578,462 @@ const BULLETS = {
     this.overlay = el;
   },
 
-  // Convert SVG coords to screen coords, accounting for Nick's scaleX(-1) mirror
+  // Convert SVG coords → screen coords (handles Nick's scaleX(-1) mirror)
   getMuzzle(player, svgX, svgY) {
     const svgEl = document.getElementById(player === 'john' ? 'johnSvg' : 'nickSvg');
     if (!svgEl) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
     const rect = svgEl.getBoundingClientRect();
-    const vbW = 140, vbH = 230;
-    const y = rect.top + (svgY / vbH) * rect.height;
-    let x;
-    if (player === 'john') {
-      x = rect.left + (svgX / vbW) * rect.width;
-    } else {
-      // Nick's SVG has style="transform:scaleX(-1)" — x axis is flipped
-      x = rect.left + (1 - svgX / vbW) * rect.width;
-    }
+    const y = rect.top  + (svgY / 230) * rect.height;
+    const x = player === 'john'
+      ? rect.left + (svgX / 140) * rect.width
+      : rect.left + (1 - svgX / 140) * rect.width; // mirrored
     return { x, y };
   },
 
-  // Aim point: center of the VS element — correct for both wide (horizontal) and stacked (vertical) layouts
+  // Center of the VS element — target for wide-screen mode
   getVSCenter() {
     const el = document.querySelector('.vs') || document.querySelector('.ccol');
-    if (el) {
-      const r = el.getBoundingClientRect();
-      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-    }
+    if (el) { const r = el.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; }
     return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
   },
 
-  spawnBullet(player, targetX, targetY) {
+  // Target: VS center in wide mode; off-screen in stacked mobile mode
+  _tgt(player, svgY) {
+    if (window.innerWidth <= 680) {
+      const m = this.getMuzzle(player, 148, svgY || 133);
+      return { x: player === 'john' ? window.innerWidth + 220 : -220, y: m.y };
+    }
+    return this.getVSCenter();
+  },
+
+  // ── Core projectile spawner ──
+  // opts: { muzzle, target, color, w, h, dur, spread, spiral }
+  _fire(player, svgX, svgY, opts) {
     if (!this.overlay) return;
-    const muzzle = this.getMuzzle(player, 148, 133);
-    const color  = player === 'john' ? '#FFD700' : '#00C8FF';
+    opts = opts || {};
+    const muzzle = opts.muzzle || this.getMuzzle(player, svgX, svgY);
+    const target = opts.target || this._tgt(player, svgY);
+    const color  = opts.color  || (player === 'john' ? '#FFD700' : '#00C8FF');
+    const w = opts.w || 14, h = opts.h || 4;
+    const dur = opts.dur || (260 + Math.random() * 60);
 
-    // Spread: perpendicular to travel direction
-    const dx0 = targetX - muzzle.x;
-    const dy0 = targetY - muzzle.y;
-    const angle = Math.atan2(dy0, dx0); // radians — used to orient bullet rect
-    // Add slight perpendicular spread to end point
-    const perpAngle = angle + Math.PI / 2;
-    const spread = (Math.random() - 0.5) * 10;
-    const endX = targetX + Math.cos(perpAngle) * spread;
-    const endY = targetY + Math.sin(perpAngle) * spread;
+    const dx0 = target.x - muzzle.x, dy0 = target.y - muzzle.y;
+    const angle = Math.atan2(dy0, dx0);
+    const perpA = angle + Math.PI / 2;
+    const spr   = (Math.random() - 0.5) * (opts.spread !== undefined ? opts.spread : 10);
+    const endX  = target.x + Math.cos(perpA) * spr;
+    const endY  = target.y + Math.sin(perpA) * spr;
 
-    const bullet = document.createElement('div');
-    bullet.style.cssText = [
-      'position:fixed',
-      'width:14px',
-      'height:4px',
-      // Gradient always 90deg inside the element; rotation is handled by transform
+    const el = document.createElement('div');
+    el.style.cssText = [
+      'position:fixed', `width:${w}px`, `height:${h}px`,
       `background:linear-gradient(90deg,transparent 0%,${color} 55%,#fff 100%)`,
-      'border-radius:3px',
-      `box-shadow:0 0 7px ${color},0 0 14px ${color}66`,
+      `border-radius:${Math.max(2, h / 2)}px`,
+      `box-shadow:0 0 ${h * 2}px ${color},0 0 ${h * 4}px ${color}44`,
       'pointer-events:none',
-      'will-change:transform',
-      `left:${muzzle.x}px`,
-      `top:${muzzle.y}px`,
+      `left:${muzzle.x}px`, `top:${muzzle.y}px`,
       `transform:translate(-50%,-50%) rotate(${angle}rad)`
     ].join(';');
-    this.overlay.appendChild(bullet);
+    this.overlay.appendChild(el);
 
-    const duration = 260 + Math.random() * 60;
-    const startTime = performance.now();
-    const startX = muzzle.x;
-    const startY = muzzle.y;
-
+    const sx = muzzle.x, sy = muzzle.y, st = performance.now();
+    let lastTrail = 0;
     const tick = (now) => {
-      const t = Math.min((now - startTime) / duration, 1);
-      const ease = t * t; // ease-in — accelerates out of barrel
-      const cx = startX + (endX - startX) * ease;
-      const cy = startY + (endY - startY) * ease;
-      bullet.style.left = cx + 'px';
-      bullet.style.top  = cy + 'px';
-      bullet.style.opacity = t > 0.8 ? String(1 - (t - 0.8) / 0.2) : '1';
-      if (t < 1) {
-        requestAnimationFrame(tick);
-      } else {
-        bullet.remove();
+      const t = Math.min((now - st) / dur, 1);
+      const ease = t * t;
+      const cx = sx + (endX - sx) * ease, cy = sy + (endY - sy) * ease;
+      el.style.left = cx + 'px'; el.style.top = cy + 'px';
+      el.style.opacity = t > 0.8 ? String(1 - (t - 0.8) / 0.2) : '1';
+      // Rail gun: spiral trail dots
+      if (opts.spiral && now - lastTrail > 28) {
+        lastTrail = now;
+        const off = Math.sin(t * Math.PI * 5) * 10;
+        this._dot(cx + Math.cos(perpA) * off, cy + Math.sin(perpA) * off, color, 300);
       }
+      if (t < 1) requestAnimationFrame(tick); else el.remove();
     };
     requestAnimationFrame(tick);
   },
 
-  _addTimer(player, id) {
-    this._timers[player].push(id);
-  },
-
-  stop(player) {
-    (this._timers[player] || []).forEach(id => clearTimeout(id));
-    this._timers[player] = [];
-  },
-
-  stopAll() {
-    this.stop('john');
-    this.stop('nick');
-  },
-
-  // Single pistol — deliberate semi-auto pacing, 1-3 rounds per burst
-  pistol(player) {
-    this.init();
-    this.stop(player);
-    const getTarget = () => {
-      // In stacked mobile layout (≤680px), guns still point horizontally —
-      // fire off-screen in the direction the barrel is aimed, not toward VS
-      if (window.innerWidth <= 680) {
-        const muzzle = this.getMuzzle(player, 148, 133);
-        return {
-          x: player === 'john' ? window.innerWidth + 180 : -180,
-          y: muzzle.y
-        };
-      }
-      return this.getVSCenter();
+  // Fading dot (trail particles, glint sub-sparks)
+  _dot(x, y, color, life) {
+    if (!this.overlay) return;
+    const el = document.createElement('div');
+    el.style.cssText = [
+      'position:fixed', `left:${x}px`, `top:${y}px`,
+      'width:5px', 'height:5px',
+      `background:${color}`, 'border-radius:50%',
+      `box-shadow:0 0 6px ${color}`, 'pointer-events:none',
+      'transform:translate(-50%,-50%)'
+    ].join(';');
+    this.overlay.appendChild(el);
+    const st = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - st) / (life || 250), 1);
+      el.style.opacity = String(1 - t);
+      if (t < 1) requestAnimationFrame(tick); else el.remove();
     };
+    requestAnimationFrame(tick);
+  },
 
-    const burst = () => {
-      // 1-3 rounds — a pistol, not a machine gun
-      const rounds = 1 + Math.floor(Math.random() * 3);
-      let delay = 0;
-      for (let i = 0; i < rounds; i++) {
+  // Glint flash (knife sparkle)
+  _glint(x, y, color) {
+    if (!this.overlay) return;
+    const el = document.createElement('div');
+    el.style.cssText = [
+      'position:fixed', `left:${x}px`, `top:${y}px`,
+      'width:12px', 'height:12px',
+      `background:radial-gradient(circle,#fff 0%,${color} 40%,transparent 70%)`,
+      'border-radius:50%',
+      `box-shadow:0 0 10px #fff,0 0 20px ${color}`,
+      'pointer-events:none', 'transform:translate(-50%,-50%)'
+    ].join(';');
+    this.overlay.appendChild(el);
+    const st = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - st) / 480, 1);
+      const o = t < 0.3 ? t / 0.3 : 1 - (t - 0.3) / 0.7;
+      el.style.opacity = String(Math.max(0, o));
+      el.style.transform = `translate(-50%,-50%) scale(${0.4 + o * 1.6})`;
+      if (t < 1) requestAnimationFrame(tick); else el.remove();
+    };
+    requestAnimationFrame(tick);
+  },
+
+  // Jagged lightning beam (devastator)
+  _lightning(x1, y1, x2, y2, color, life) {
+    if (!this.overlay) return;
+    const n = 9; // segments
+    const pts = [[x1, y1]];
+    const dx = (x2 - x1) / n, dy = (y2 - y1) / n;
+    const perp = Math.atan2(dy, dx) + Math.PI / 2;
+    for (let i = 1; i < n; i++) {
+      const off = (Math.random() - 0.5) * 22;
+      pts.push([x1 + dx * i + Math.cos(perp) * off, y1 + dy * i + Math.sin(perp) * off]);
+    }
+    pts.push([x2, y2]);
+    const segs = [];
+    for (let i = 0; i < pts.length - 1; i++) {
+      const [ax, ay] = pts[i], [bx, by] = pts[i + 1];
+      const len = Math.sqrt((bx-ax)**2 + (by-ay)**2);
+      const ang = Math.atan2(by - ay, bx - ax);
+      const s = document.createElement('div');
+      s.style.cssText = [
+        'position:fixed',
+        `left:${(ax+bx)/2}px`, `top:${(ay+by)/2}px`,
+        `width:${len}px`, 'height:3px',
+        `background:linear-gradient(90deg,${color}88,#fff,${color}88)`,
+        `box-shadow:0 0 5px ${color},0 0 10px ${color}66`,
+        'pointer-events:none',
+        `transform:translate(-50%,-50%) rotate(${ang}rad)`
+      ].join(';');
+      this.overlay.appendChild(s);
+      segs.push(s);
+    }
+    const st = performance.now();
+    const tick = (now) => {
+      const t = Math.min((now - st) / life, 1);
+      const flicker = Math.random() > 0.25 ? 1 : 0;
+      const fade = t > 0.65 ? 1 - (t - 0.65) / 0.35 : 1;
+      segs.forEach(s => s.style.opacity = String(flicker * fade));
+      if (t < 1) requestAnimationFrame(tick); else segs.forEach(s => s.remove());
+    };
+    requestAnimationFrame(tick);
+  },
+
+  _addTimer(player, id) { this._timers[player].push(id); },
+  stop(player) { (this._timers[player]||[]).forEach(id => clearTimeout(id)); this._timers[player] = []; },
+  stopAll() { this.stop('john'); this.stop('nick'); },
+
+  // ── TIER 0: KNIFE — sparkle glint near blade tip ──
+  knife(player) {
+    this.init(); this.stop(player);
+    const color = player === 'john' ? '#FFD700' : '#00C8FF';
+    const sparkle = () => {
+      const flashes = 2 + Math.floor(Math.random() * 3);
+      for (let i = 0; i < flashes; i++) {
         const t = setTimeout(() => {
-          const tgt = getTarget();
-          this.spawnBullet(player, tgt.x, tgt.y);
-        }, delay);
+          const p = this.getMuzzle(player, 135, 151);
+          this._glint(p.x, p.y, color);
+        }, i * 130);
         this._addTimer(player, t);
-        // 350-700ms between shots — deliberate trigger pulls
-        delay += 350 + Math.random() * 350;
       }
-      // 2-4.5s between bursts — this is not a firefight, it's a standoff
-      const nextIn = delay + 2000 + Math.random() * 2500;
-      const t = setTimeout(() => burst(), nextIn);
+      const t = setTimeout(() => sparkle(), flashes * 130 + 2000 + Math.random() * 3000);
       this._addTimer(player, t);
     };
+    sparkle();
+  },
 
+  // ── TIER 1: PISTOL — deliberate semi-auto ──
+  pistol(player) {
+    this.init(); this.stop(player);
+    const burst = () => {
+      const rounds = 1 + Math.floor(Math.random() * 3);
+      let d = 0;
+      for (let i = 0; i < rounds; i++) {
+        const t = setTimeout(() => this._fire(player, 148, 133), d);
+        this._addTimer(player, t);
+        d += 350 + Math.random() * 350;
+      }
+      const t = setTimeout(() => burst(), d + 2000 + Math.random() * 2500);
+      this._addTimer(player, t);
+    };
     burst();
   },
 
-  // Entry point — dispatches to weapon-specific function by tier index
-  // 0=knife 1=pistol 2=dbl pistols 3=shotgun 4=SMG 5=chaingun 6=rail gun 7=devastator
+  // ── TIER 2: DUAL PISTOLS — alternating barrels, slightly offset y ──
+  dualPistols(player) {
+    this.init(); this.stop(player);
+    let gun = 0;
+    const burst = () => {
+      const rounds = 2 + Math.floor(Math.random() * 3);
+      let d = 0;
+      for (let i = 0; i < rounds; i++) {
+        const svgY = gun === 0 ? 130 : 136; gun = 1 - gun;
+        const t = setTimeout(() => this._fire(player, 148, svgY), d);
+        this._addTimer(player, t);
+        d += 300 + Math.random() * 250;
+      }
+      const t = setTimeout(() => burst(), d + 1500 + Math.random() * 2000);
+      this._addTimer(player, t);
+    };
+    burst();
+  },
+
+  // ── TIER 3: SHOTGUN — cone spray, slow pump reload ──
+  shotgun(player) {
+    this.init(); this.stop(player);
+    const color = player === 'john' ? '#FFD700' : '#00C8FF';
+    const fire = () => {
+      const muzzle  = this.getMuzzle(player, 147, 131);
+      const center  = this._tgt(player, 131);
+      const baseAng = Math.atan2(center.y - muzzle.y, center.x - muzzle.x);
+      const pellets = 6, coneRad = 0.26; // ~15° total spread
+      for (let i = 0; i < pellets; i++) {
+        const ang  = baseAng + (i / (pellets - 1) - 0.5) * coneRad;
+        const dist = 240 + Math.random() * 80;
+        this._fire(player, 147, 131, {
+          muzzle, color, w: 7, h: 7, dur: 170 + Math.random() * 50, spread: 0,
+          target: { x: muzzle.x + Math.cos(ang) * dist, y: muzzle.y + Math.sin(ang) * dist }
+        });
+      }
+      const t = setTimeout(() => fire(), 3000 + Math.random() * 1800);
+      this._addTimer(player, t);
+    };
+    fire();
+  },
+
+  // ── TIER 4: SMG — rapid compact bursts ──
+  smg(player) {
+    this.init(); this.stop(player);
+    const burst = () => {
+      const rounds = 5 + Math.floor(Math.random() * 4);
+      let d = 0;
+      for (let i = 0; i < rounds; i++) {
+        const t = setTimeout(() => this._fire(player, 134, 137, { w: 10, h: 3 }), d);
+        this._addTimer(player, t);
+        d += 55 + Math.random() * 35;
+      }
+      const t = setTimeout(() => burst(), d + 800 + Math.random() * 700);
+      this._addTimer(player, t);
+    };
+    burst();
+  },
+
+  // ── TIER 5: CHAINGUN — sustained fire, rotating 6-barrel cycle ──
+  chaingun(player) {
+    this.init(); this.stop(player);
+    const barrels = [122, 127, 132, 137, 142, 147];
+    let bi = 0;
+    const burst = () => {
+      const rounds = 10 + Math.floor(Math.random() * 8);
+      let d = 0;
+      for (let i = 0; i < rounds; i++) {
+        const svgY = barrels[bi++ % barrels.length];
+        const t = setTimeout(() => this._fire(player, 148, svgY, { w: 15, h: 4 }), d);
+        this._addTimer(player, t);
+        d += 38 + Math.random() * 28;
+      }
+      const t = setTimeout(() => burst(), d + 1500 + Math.random() * 1200);
+      this._addTimer(player, t);
+    };
+    burst();
+  },
+
+  // ── TIER 6: RAIL GUN — single heavy shot with fading spiral trail ──
+  railGun(player) {
+    this.init(); this.stop(player);
+    const color = player === 'john' ? '#FFD700' : '#00C8FF';
+    const fire = () => {
+      this._fire(player, 148, 137, { color, w: 26, h: 7, dur: 340, spiral: true });
+      const t = setTimeout(() => fire(), 2800 + Math.random() * 1800);
+      this._addTimer(player, t);
+    };
+    fire();
+  },
+
+  // ── TIER 7: DEVASTATOR — plasma lightning beam ──
+  devastator(player) {
+    this.init(); this.stop(player);
+    const color = player === 'john' ? '#FFD700' : '#00C8FF';
+    const fire = () => {
+      const muzzle = this.getMuzzle(player, 150, 132);
+      const vs     = this._tgt(player, 132);
+      const ex = muzzle.x + (vs.x - muzzle.x) * 0.68;
+      const ey = muzzle.y + (vs.y - muzzle.y) * 0.68;
+      // 3 successive lightning pulses
+      for (let i = 0; i < 3; i++) {
+        const t = setTimeout(() => this._lightning(muzzle.x, muzzle.y, ex, ey, color, 440), i * 190);
+        this._addTimer(player, t);
+      }
+      const t = setTimeout(() => fire(), 3 * 190 + 2000 + Math.random() * 1800);
+      this._addTimer(player, t);
+    };
+    fire();
+  },
+
+  // Entry point — dispatch to weapon function, track tier
   start(player, tier) {
-    switch (tier) {
-      case 1: this.pistol(player); break;
-      default: this.pistol(player); break; // fallback during development
+    this._tier[player] = tier;
+    this.stop(player);
+    const fns = [this.knife, this.pistol, this.dualPistols, this.shotgun,
+                 this.smg, this.chaingun, this.railGun, this.devastator];
+    (fns[tier] || this.pistol).call(this, player);
+  }
+};
+
+/* ================================================
+   PRESENCE — Supabase Realtime presence detection
+   Fires weapon animations when BOTH players are on
+   an active (visible) tab simultaneously
+================================================ */
+const PRESENCE = {
+  _ch: null,
+  _bothActive: false,
+  _bannerEl: null,
+
+  init() {
+    if (this._ch || !window.sb || !who()) return;
+    const me = who();
+    const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
+
+    ch.on('presence', { event: 'sync' }, () => {
+      const keys = Object.keys(ch.presenceState());
+      const both = keys.includes('john') && keys.includes('nick');
+      if (both && !this._bothActive) {
+        this._bothActive = true;
+        this._onBoth();
+      } else if (!both && this._bothActive) {
+        this._bothActive = false;
+        BULLETS.stopAll();
+      }
+    });
+
+    ch.subscribe(async (status) => {
+      if (status === 'SUBSCRIBED') await ch.track({ player: me, ts: Date.now() });
+    });
+
+    this._ch = ch;
+
+    // Untrack when tab goes to background, re-track when it comes back
+    document.addEventListener('visibilitychange', () => {
+      if (!this._ch) return;
+      if (document.visibilityState === 'visible') {
+        this._ch.track({ player: me, ts: Date.now() });
+      } else {
+        this._ch.untrack();
+      }
+    });
+  },
+
+  _onBoth() {
+    this._showBanner();
+    setTimeout(() => {
+      BULLETS.start('john', BULLETS._tier.john);
+      BULLETS.start('nick', BULLETS._tier.nick);
+    }, 1400);
+  },
+
+  _showBanner() {
+    if (!this._bannerEl) {
+      const el = document.createElement('div');
+      el.style.cssText = [
+        'position:fixed', 'top:72px', 'left:50%', 'transform:translateX(-50%)',
+        'z-index:9990', 'pointer-events:none',
+        'background:rgba(4,2,10,0.94)', 'border:2px solid #CC0000',
+        'padding:10px 24px',
+        'font-family:"Press Start 2P",monospace', 'font-size:.5em',
+        'color:#CC0000', 'letter-spacing:3px', 'text-align:center',
+        'white-space:nowrap', 'box-shadow:0 0 24px rgba(200,0,0,.55)',
+        'opacity:0'
+      ].join(';');
+      el.textContent = '⚡ BOTH WARRIORS ONLINE — WEAPONS HOT ⚡';
+      document.body.appendChild(el);
+      this._bannerEl = el;
     }
+    const el = this._bannerEl, st = performance.now(), dur = 3800;
+    const tick = (now) => {
+      const t = Math.min((now - st) / dur, 1);
+      el.style.opacity = String(t < 0.1 ? t / 0.1 : t > 0.8 ? 1 - (t - 0.8) / 0.2 : 1);
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }
+};
+
+/* ================================================
+   REALTIME — Live submission updates
+   Instantly updates the arena when opponent submits;
+   shows a flash notification + plays Duke voice
+================================================ */
+const REALTIME = {
+  _ch: null,
+  _flashEl: null,
+
+  init() {
+    if (this._ch || !window.sb) return;
+    this._ch = sb.channel('arena:submissions')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'submissions' }, (payload) => {
+        const sub = payload.new;
+        if (!sub || sub.week_id !== wid()) return;
+        renderArena(); // live update — card appears immediately
+        if (who() && sub.player !== who()) {
+          this._showFlash(sub.player, sub.title || '');
+          if (window.DukeVoice) DukeVoice.play();
+        }
+      })
+      .subscribe();
+  },
+
+  _showFlash(player, title) {
+    if (!this._flashEl) {
+      const el = document.createElement('div');
+      el.style.cssText = [
+        'position:fixed', 'bottom:72px', 'left:50%', 'transform:translateX(-50%)',
+        'z-index:9990', 'pointer-events:none',
+        'background:rgba(4,2,10,0.94)', 'padding:14px 28px',
+        'font-family:"Press Start 2P",monospace', 'font-size:.48em',
+        'letter-spacing:2px', 'text-align:center',
+        'white-space:nowrap', 'max-width:92vw', 'overflow:hidden',
+        'text-overflow:ellipsis', 'opacity:0'
+      ].join(';');
+      document.body.appendChild(el);
+      this._flashEl = el;
+    }
+    const el = this._flashEl;
+    const isJ = player === 'john';
+    const c   = isJ ? '#FFD700' : '#00C8FF';
+    el.style.border = `2px solid ${c}`;
+    el.style.color  = c;
+    el.style.boxShadow = `0 0 22px ${c}55`;
+    el.textContent = `${isJ ? '⚡' : '💙'} ${isJ ? 'JOHN' : 'NICK'} JUST LOCKED IN. YOUR MOVE.`;
+    const st = performance.now(), dur = 5200;
+    const tick = (now) => {
+      const t = Math.min((now - st) / dur, 1);
+      el.style.opacity = String(t < 0.08 ? t / 0.08 : t > 0.82 ? 1 - (t - 0.82) / 0.18 : 1);
+      if (t < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
   }
 };
 </script>
