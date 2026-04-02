@@ -1005,7 +1005,7 @@ footer span{color:#8888aa}
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
         <div class="dev-cs-lbl">🎭 SEASONAL — ?devSeason=KEY</div>
-        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache | bday</div>
+        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache</div>
         <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em">?devBday=john &nbsp;|&nbsp; ?devBday=nick &nbsp;|&nbsp; ?devBday=both → birthday week + splash</div>
       </div>
       <hr class="dev-cs-divider">
@@ -3558,7 +3558,8 @@ function _isStPatricksWeek() {
 /**
  * Returns the seasonal overlay key to show, or null.
  * ?devSeason=KEY forces a season key:
- *   santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache | bday
+ *   santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache
+ *   (use ?devBday=john|nick|both for birthday — fires the splash too)
  * ?devBday=PLAYER forces birthday week for that player (john | nick | both)
  */
 function _getSeasonOverlay(player) {
