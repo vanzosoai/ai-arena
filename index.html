@@ -1313,9 +1313,9 @@ footer span{color:#8888aa}
         <rect x="12" y="217" width="48" height="7"  fill="#6B4B35" stroke="#5A3B2B" stroke-width="1" rx="2"/>
         <rect x="58" y="207" width="44" height="14" fill="#7B5B45" stroke="#5A3B2B" stroke-width="1.5" rx="2"/>
         <rect x="58" y="217" width="48" height="7"  fill="#6B4B35" stroke="#5A3B2B" stroke-width="1" rx="2"/>
-        <!-- Knee pads (right-lean parallelograms) -->
-        <polygon points="24,190 36,190 40,180 28,180" fill="#444" stroke="#333" stroke-width="1"/>
-        <polygon points="64,190 76,190 80,180 68,180" fill="#444" stroke="#333" stroke-width="1"/>
+        <!-- Knee pads (right side of each leg) -->
+        <rect x="38" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
+        <rect x="80" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <!-- WEAPONS — tier managed by showWeapon('john', tier) via JS — drawn after belt so gun sits on top -->
         <!-- ─── TIER 0: KNIFE — small blade extending right from right fist ─── -->
         <g id="jGun0" display="none">
@@ -2001,9 +2001,9 @@ footer span{color:#8888aa}
         <rect x="12" y="217" width="48" height="7"  fill="#6B4B35" stroke="#5A3B2B" stroke-width="1" rx="2"/>
         <rect x="58" y="207" width="44" height="14" fill="#7B5B45" stroke="#5A3B2B" stroke-width="1.5" rx="2"/>
         <rect x="58" y="217" width="48" height="7"  fill="#6B4B35" stroke="#5A3B2B" stroke-width="1" rx="2"/>
-        <!-- Knee pads (right-lean in SVG coords → renders as left-lean due to scaleX(-1)) -->
-        <polygon points="24,190 36,190 40,180 28,180" fill="#444" stroke="#333" stroke-width="1"/>
-        <polygon points="64,190 76,190 80,180 68,180" fill="#444" stroke="#333" stroke-width="1"/>
+        <!-- Knee pads (right side in SVG coords → renders as left side due to scaleX(-1)) -->
+        <rect x="38" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
+        <rect x="80" y="180" width="12" height="10" fill="#444" stroke="#333" stroke-width="1" rx="1"/>
         <!-- WEAPONS — tier managed by showWeapon('nick', tier) via JS — SVG is scaleX(-1) so all coords mirror automatically -->
         <!-- ─── TIER 0: KNIFE ─── -->
         <g id="nGun0" display="none">
