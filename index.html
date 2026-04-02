@@ -1003,7 +1003,7 @@ footer span{color:#8888aa}
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
         <div class="dev-cs-lbl">🎭 SEASONAL — ?devSeason=KEY</div>
-        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | sombrero | dogtags | bandana | jason | mustache | bday</div>
+        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | shorts | sombrero | dogtags | bandana | jason | mustache | bday</div>
         <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em">?devBday=john &nbsp;|&nbsp; ?devBday=nick &nbsp;|&nbsp; ?devBday=both → birthday week + splash</div>
       </div>
       <hr class="dev-cs-divider">
@@ -1807,6 +1807,19 @@ footer span{color:#8888aa}
           <path d="M 70,18 C 68,9 69,4 74,4 C 79,4 80,9 78,18" fill="#FFAABB"/>
         </g>
 
+        <!-- JUNE — Shorts (skin over lower legs, keep boots) -->
+        <g id="jOv_shorts" display="none">
+          <!-- Left lower leg skin (knee to boot top) -->
+          <rect x="20" y="177" width="34" height="30" fill="#FFCC99"/>
+          <!-- Right lower leg skin -->
+          <rect x="62" y="177" width="34" height="30" fill="#FFCC99"/>
+          <!-- Cover center seam between legs -->
+          <rect x="54" y="177" width="10" height="30" fill="#FFCC99"/>
+          <!-- Shorts hem line (jeans blue) -->
+          <line x1="20" y1="182" x2="54" y2="182" stroke="#1A3A99" stroke-width="2"/>
+          <line x1="62" y1="182" x2="96" y2="182" stroke="#1A3A99" stroke-width="2"/>
+        </g>
+
       </svg>
     </div>
     <div class="av-badge" id="johnBadge"></div>
@@ -2413,6 +2426,15 @@ footer span{color:#8888aa}
           <path d="M 34,18 C 32,9 33,4 38,4 C 43,4 44,9 42,18" fill="#FFAABB"/>
           <path d="M 67,19 C 64,9 66,1 74,1 C 82,1 84,9 81,19" fill="#F5F5F5" stroke="#DDD" stroke-width=".8"/>
           <path d="M 70,18 C 68,9 69,4 74,4 C 79,4 80,9 78,18" fill="#FFAABB"/>
+        </g>
+
+        <!-- JUNE — Shorts (Nick SVG auto-mirrors) -->
+        <g id="nOv_shorts" display="none">
+          <rect x="20" y="177" width="34" height="30" fill="#FFCC99"/>
+          <rect x="62" y="177" width="34" height="30" fill="#FFCC99"/>
+          <rect x="54" y="177" width="10" height="30" fill="#FFCC99"/>
+          <line x1="20" y1="182" x2="54" y2="182" stroke="#1A3A99" stroke-width="2"/>
+          <line x1="62" y1="182" x2="96" y2="182" stroke="#1A3A99" stroke-width="2"/>
         </g>
 
       </svg>
@@ -3487,6 +3509,7 @@ function _getSeasonOverlay(player) {
   if (_isStPatricksWeek()) return 'clover';    // Mar 17 calendar week
   if (_isEasterWeek())     return 'bunnyears'; // Easter Sun calendar week (Mar or Apr)
   if (m === 4 && d === 1)  return 'jester';    // April Fool's (if not Easter week)
+  if (m === 6)  return 'shorts';
   if (m === 11) return 'mustache';
   if (m === 10) return 'jason';
   if (m === 7)  return 'bandana';
@@ -3502,7 +3525,7 @@ function _getSeasonOverlay(player) {
 }
 
 /** All overlay IDs for a given player prefix */
-const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','sombrero','clover','bunnyears','dogtags','bandana','jason','mustache','bday'];
+const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','sombrero','clover','bunnyears','shorts','dogtags','bandana','jason','mustache','bday'];
 
 /** Show correct overlay, hide all others. Also manages cake DOM overlay.
  *  @param {string} player
