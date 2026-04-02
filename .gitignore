@@ -9,6 +9,9 @@
 ai-arena-backup-*.html
 *-backup-*.html
 
+# Keep Duke Nukem Slogans — required by the app
+!Duke Nukem Slogans/
+
 # Editor
 .vscode/
 *.swp

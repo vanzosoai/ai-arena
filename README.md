@@ -117,8 +117,8 @@ Plus holiday splash screens on St. Patrick's Day, Easter Sunday, April Fool's, J
 
 - Built entirely as a single `index.html` — no dependencies to install, no server needed
 - The Supabase anon key in the source is intentional — it's a public client key, protected by Row Level Security
-- Audio is generated in-browser via the Web Audio API — no audio files needed for music
-- The Duke Nukem `.wav` clips are loaded from the same folder as `index.html`
+- Background music, weapon sounds, and sound effects are generated entirely in-browser via the Web Audio API
+- The Duke Nukem voice clips (played on submission) are real `.wav` files in the `Duke Nukem Slogans/` folder — these need to stay alongside `index.html`
 
 ---
 
