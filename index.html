@@ -1003,7 +1003,7 @@ footer span{color:#8888aa}
       <hr class="dev-cs-divider">
       <div class="dev-cs-section">
         <div class="dev-cs-lbl">🎭 SEASONAL — ?devSeason=KEY</div>
-        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | sombrero | dogtags | jason | mustache | bday</div>
+        <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em;margin-bottom:3px">santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache | bday</div>
         <div class="dev-cs-row" style="color:#3a4a66;font-size:.28em">?devBday=john &nbsp;|&nbsp; ?devBday=nick &nbsp;|&nbsp; ?devBday=both → birthday week + splash</div>
       </div>
       <hr class="dev-cs-divider">
@@ -3552,7 +3552,7 @@ function _isStPatricksWeek() {
 /**
  * Returns the seasonal overlay key to show, or null.
  * ?devSeason=KEY forces a season key:
- *   santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | sombrero | dogtags | jason | mustache | bday
+ *   santahat | heartglasses | clover | bunnyears | jester | shorts | bandana | bandana_shorts | dogtags | jason | mustache | bday
  * ?devBday=PLAYER forces birthday week for that player (john | nick | both)
  */
 function _getSeasonOverlay(player) {
@@ -3573,19 +3573,18 @@ function _getSeasonOverlay(player) {
 
   if (m === 12) return 'santahat';
   if (m === 2)  return 'heartglasses';
-  if (_isStPatricksWeek()) return 'clover';    // Mar 17 calendar week
-  if (_isEasterWeek())     return 'bunnyears'; // Easter Sun calendar week (Mar or Apr)
-  if (m === 4 && d === 1)  return 'jester';    // April Fool's (if not Easter week)
+  if (m === 4 && d === 1)  return 'jester';    // April Fool's — beats Easter week. April fools rules.
+  if (_isEasterWeek())     return 'bunnyears'; // Easter week (late Mar or Apr) — beats March clover
+  if (m === 3)  return 'clover';               // All of March gets the clover + Irish jig
   if (m === 6)  return 'shorts';
   if (m === 8)  return 'shorts';
   if (m === 11) return 'mustache';
   if (m === 10) return 'jason';
   if (m === 7)  return 'bandana_shorts';
   if (m === 5) {
-    // Dog tags on Memorial Day weekend: Friday, Saturday, Sunday before + Monday (4 days)
-    const mem = _memorialDay(now.getFullYear());
+    // Dog tags on Memorial Day weekend: Fri/Sat/Sun before + Monday (4 days)
+    const mem  = _memorialDay(now.getFullYear());
     const memD = mem.getDate();
-    const d = now.getDate();
     if (d === memD || d === memD - 1 || d === memD - 2 || d === memD - 3) return 'dogtags';
     return null;  // No overlay for rest of May
   }
@@ -3593,7 +3592,7 @@ function _getSeasonOverlay(player) {
 }
 
 /** All overlay IDs for a given player prefix */
-const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','sombrero','clover','bunnyears','shorts','dogtags','bandana','bandana_shorts','jason','mustache','bday'];
+const _OVERLAY_KEYS = ['santahat','heartglasses','heartglasses_panic','jester','clover','bunnyears','shorts','dogtags','bandana','bandana_shorts','jason','mustache','bday'];
 
 /** Show correct overlay, hide all others. Also manages cake DOM overlay.
  *  @param {string} player
@@ -4414,20 +4413,22 @@ const MUSIC_SEQ_XMAS = {
 const MUSIC_SEQ_JIGS = {
   bpm: 176, steps: 64,
   mel: [
-    // A part — classic jig feel
-    587,523,440, 494,440,392, 440,494,523, 587,523,494,
-    587,523,440, 494,440,392, 523,494,440, 392,  0,  0,
-    // B part — move up to A
-    659,587,523, 587,523,494, 523,494,440, 494,440,392,
-    440,494,523, 587,523,494, 523,440,392, 330,  0,  0,
+    // A phrase — up the scale and back
+    587,554,494, 440,494,554, 587,  0, 494,440,392, 440,494,440, 392,330,
+    // A repeat with turnaround
+    294,330,370, 392,440,494, 554,587, 659,  0,587, 554,494,440,   0,  0,
+    // B phrase — higher register sweep
+    659,587,554, 494,440,392, 440,494, 554,587,659,   0,587,554, 494,440,
+    // B close — resolve to D
+    494,440,392, 330,294,330, 370,392, 440,494,587,   0,440,  0, 294,  0,
   ],
   bas: [
-    ..._rep([147,0,0, 110,0,0], 4),
-    ..._rep([147,0,0, 131,0,0], 4),
+    ..._rep([147,0,0,0, 110,0,0,0], 4),
+    ..._rep([147,0,0,0, 131,0,0,0], 4),
   ],
-  kik: [..._rep([1,0,0, 0,0,0], 8), ..._rep([1,0,0, 1,0,0], 8)].slice(0,64),
-  snr: [..._rep([0,0,0, 1,0,0], 8), ..._rep([0,0,1, 0,0,0], 8)].slice(0,64),
-  hat: [..._rep([1,1,1, 1,1,1], 10)].slice(0,64),
+  kik: [..._rep([1,0,0, 1,0,0, 0,0], 8)],
+  snr: [..._rep([0,0,1, 0,0,0, 1,0], 8)],
+  hat: [..._rep([1,1,1, 1,1,1, 1,1], 8)],
 };
 
 // February / Valentine's — romantic swing in C major (BPM 108)
@@ -4515,7 +4516,7 @@ const MU = {
 
   start(){
     this.init();
-    this.SEQ = _getMusicSeq(); // pick seasonal variant (bandana/jason/santahat or default)
+    this.SEQ = _getMusicSeq(); // pick seasonal variant based on current overlay
     this._dur = this._baseDur();
     this._step = 0;
     this._nxt = this.ctx.currentTime + 0.08;
