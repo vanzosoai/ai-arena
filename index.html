@@ -296,6 +296,16 @@ body::after{
 #bdaySplash .bday-cake{font-size:3em;margin-bottom:14px}
 #bdaySplash .bday-msg{font-size:.45em;color:#FFAADD;max-width:340px;line-height:1.8;margin-bottom:22px}
 #bdaySplash .bday-dismiss{font-size:.32em;color:#666688;margin-top:6px}
+/* Holiday splash overlays */
+.holiday-splash{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Press Start 2P',monospace;text-align:center;cursor:pointer;padding:20px}
+.holiday-splash .hs-emoji{font-size:3.5em;margin-bottom:16px}
+.holiday-splash .hs-title{font-size:1.4em;margin-bottom:18px;letter-spacing:2px;line-height:1.4}
+.holiday-splash .hs-msg{font-size:.42em;max-width:380px;line-height:1.9;margin-bottom:22px;letter-spacing:.5px}
+.holiday-splash .hs-dismiss{font-size:.3em;color:#666688;margin-top:6px}
+@keyframes jesterbounce{0%,100%{transform:rotate(-15deg) scale(1)}50%{transform:rotate(15deg) scale(1.2)}}
+@keyframes hs-pulse{0%,100%{opacity:1}50%{opacity:.65}}
+.hs-emoji-bounce{animation:jesterbounce .55s ease-in-out infinite}
+.hs-title-pulse{animation:hs-pulse 1.4s ease-in-out infinite}
 @keyframes cookedshake{
   0%,90%,100%{transform:translateX(0)}
   92%{transform:translateX(-2px)}
@@ -2885,6 +2895,8 @@ async function showArena(){
   await loadAndRender();
   // Birthday day experience — show once per session for the logged-in player
   if (_session) _checkBirthdayExperience();
+  // Holiday splash — show for everyone (players & spectators alike)
+  _checkHolidayExperience();
 }
 
 // ============================================================
@@ -3688,9 +3700,9 @@ function _playHappyBirthday() {
   }
 }
 
-/** Spawn confetti particles over the arena */
-function _spawnConfetti() {
-  const colors = ['#FFD700','#FF44AA','#44CCFF','#FF6600','#AAFFAA','#FF4444','#FFFFAA'];
+/** Spawn confetti particles over the arena. Optional colors array for holiday variants. */
+function _spawnConfetti(colors) {
+  colors = colors || ['#FFD700','#FF44AA','#44CCFF','#FF6600','#AAFFAA','#FF4444','#FFFFAA'];
   for (let i = 0; i < 90; i++) {
     const el = document.createElement('div');
     const sz = 7 + Math.random() * 8;
@@ -3720,6 +3732,66 @@ function _spawnConfetti() {
       if (prog < 1) requestAnimationFrame(animate); else el.remove();
     };
     requestAnimationFrame(animate);
+  }
+}
+
+/** Radial fireworks bursts — for July 4th and New Year's */
+function _spawnFireworks(colors) {
+  colors = colors || ['#FFD700','#FF4444','#FFFFFF','#4488FF','#FF44AA','#44FFCC'];
+  const NUM_BURSTS = 6 + Math.floor(Math.random() * 4);
+  for (let b = 0; b < NUM_BURSTS; b++) {
+    setTimeout(() => {
+      const cx = (0.15 + Math.random() * 0.7) * window.innerWidth;
+      const cy = (0.15 + Math.random() * 0.55) * window.innerHeight;
+      const count = 18 + Math.floor(Math.random() * 14);
+      for (let i = 0; i < count; i++) {
+        const angle = (i / count) * Math.PI * 2;
+        const speed = 90 + Math.random() * 130;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const el = document.createElement('div');
+        const sz = 5 + Math.random() * 5;
+        el.style.cssText = `position:fixed;left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;background:${color};border-radius:50%;pointer-events:none;z-index:9998`;
+        document.body.appendChild(el);
+        const vx = Math.cos(angle) * speed;
+        const vy = Math.sin(angle) * speed;
+        const dur = 900 + Math.random() * 700;
+        const start = performance.now();
+        (function anim(now) {
+          const t = Math.min((now - start) / dur, 1);
+          el.style.left = (cx + vx * t) + 'px';
+          el.style.top  = (cy + vy * t + 80 * t * t) + 'px'; // gravity arc
+          el.style.opacity = String(t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4);
+          if (t < 1) requestAnimationFrame(anim); else el.remove();
+        })(performance.now());
+      }
+    }, b * 380 + Math.random() * 250);
+  }
+}
+
+/** Emoji characters raining down — for Halloween, St. Patricks, etc. */
+function _spawnEmojiRain(emojis) {
+  for (let i = 0; i < 45; i++) {
+    const el = document.createElement('div');
+    el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    const x = Math.random() * window.innerWidth;
+    const sz = (1.4 + Math.random() * 1.4).toFixed(1);
+    el.style.cssText = `position:fixed;left:${x}px;top:-60px;font-size:${sz}em;pointer-events:none;z-index:9998;user-select:none`;
+    document.body.appendChild(el);
+    const fallDur = 2600 + Math.random() * 2200;
+    const delay   = Math.random() * 1600;
+    const drift   = (Math.random() - 0.5) * 140;
+    const spin    = (Math.random() > 0.5 ? 1 : -1) * (180 + Math.random() * 360);
+    const startT  = performance.now() + delay;
+    (function anim(now) {
+      const elapsed = now - startT;
+      if (elapsed < 0) { requestAnimationFrame(anim); return; }
+      const prog = Math.min(elapsed / fallDur, 1);
+      el.style.top       = (-60 + (window.innerHeight + 80) * prog) + 'px';
+      el.style.left      = (x + drift * prog) + 'px';
+      el.style.transform = `rotate(${spin * prog}deg)`;
+      el.style.opacity   = String(prog > 0.8 ? (1 - (prog - 0.8) / 0.2) : 1);
+      if (prog < 1) requestAnimationFrame(anim); else el.remove();
+    })(performance.now());
   }
 }
 
@@ -3770,6 +3842,165 @@ function _checkBirthdayExperience() {
   // Small delay so arena renders first
   setTimeout(() => _showBirthdaySplash(player), 800);
 }
+
+// ─── HOLIDAY SPLASH SCREENS ────────────────────────────────────────────────
+
+function _isEasterSunday() {
+  const now = new Date();
+  const e = _easterDate(now.getFullYear());
+  return now.getMonth() === e.getMonth() && now.getDate() === e.getDate();
+}
+
+const _HOLIDAY_CONFIGS = [
+  {
+    id: 'newyears',
+    check() { const d=new Date(); return d.getMonth()===0 && d.getDate()===1; },
+    emoji: '🎆',
+    emojiClass: '',
+    titleColor: '#FFD700',
+    glow: '#FFD700',
+    title: "HAPPY NEW YEAR",
+    msgs: [
+      "Another year. Another chance to dominate.\nClock's reset. No excuses.\nTime to make it count.",
+      "Three hundred sixty-five fresh days of carnage.\nSet your goals. Lock in.\nLet's get it.",
+      "Last year was just warmup.\nThis is the year we go supernova.\nReady? Good. Let's ride.",
+    ],
+    particles() { _spawnFireworks(['#FFD700','#FFFFFF','#C0C0C0','#FF44AA','#44CCFF','#FFFFAA']); }
+  },
+  {
+    id: 'stpatricks',
+    check() { const d=new Date(); return d.getMonth()===2 && d.getDate()===17; },
+    emoji: '☘️',
+    emojiClass: '',
+    titleColor: '#44DD66',
+    glow: '#22AA44',
+    title: "HAPPY ST. PADDY'S",
+    msgs: [
+      "The luck of the Irish is in the air.\nBut luck's just preparation meeting opportunity.\nSubmit something legendary.",
+      "Green beer, good vibes, great work.\nChannel that Celtic warrior energy.\nMake your ancestors proud.",
+      "May your builds compile on the first try\nand your earnings outshine the gold\nat the end of the rainbow.",
+    ],
+    particles() { _spawnEmojiRain(['☘️','🍀','🌿','🟢','☘️','🍀']); }
+  },
+  {
+    id: 'easter',
+    check() { return _isEasterSunday(); },
+    emoji: '🐣',
+    emojiClass: '',
+    titleColor: '#FFAACC',
+    glow: '#FF88BB',
+    title: "HAPPY EASTER",
+    msgs: [
+      "Rise and grind — just like today demands.\nThe eggs are hidden. Your potential isn't.\nGet after it.",
+      "New beginnings. Fresh starts. Pastel everything.\nPerfect day to hatch something brilliant\nand lock it in.",
+      "The bunny delivered. Now it's your turn.\nWhat are you building this week?\nHop to it.",
+    ],
+    particles() { _spawnConfetti(['#FFAABB','#FFEE88','#AAFFCC','#BBAAFF','#FFCCEE','#88EEFF','#FFD0F0']); }
+  },
+  {
+    id: 'aprilfools',
+    check() { const d=new Date(); return d.getMonth()===3 && d.getDate()===1; },
+    emoji: '🃏',
+    emojiClass: 'hs-emoji-bounce',
+    titleColor: '#FF4444',
+    glow: '#FF0000',
+    title: "APRIL FOOLS!!!",
+    msgs: [
+      "HA. You actually opened this today.\nThe joke's on your enemies — because\nyou're about to build something INSANE.",
+      "Today nothing is real. Except the grind.\nEverything is chaos. Embrace it.\nCreate the most unhinged thing you can.",
+      "The world is a simulation and today\nthe devs forgot to patch the glitch.\nDeploy something nobody saw coming.",
+    ],
+    particles() {
+      _spawnConfetti(['#FF4444','#FFFF00','#44FF44','#FF44FF','#44FFFF','#FF8800','#8844FF','#FFFFFF']);
+      setTimeout(()=>_spawnEmojiRain(['🃏','🎭','🤡','💥','❓','‼️','🌀']), 600);
+    }
+  },
+  {
+    id: 'july4',
+    check() { const d=new Date(); return d.getMonth()===6 && d.getDate()===4; },
+    emoji: '🇺🇸',
+    emojiClass: '',
+    titleColor: '#FF4444',
+    glow: '#FF2222',
+    title: "HAPPY 4TH OF JULY",
+    msgs: [
+      "Freedom isn't free — and neither is greatness.\nGet out there and build something\nworth celebrating.",
+      "The founders pledged their lives for liberty.\nThe least you can do is\nlock in a submission this week.",
+      "Red, white, blue, and LOCKED IN.\nThe fireworks are loud tonight.\nMake your work louder.",
+    ],
+    particles() { _spawnFireworks(['#FF2222','#FFFFFF','#2244FF','#FF8888','#AAAAFF','#FFD700','#FF4444']); }
+  },
+  {
+    id: 'halloween',
+    check() { const d=new Date(); return d.getMonth()===9 && d.getDate()===31; },
+    emoji: '🎃',
+    emojiClass: '',
+    titleColor: '#FF8800',
+    glow: '#FF6600',
+    title: "HAPPY HALLOWEEN",
+    msgs: [
+      "It's the scariest day of the year.\nYou know what's actually terrifying?\nNot shipping anything this week.",
+      "Monsters, ghosts, and missed deadlines.\nOnly one of those is real.\nDon't let it haunt you.",
+      "The veil between worlds is thin tonight.\nChannel some dark energy into your work.\nBuild something spooky good.",
+    ],
+    particles() { _spawnEmojiRain(['🎃','🦇','🕷️','👻','🕸️','🍂','💀','🦇']); }
+  },
+  {
+    id: 'christmas',
+    check() { const d=new Date(); return d.getMonth()===11 && d.getDate()===25; },
+    emoji: '🎄',
+    emojiClass: '',
+    titleColor: '#44FF88',
+    glow: '#22CC55',
+    title: "MERRY CHRISTMAS",
+    msgs: [
+      "Santa checked the list twice.\nYour submission is on it.\nDon't let the big guy down.",
+      "All the best gifts are homemade.\nWhat are you building this week?\nWrap it up and ship it.",
+      "Peace on earth. Goodwill to builders.\nTake a breath, eat something good,\nand then get back to work.",
+    ],
+    particles() { _spawnConfetti(['#FFFFFF','#EEEEFF','#CCFFCC','#FFCCCC','#FFFFFF','#DDFFDD','#FFDDDD']); }
+  },
+];
+
+/** Render and show a single holiday splash */
+function _showHolidaySplash(cfg) {
+  const msgs = cfg.msgs;
+  const msg  = msgs[Math.floor(Math.random() * msgs.length)];
+  const el   = document.createElement('div');
+  el.className = 'holiday-splash';
+  el.innerHTML = `
+    <div class="hs-emoji ${cfg.emojiClass}">${cfg.emoji}</div>
+    <div class="hs-title hs-title-pulse" style="color:${cfg.titleColor};text-shadow:0 0 18px ${cfg.glow}">${cfg.title}</div>
+    <div class="hs-msg" style="color:#ccccee">${msg.replace(/\n/g,'<br>')}</div>
+    <div class="hs-dismiss">[ TAP TO CONTINUE ]</div>
+  `;
+  el.addEventListener('click', () => {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity .4s';
+    setTimeout(() => el.remove(), 420);
+  });
+  document.body.appendChild(el);
+  // Trigger particles after a short delay
+  setTimeout(() => cfg.particles(), 300);
+}
+
+/** Check for a holiday today — show splash once per session */
+function _checkHolidayExperience() {
+  const devHoliday = new URLSearchParams(location.search).get('devHoliday');
+  let cfg = null;
+  if (devHoliday) {
+    cfg = _HOLIDAY_CONFIGS.find(c => c.id === devHoliday) || null;
+  } else {
+    cfg = _HOLIDAY_CONFIGS.find(c => c.check()) || null;
+  }
+  if (!cfg) return;
+  const key = `holidaySeen_${cfg.id}_${new Date().toDateString()}`;
+  if (sessionStorage.getItem(key)) return;
+  sessionStorage.setItem(key, '1');
+  setTimeout(() => _showHolidaySplash(cfg), 1100);
+}
+
+// ─── END HOLIDAY SPLASHES ───────────────────────────────────────────────────
 
 function _applyAvatarState(player, lockedIn, isChamp, isCooked, isStressed=false, streakCount=0) {
   const av    = document.getElementById(player === 'john' ? 'johnSvg' : 'nickSvg')?.parentElement;
