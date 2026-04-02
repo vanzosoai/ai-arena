@@ -1112,7 +1112,7 @@ footer span{color:#8888aa}
         <span style="color:#cccccc">🎅 DECEMBER</span> — Santa hats. Jingle Bells loops in the background.<br>
         <span style="color:#ff6688">💕 FEBRUARY</span> — Heart-shaped glasses. Romantic jazz swing plays.<br>
         <span style="color:#33bb55">🍀 ST. PATRICK'S WEEK</span> — 4-leaf clover necklaces for the calendar week containing March 17. Irish jig music kicks in.<br>
-        <span style="color:#ffccaa">🐣 EASTER WEEK</span> — Bunny ears for the calendar week containing Easter Sunday.<br>
+        <span style="color:#ffccaa">🐣 EASTER WEEK</span> — Bunny ears for the calendar week containing Easter Sunday. Hippity-hoppity spring music plays.<br>
         <span style="color:#ffaa44">🃏 APRIL FOOL'S DAY</span> — Jester hats on April 1st (unless it's Easter week — bunnies win).<br>
         <span style="color:#88ccff">🩳 JUNE &amp; AUGUST</span> — Shorts. First and last months of summer.<br>
         <span style="color:#cc2222">🇺🇸 JULY</span> — Flag bandana on their heads plus shorts. USA patriotic music plays. Same track fires during Memorial Day weekend in May with the dog tag chains.<br>
@@ -4456,6 +4456,28 @@ const MUSIC_SEQ_SWING = {
   hat: [..._rep([1,0,1,0, 1,1,1,0], 8)],
 };
 
+// Easter week — hippity-hoppity spring bounce, C major (BPM 148)
+const MUSIC_SEQ_EASTER = {
+  bpm: 148, steps: 64,
+  mel: [
+    // Bouncy opening hop
+    523,  0,523,  0, 523,494,440,  0, 392,  0,440,  0, 494,523,  0,  0,
+    // Skippy run up
+    392,  0,440,494, 523,  0,587,  0, 523,  0,494,  0, 440,  0,  0,  0,
+    // High playful figure
+    659,587,523,494, 523,  0,587,659, 523,  0,  0,  0, 494,440,392,  0,
+    // Closing hippity-hop home
+    440,494,523,  0, 587,523,494,  0, 440,392,330,294, 330,392,523,  0,
+  ],
+  bas: [
+    ..._rep([130,0,0,0,  98,0,0,0], 4),
+    ..._rep([130,0,0,0, 110,0,0,0], 4),
+  ],
+  kik: [..._rep([1,0,0,0, 1,0,1,0], 8)],
+  snr: [..._rep([0,0,1,0, 0,0,1,1], 8)],
+  hat: [..._rep([1,0,1,0, 1,0,1,0], 8)],
+};
+
 // November / mustache — Top Gun Danger Zone feel, F# minor (BPM 152)
 const MUSIC_SEQ_TOPGUN = {
   bpm: 152, steps: 64,
@@ -4487,7 +4509,8 @@ function _getMusicSeq() {
   if (overlay === 'bandana_shorts') return MUSIC_SEQ_USA;  // July
   if (overlay === 'bandana')        return MUSIC_SEQ_USA;  // fallback
   if (overlay === 'dogtags')        return MUSIC_SEQ_USA;  // Memorial Day
-  if (overlay === 'clover')         return MUSIC_SEQ_JIGS; // March
+  if (overlay === 'clover')         return MUSIC_SEQ_JIGS;   // March
+  if (overlay === 'bunnyears')      return MUSIC_SEQ_EASTER; // Easter week
   if (overlay === 'heartglasses' || overlay === 'heartglasses_panic') return MUSIC_SEQ_SWING; // Feb
   if (overlay === 'mustache')       return MUSIC_SEQ_TOPGUN; // November
   if (overlay === 'jason')          return MUSIC_SEQ_SPOOKY;
