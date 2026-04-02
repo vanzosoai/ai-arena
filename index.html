@@ -966,6 +966,16 @@ footer span{color:#8888aa}
         <div class="dev-cs-row" style="color:#3a4a66;word-break:break-all">?devStreak=7&amp;devDay=6&amp;devChamp=john</div>
         <div class="dev-cs-row" style="color:#3a4a66;word-break:break-all">?devStreak=9&amp;devCooked=1</div>
       </div>
+      <hr class="dev-cs-divider">
+      <div class="dev-cs-section">
+        <div class="dev-cs-lbl">🔫 BULLET ANIMATIONS</div>
+        <div class="dev-cs-row" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:4px">
+          <button onclick="BULLETS.pistol('john')" style="background:#1a1000;border:1px solid #AA8800;color:#FFD700;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ JOHN</button>
+          <button onclick="BULLETS.pistol('nick')" style="background:#001020;border:1px solid #0088BB;color:#00C8FF;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ NICK</button>
+          <button onclick="BULLETS.pistol('john');BULLETS.pistol('nick')" style="background:#0d0d14;border:1px solid #334;color:#aaa;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">▶ BOTH</button>
+          <button onclick="BULLETS.stopAll()" style="background:#0d0008;border:1px solid #550022;color:#CC3366;font-family:'Press Start 2P',monospace;font-size:.28em;padding:5px 8px;cursor:pointer;letter-spacing:1px">■ STOP</button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -3537,6 +3547,145 @@ const DUKE = {
         MU.master.gain.linearRampToValueAtTime(0.45, MU.ctx.currentTime + 0.4);
       }
     };
+  }
+};
+
+/* ================================================
+   BULLETS — Weapon animation overlay system
+   Pistol (tier 1) implemented first for testing.
+   SVG muzzle coords: cx=148, cy=133 (viewBox 0 0 140 230)
+   John: normal SVG | Nick: scaleX(-1) mirrored SVG
+================================================ */
+const BULLETS = {
+  overlay: null,
+  _timers: { john: [], nick: [] },
+
+  init() {
+    if (this.overlay) return;
+    const el = document.createElement('div');
+    el.id = 'bulletOverlay';
+    el.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden';
+    document.body.appendChild(el);
+    this.overlay = el;
+  },
+
+  // Convert SVG coords to screen coords, accounting for Nick's scaleX(-1) mirror
+  getMuzzle(player, svgX, svgY) {
+    const svgEl = document.getElementById(player === 'john' ? 'johnSvg' : 'nickSvg');
+    if (!svgEl) return { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    const rect = svgEl.getBoundingClientRect();
+    const vbW = 140, vbH = 230;
+    const y = rect.top + (svgY / vbH) * rect.height;
+    let x;
+    if (player === 'john') {
+      // Normal SVG — x maps directly
+      x = rect.left + (svgX / vbW) * rect.width;
+    } else {
+      // Nick's SVG has style="transform:scaleX(-1)" — x axis is flipped
+      // SVG x=148 (8px past right edge) appears at 8/140 to the LEFT of rect.left
+      x = rect.left + (1 - svgX / vbW) * rect.width;
+    }
+    return { x, y };
+  },
+
+  spawnBullet(player, targetX, targetY) {
+    if (!this.overlay) return;
+    const muzzle = this.getMuzzle(player, 148, 133);
+    const color   = player === 'john' ? '#FFD700' : '#00C8FF';
+    const dirRight = player === 'john'; // John fires rightward toward center
+
+    const bullet = document.createElement('div');
+    bullet.style.cssText = [
+      'position:fixed',
+      'width:14px',
+      'height:4px',
+      `background:linear-gradient(${dirRight ? '90deg' : '270deg'},transparent 0%,${color} 55%,#fff 100%)`,
+      'border-radius:3px',
+      `box-shadow:0 0 7px ${color},0 0 14px ${color}66`,
+      'pointer-events:none',
+      'will-change:transform',
+      `left:${muzzle.x}px`,
+      `top:${muzzle.y}px`,
+      'transform:translate(-50%,-50%)'
+    ].join(';');
+    this.overlay.appendChild(bullet);
+
+    const duration = 260 + Math.random() * 60; // 260-320ms travel time
+    const startTime = performance.now();
+    const startX = muzzle.x;
+    const startY = muzzle.y;
+    const endX   = targetX;
+    const endY   = targetY + (Math.random() - 0.5) * 12; // slight vertical spread
+
+    const tick = (now) => {
+      const t = Math.min((now - startTime) / duration, 1);
+      // Ease-in — bullets accelerate out of barrel
+      const ease = t * t;
+      const cx = startX + (endX - startX) * ease;
+      const cy = startY + (endY - startY) * t;
+      bullet.style.left = cx + 'px';
+      bullet.style.top  = cy + 'px';
+      // Fade out as bullet reaches target
+      bullet.style.opacity = t > 0.8 ? String(1 - (t - 0.8) / 0.2) : '1';
+      if (t < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        bullet.remove();
+      }
+    };
+    requestAnimationFrame(tick);
+  },
+
+  _addTimer(player, id) {
+    this._timers[player].push(id);
+  },
+
+  stop(player) {
+    (this._timers[player] || []).forEach(id => clearTimeout(id));
+    this._timers[player] = [];
+  },
+
+  stopAll() {
+    this.stop('john');
+    this.stop('nick');
+  },
+
+  // Single pistol — fires in 1-4 round bursts, loops indefinitely
+  pistol(player) {
+    this.init();
+    this.stop(player);
+    const getTarget = () => ({
+      x: window.innerWidth / 2,
+      y: this.getMuzzle(player, 148, 133).y
+    });
+
+    const burst = () => {
+      const rounds = 1 + Math.floor(Math.random() * 4); // 1-4 rounds per burst
+      let delay = 0;
+      for (let i = 0; i < rounds; i++) {
+        const t = setTimeout(() => {
+          const tgt = getTarget();
+          this.spawnBullet(player, tgt.x, tgt.y);
+        }, delay);
+        this._addTimer(player, t);
+        delay += 85 + Math.random() * 115; // 85-200ms between shots
+      }
+      // Next burst after 1.2-3s cooldown
+      const nextIn = delay + 1200 + Math.random() * 1800;
+      const t = setTimeout(() => burst(), nextIn);
+      this._addTimer(player, t);
+    };
+
+    burst();
+  },
+
+  // Entry point — dispatches to weapon-specific function by tier index
+  // 0=knife 1=pistol 2=dbl pistols 3=shotgun 4=SMG 5=chaingun 6=rail gun 7=devastator
+  start(player, tier) {
+    switch (tier) {
+      case 1: this.pistol(player); break;
+      default: this.pistol(player); break; // fallback during development
+    }
   }
 };
 </script>
