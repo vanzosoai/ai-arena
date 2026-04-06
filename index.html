@@ -3021,11 +3021,23 @@ function renderArena(){
 }
 
 function streak(p){
-  const ids = [...new Set(_subs.map(s => s.week_id))].sort().reverse();
-  const cur = wid(); let s = 0;
-  for (let i = 0; i < ids.length; i++){
-    if (_subs.find(sub => sub.week_id === ids[i] && sub.username === p)) s++;
-    else { if (i === 0 && ids[i] === cur) continue; break; }
+  if (!_subs.length) return 0;
+  const cur = wid();
+  let s = 0, first = true;
+  // Walk backward through consecutive calendar weeks so a fully-missed
+  // week (zero submissions from either player) correctly breaks the streak
+  let d = new Date(weekStart(cur).getTime());
+  for (let i = 0; i < 104; i++){       // safety cap: 2 years
+    const id = wid(d);
+    if (_subs.find(sub => sub.week_id === id && sub.username === p)){
+      s++;
+    } else if (first){
+      // current week not yet submitted — grace, keep going back
+    } else {
+      break;
+    }
+    first = false;
+    d = new Date(d.getTime() - 7 * 86400000);
   }
   return s;
 }
@@ -3477,11 +3489,10 @@ function updateAvatarStates() {
   const jLocked = !!w.john;
   const nLocked = !!w.nick;
 
-  // Last week winner — filter to weeks strictly before cur so this works
-  // even when the current week has zero submissions yet
-  const allIds = Object.keys(weeks).sort();
-  const prevIds = allIds.filter(id => id < cur);
-  const lastId = prevIds.length > 0 ? prevIds[prevIds.length - 1] : null;
+  // Last week winner — derive from the calendar so a fully-missed week
+  // (zero submissions from either player) still resets crown and cooked states
+  const lastWeekDate = new Date(weekStart(cur).getTime() - 7 * 86400000);
+  const lastId = wid(lastWeekDate);
   const lastW  = lastId ? (weeks[lastId] || {}) : {};
   let lastChamp = null;
   if (lastW.john && lastW.nick) {
