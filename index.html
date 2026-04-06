@@ -3477,10 +3477,11 @@ function updateAvatarStates() {
   const jLocked = !!w.john;
   const nLocked = !!w.nick;
 
-  // Last week winner
+  // Last week winner — filter to weeks strictly before cur so this works
+  // even when the current week has zero submissions yet
   const allIds = Object.keys(weeks).sort();
-  const curIdx = allIds.indexOf(cur);
-  const lastId = curIdx > 0 ? allIds[curIdx - 1] : null;
+  const prevIds = allIds.filter(id => id < cur);
+  const lastId = prevIds.length > 0 ? prevIds[prevIds.length - 1] : null;
   const lastW  = lastId ? (weeks[lastId] || {}) : {};
   let lastChamp = null;
   if (lastW.john && lastW.nick) {
