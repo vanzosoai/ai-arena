@@ -758,6 +758,8 @@ footer span{color:#8888aa}
   /* Hall of Carnage — search bar full width, buttons share row below */
   .hist-search-wrap{flex:0 0 100%;width:100%;min-width:0}
   .hist-ctrl-btn{flex:1}
+  /* Hall of Carnage week headers — hide end date on mobile to prevent wrapping */
+  .hw-end-date{display:none}
   /* Dashboard body text — nudge up 1-2px equivalent */
   .sc-title{font-size:.52em}
   .sc-desc{font-size:.36em}
@@ -3162,9 +3164,12 @@ function renderHistory(){
 
     const cwN = compWeek(id);
     const dateStr = wlabel(id).replace(/, \d{4}$/, '').toUpperCase();
+    const _dashIdx = dateStr.indexOf(' \u2013 ');
+    const _dateStart = _dashIdx >= 0 ? dateStr.slice(0, _dashIdx) : dateStr;
+    const _dateEnd   = _dashIdx >= 0 ? dateStr.slice(_dashIdx) : '';
     return `<div class="hw">
       <div class="hw-hdr" onclick="this.nextElementSibling.classList.toggle('open')">
-        <span>WEEK ${cwN} • ${dateStr}</span><span>${badge} ▼</span>
+        <span>WEEK ${cwN} &bull; ${_dateStart}<span class="hw-end-date">${_dateEnd}</span></span><span>${badge} ▼</span>
       </div>
       <div class="hw-body ${i===0?'open':''}">
         <div class="hw-grid">${mkHCard(w.john,'john')}${mkHCard(w.nick,'nick')}</div>
