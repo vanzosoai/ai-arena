@@ -3759,6 +3759,42 @@ function _playHappyBirthday() {
   }
 }
 
+/** Shared helper — plays a short jingle using Web Audio and restores arena music afterwards.
+ *  Same pattern as _playHappyBirthday: stops music, plays notes, fades back in. */
+function _playHolidayJingle(notes, durations, oscType, vol, totalMs) {
+  if (!MU.ctx) { try { MU.ctx = new (window.AudioContext||window.webkitAudioContext)(); } catch(e){ return; } }
+  const ctx = MU.ctx;
+  const wasPlaying = MU._t !== null;
+  MU.stop();
+  if (MU.master) MU.master.gain.setValueAtTime(0, ctx.currentTime);
+  let t = ctx.currentTime + 0.05;
+  notes.forEach((freq, i) => {
+    const dur = durations[i] || 0.2;
+    if (freq > 0) {
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = oscType || 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(vol || 0.25, t + 0.02);
+      gain.gain.setValueAtTime(vol || 0.25, t + dur - 0.04);
+      gain.gain.linearRampToValueAtTime(0, t + dur);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t); osc.stop(t + dur);
+    }
+    t += dur + 0.04;
+  });
+  if (wasPlaying) {
+    setTimeout(() => {
+      MU.start();
+      if (MU.master && !MU.muted) {
+        MU.master.gain.setValueAtTime(0, MU.ctx.currentTime);
+        MU.master.gain.linearRampToValueAtTime(0.45, MU.ctx.currentTime + 2.0);
+      }
+    }, totalMs);
+  }
+}
+
 /** Spawn confetti particles over the arena. Optional colors array for holiday variants. */
 function _spawnConfetti(colors) {
   colors = colors || ['#FFD700','#FF44AA','#44CCFF','#FF6600','#AAFFAA','#FF4444','#FFFFAA'];
@@ -3924,7 +3960,9 @@ const _HOLIDAY_CONFIGS = [
       "Three hundred sixty-five fresh days of carnage.\nSet your goals. Lock in.\nLet's get it.",
       "Last year was just warmup.\nThis is the year we go supernova.\nReady? Good. Let's ride.",
     ],
-    particles() { _spawnFireworks(['#FFD700','#FFFFFF','#C0C0C0','#FF44AA','#44CCFF','#FFFFAA']); }
+    particles() { _spawnFireworks(['#FFD700','#FFFFFF','#C0C0C0','#FF44AA','#44CCFF','#FFFFAA']); },
+    // Triumphant ascending fanfare: G4 C5 E5 G5 C6
+    sound() { _playHolidayJingle([392.0,523.2,659.3,784.0,1046.5],[0.15,0.15,0.15,0.15,0.6],'square',0.25,2000); }
   },
   {
     id: 'stpatricks',
@@ -3939,7 +3977,9 @@ const _HOLIDAY_CONFIGS = [
       "Green beer, good vibes, great work.\nChannel that Celtic warrior energy.\nMake your ancestors proud.",
       "May your builds compile on the first try\nand your earnings outshine the gold\nat the end of the rainbow.",
     ],
-    particles() { _spawnEmojiRain(['☘️','🍀','🌿','🟢','☘️','🍀']); }
+    particles() { _spawnEmojiRain(['☘️','🍀','🌿','🟢','☘️','🍀']); },
+    // Quick Irish jig run: E4 G4 A4 B4 D5 E5 D5 B4
+    sound() { _playHolidayJingle([329.6,392.0,440.0,493.9,587.3,659.3,587.3,493.9],[0.12,0.12,0.12,0.12,0.12,0.25,0.12,0.12],'sine',0.25,2000); }
   },
   {
     id: 'easter',
@@ -3954,7 +3994,9 @@ const _HOLIDAY_CONFIGS = [
       "New beginnings. Fresh starts. Pastel everything.\nPerfect day to hatch something brilliant\nand lock it in.",
       "The bunny delivered. Now it's your turn.\nWhat are you building this week?\nHop to it.",
     ],
-    particles() { _spawnConfetti(['#FFAABB','#FFEE88','#AAFFCC','#BBAAFF','#FFCCEE','#88EEFF','#FFD0F0']); }
+    particles() { _spawnConfetti(['#FFAABB','#FFEE88','#AAFFCC','#BBAAFF','#FFCCEE','#88EEFF','#FFD0F0']); },
+    // Bright ascending chimes: C5 E5 G5 C6 E6
+    sound() { _playHolidayJingle([523.2,659.3,784.0,1046.5,1318.5],[0.2,0.2,0.2,0.2,0.5],'sine',0.22,2500); }
   },
   {
     id: 'aprilfools',
@@ -3972,7 +4014,9 @@ const _HOLIDAY_CONFIGS = [
     particles() {
       _spawnConfetti(['#FF4444','#FFFF00','#44FF44','#FF44FF','#44FFFF','#FF8800','#8844FF','#FFFFFF']);
       setTimeout(()=>_spawnEmojiRain(['🃏','🎭','🤡','💥','❓','‼️','🌀']), 600);
-    }
+    },
+    // Sad trombone "wah wah wah": C5 B4 Bb4 A4 Ab4
+    sound() { _playHolidayJingle([523.2,493.9,466.2,440.0,415.3],[0.3,0.3,0.3,0.3,0.6],'sawtooth',0.22,3000); }
   },
   {
     id: 'july4',
@@ -3987,7 +4031,9 @@ const _HOLIDAY_CONFIGS = [
       "The founders pledged their lives for liberty.\nThe least you can do is\nlock in a submission this week.",
       "Red, white, blue, and LOCKED IN.\nThe fireworks are loud tonight.\nMake your work louder.",
     ],
-    particles() { _spawnFireworks(['#FF2222','#FFFFFF','#2244FF','#FF8888','#AAAAFF','#FFD700','#FF4444']); }
+    particles() { _spawnFireworks(['#FF2222','#FFFFFF','#2244FF','#FF8888','#AAAAFF','#FFD700','#FF4444']); },
+    // Star-Spangled Banner opening: "Oh say can you see" — G3 E4 C4 E4 G4 C5
+    sound() { _playHolidayJingle([196.0,329.6,261.6,329.6,392.0,523.2],[0.4,0.2,0.2,0.3,0.3,0.6],'square',0.25,3000); }
   },
   {
     id: 'halloween',
@@ -4002,7 +4048,9 @@ const _HOLIDAY_CONFIGS = [
       "Monsters, ghosts, and missed deadlines.\nOnly one of those is real.\nDon't let it haunt you.",
       "The veil between worlds is thin tonight.\nChannel some dark energy into your work.\nBuild something spooky good.",
     ],
-    particles() { _spawnEmojiRain(['🎃','🦇','🕷️','👻','🕸️','🍂','💀','🦇']); }
+    particles() { _spawnEmojiRain(['🎃','🦇','🕷️','👻','🕸️','🍂','💀','🦇']); },
+    // Creepy chromatic descent: A4 G4 F4 E4 Eb4 D4 C#4 C4
+    sound() { _playHolidayJingle([440.0,392.0,349.2,329.6,311.1,293.7,277.2,261.6],[0.2,0.2,0.2,0.2,0.2,0.2,0.2,0.5],'sine',0.22,3000); }
   },
   {
     id: 'christmas',
@@ -4017,7 +4065,9 @@ const _HOLIDAY_CONFIGS = [
       "All the best gifts are homemade.\nWhat are you building this week?\nWrap it up and ship it.",
       "Peace on earth. Goodwill to builders.\nTake a breath, eat something good,\nand then get back to work.",
     ],
-    particles() { _spawnConfetti(['#FFFFFF','#EEEEFF','#CCFFCC','#FFCCCC','#FFFFFF','#DDFFDD','#FFDDDD']); }
+    particles() { _spawnConfetti(['#FFFFFF','#EEEEFF','#CCFFCC','#FFCCCC','#FFFFFF','#DDFFDD','#FFDDDD']); },
+    // Jingle Bells opening: E E E(long) E E E(long) E G C D E(long)
+    sound() { _playHolidayJingle([329.6,329.6,329.6,329.6,329.6,329.6,329.6,392.0,261.6,293.7,329.6],[0.18,0.18,0.38,0.18,0.18,0.38,0.18,0.18,0.18,0.18,0.6],'triangle',0.25,4000); }
   },
 ];
 
@@ -4039,7 +4089,8 @@ function _showHolidaySplash(cfg) {
     setTimeout(() => el.remove(), 420);
   });
   document.body.appendChild(el);
-  // Trigger particles after a short delay
+  // Play holiday jingle and trigger particles
+  if (cfg.sound) cfg.sound();
   setTimeout(() => cfg.particles(), 300);
 }
 
