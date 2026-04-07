@@ -5729,13 +5729,16 @@ const BULLETS = {
 
 /* ================================================
    PRESENCE — Supabase Realtime presence detection
-   Fires weapon animations when BOTH players are on
-   an active (visible) tab simultaneously
+   Fires weapon animations when BOTH players have the tab open.
+   Uses a 30-min activity window so battles fire even if a player
+   has clicked away — tab close / navigate away ends presence naturally.
 ================================================ */
 const PRESENCE = {
   _ch: null,
   _bothActive: false,
   _bannerEl: null,
+  _heartbeat: null,
+  _GRACE_MS: 30 * 60 * 1000,  // 30-minute activity window
 
   init() {
     if (this._ch || !window.sb || !who()) return;
@@ -5743,8 +5746,16 @@ const PRESENCE = {
     const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
 
     ch.on('presence', { event: 'sync' }, () => {
-      const keys = Object.keys(ch.presenceState());
-      const both = keys.includes('john') && keys.includes('nick');
+      const state = ch.presenceState();
+      const now   = Date.now();
+      // Player counts as "present" if their last tracked timestamp is within the grace window
+      const live  = (key) => {
+        const entries = state[key];
+        if (!entries || !entries.length) return false;
+        const ts = entries[0].ts;
+        return typeof ts === 'number' && (now - ts) < this._GRACE_MS;
+      };
+      const both = live('john') && live('nick');
       if (both && !this._bothActive) {
         this._bothActive = true;
         this._onBoth();
@@ -5760,15 +5771,21 @@ const PRESENCE = {
 
     this._ch = ch;
 
-    // Untrack when tab goes to background, re-track when it comes back
+    // Refresh timestamp when tab comes back into focus
     document.addEventListener('visibilitychange', () => {
       if (!this._ch) return;
       if (document.visibilityState === 'visible') {
         this._ch.track({ player: me, ts: Date.now() });
-      } else {
-        this._ch.untrack();
       }
+      // No untrack on hide — tab stays in presence while open.
+      // Supabase drops the player naturally when the WebSocket closes (tab closed / navigated away).
     });
+
+    // Heartbeat: refresh timestamp every 10 min so the 30-min window stays valid
+    // while the tab is open in the background
+    this._heartbeat = setInterval(() => {
+      if (this._ch) this._ch.track({ player: me, ts: Date.now() });
+    }, 10 * 60 * 1000);
   },
 
   _onBoth() {
