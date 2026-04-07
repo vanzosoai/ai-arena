@@ -723,6 +723,11 @@ footer span{color:#8888aa}
     grid-template-columns:1fr;
     grid-template-areas:"john" "center" "nick";
   }
+  body[data-viewer="nick"] .arena{
+    grid-template-areas:"nick" "center" "john";
+  }
+  body[data-viewer="nick"] .wgrid .sc.jc{order:2}
+  body[data-viewer="nick"] .wgrid .sc.nc{order:1}
   .ccol{
     padding:14px 16px;flex-direction:row;
     flex-wrap:wrap;justify-content:center;gap:8px;align-items:center;
@@ -2911,6 +2916,7 @@ async function showArena(){
   document.getElementById('login').style.display = 'none';
   document.getElementById('mainHdr').style.display = '';
   document.getElementById('mainArena').style.display = '';
+  document.body.dataset.viewer = who() || 'spectator';
   document.getElementById('mobileCombined').style.display = '';
   document.getElementById('thisWeekSec').style.display = '';
   document.getElementById('histSec').style.display = '';
