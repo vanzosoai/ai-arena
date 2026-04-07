@@ -5751,8 +5751,8 @@ const PRESENCE = {
   _BEAT_MS:      90 * 1000,        // heartbeat every 90s (well within stale window)
 
   init() {
-    if (this._ch || !sb || !who()) return;
-    const me = who();
+    if (this._ch || !sb) return;
+    const me = who(); // null for spectators — they listen but don't track
     const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
 
     ch.on('presence', { event: 'sync' }, () => {
@@ -5768,7 +5768,7 @@ const PRESENCE = {
     });
 
     ch.subscribe(async (status) => {
-      if (status === 'SUBSCRIBED') await ch.track({ player: me, ts: Date.now() });
+      if (status === 'SUBSCRIBED' && me) await ch.track({ player: me, ts: Date.now() });
     });
 
     this._ch = ch;
@@ -5786,11 +5786,11 @@ const PRESENCE = {
       }
     });
 
-    // Heartbeat: keep ts fresh every 90s regardless of visibility.
+    // Heartbeat: keep ts fresh every 90s (players only — spectators don't track)
     // On desktop this runs even in background tabs → audio keeps playing in other apps.
     // On mobile JS is frozen when backgrounded so this never fires → ts goes stale naturally.
     this._heartbeat = setInterval(() => {
-      if (this._ch) this._ch.track({ player: me, ts: Date.now() });
+      if (this._ch && me) this._ch.track({ player: me, ts: Date.now() });
     }, this._BEAT_MS);
 
     // Combined check every 30s:
@@ -5801,8 +5801,8 @@ const PRESENCE = {
       const state = this._ch.presenceState();
       const now = Date.now();
 
-      // Untrack ourselves if hidden too long on desktop (mobile never reaches this — JS is frozen)
-      if (this._hiddenAt && (now - this._hiddenAt) > this._DESKTOP_AWAY) {
+      // Untrack ourselves if hidden too long on desktop (players only; mobile JS is frozen anyway)
+      if (me && this._hiddenAt && (now - this._hiddenAt) > this._DESKTOP_AWAY) {
         this._hiddenAt = null;
         this._ch.untrack();
         if (this._bothActive) { this._bothActive = false; BULLETS.stopAll(); }
