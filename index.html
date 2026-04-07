@@ -5741,7 +5741,7 @@ const PRESENCE = {
   _GRACE_MS: 30 * 60 * 1000,  // 30-minute activity window
 
   init() {
-    if (this._ch || !window.sb || !who()) return;
+    if (this._ch || !sb || !who()) return;
     const me = who();
     console.log('[PRESENCE] init as:', me);
     const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
@@ -5836,7 +5836,7 @@ const REALTIME = {
   _flashEl: null,
 
   init() {
-    if (this._ch || !window.sb) return;
+    if (this._ch || !sb) return;
     this._ch = sb.channel('arena:submissions')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'submissions' }, (payload) => {
         const sub = payload.new;
