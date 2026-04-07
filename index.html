@@ -5743,12 +5743,10 @@ const PRESENCE = {
   init() {
     if (this._ch || !sb || !who()) return;
     const me = who();
-    console.log('[PRESENCE] init as:', me);
     const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
 
     ch.on('presence', { event: 'sync' }, () => {
       const keys = Object.keys(ch.presenceState());
-      console.log('[PRESENCE] sync — keys:', keys);
       const both = keys.includes('john') && keys.includes('nick');
       if (both && !this._bothActive) {
         this._bothActive = true;
@@ -5760,7 +5758,6 @@ const PRESENCE = {
     });
 
     ch.subscribe(async (status) => {
-      console.log('[PRESENCE] subscribe status:', status);
       if (status === 'SUBSCRIBED') await ch.track({ player: me, ts: Date.now() });
     });
 
