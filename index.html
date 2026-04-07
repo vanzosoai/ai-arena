@@ -5753,7 +5753,9 @@ const PRESENCE = {
   init() {
     if (this._ch || !sb) return;
     const me = who(); // null for spectators — they listen but don't track
-    const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
+    // Presence key must be a non-null string; spectators use a placeholder they never track with
+    const presenceKey = me || 'spectator';
+    const ch = sb.channel('arena:presence', { config: { presence: { key: presenceKey } } });
 
     ch.on('presence', { event: 'sync' }, () => {
       const keys = Object.keys(ch.presenceState());
@@ -5780,9 +5782,9 @@ const PRESENCE = {
         // Record when we hid — stale timer will untrack after _DESKTOP_AWAY ms
         this._hiddenAt = Date.now();
       } else {
-        // Came back — clear hidden clock, refresh presence immediately
+        // Came back — clear hidden clock, refresh presence immediately (players only)
         this._hiddenAt = null;
-        this._ch.track({ player: me, ts: Date.now() });
+        if (me) this._ch.track({ player: me, ts: Date.now() });
       }
     });
 
