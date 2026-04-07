@@ -5746,16 +5746,8 @@ const PRESENCE = {
     const ch = sb.channel('arena:presence', { config: { presence: { key: me } } });
 
     ch.on('presence', { event: 'sync' }, () => {
-      const state = ch.presenceState();
-      const now   = Date.now();
-      // Player counts as "present" if their last tracked timestamp is within the grace window
-      const live  = (key) => {
-        const entries = state[key];
-        if (!entries || !entries.length) return false;
-        const ts = entries[0].ts;
-        return typeof ts === 'number' && (now - ts) < this._GRACE_MS;
-      };
-      const both = live('john') && live('nick');
+      const keys = Object.keys(ch.presenceState());
+      const both = keys.includes('john') && keys.includes('nick');
       if (both && !this._bothActive) {
         this._bothActive = true;
         this._onBoth();
