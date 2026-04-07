@@ -1136,7 +1136,8 @@ footer span{color:#8888aa}
         <span style="color:#cccccc">BOTH SUBMIT, ONE EARNS MORE</span> — The higher earner takes the crown. The other still gets full credit for submitting.<br>
         <span style="color:#cccccc">ONLY ONE SUBMITS</span> — The submitter claims the crown by default. The other player gets nothing. Don't be the other player.<br>
         <span style="color:#cccccc">NEITHER SUBMITS</span> — The week is marked DNF. Duke Nukem sends you both an email on Tuesday. Expect no sympathy.<br><br>
-        <span style="color:#cccccc">WEEKLY SCORE</span> — The scoreboard tracks crown weeks. Shown next to each player's name.<br>
+        <span style="color:#cccccc">SCORE</span> — Your win count. Weeks where you came out on top, either by earning more or by showing up when the other guy didn't.<br>
+        <span style="color:#cccccc">BEST</span> — Your longest submission streak ever, shown in weeks (e.g. 3 WKS). Current streak is tracked separately on the streak bar.<br>
         <span style="color:#cccccc">COMBINED STATS</span> — The center panel shows total weeks played, apps built, weeks where both showed up, and total combined earnings. This is the record of what you've actually made together.
       </div>
     </div>
@@ -1928,9 +1929,9 @@ footer span{color:#8888aa}
     <div class="is">
       <div class="is-box" id="jWeaponBox" style="grid-column:span 2"><div class="is-lbl">WEAPON</div><div class="is-val jv" id="jWeaponLbl">KNIFE</div></div>
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val jv" id="jApps">0</div></div>
+      <div class="is-box"><div class="is-lbl">SCORE</div><div class="is-val jv" id="jSc">0</div></div>
       <div class="is-box"><div class="is-lbl">BEST</div><div class="is-val jv" id="jBest">—</div></div>
       <div class="is-box"><div class="is-lbl">EARNED</div><div class="is-val gv" id="jEarn">$0</div></div>
-      <div class="is-box"><div class="is-lbl">SCORE</div><div class="is-val jv" id="jSc">0</div></div>
     </div>
   </div>
 
@@ -2568,9 +2569,9 @@ footer span{color:#8888aa}
     <div class="is">
       <div class="is-box" id="nWeaponBox" style="grid-column:span 2"><div class="is-lbl">WEAPON</div><div class="is-val nv" id="nWeaponLbl">KNIFE</div></div>
       <div class="is-box"><div class="is-lbl">APPS</div><div class="is-val nv" id="nApps">0</div></div>
+      <div class="is-box"><div class="is-lbl">SCORE</div><div class="is-val nv" id="nSc">0</div></div>
       <div class="is-box"><div class="is-lbl">BEST</div><div class="is-val nv" id="nBest">—</div></div>
       <div class="is-box"><div class="is-lbl">EARNED</div><div class="is-val gv" id="nEarn">$0</div></div>
-      <div class="is-box"><div class="is-lbl">SCORE</div><div class="is-val nv" id="nSc">0</div></div>
     </div>
   </div>
 </div>
@@ -2997,16 +2998,17 @@ function renderArena(){
   }
   const allWeeks = Object.keys(weeks).length;
 
+  const jw = wins('john'), nw = wins('nick');
   document.getElementById('jApps').textContent = ja;
-  document.getElementById('jBest').textContent = best('john');
+  document.getElementById('jSc').textContent = jw;
+  document.getElementById('jBest').textContent = bestStreak('john');
   document.getElementById('jEarn').textContent = $$(je);
   document.getElementById('nApps').textContent = na;
-  document.getElementById('nBest').textContent = best('nick');
+  document.getElementById('nSc').textContent = nw;
+  document.getElementById('nBest').textContent = bestStreak('nick');
   document.getElementById('nEarn').textContent = $$(ne);
-  document.getElementById('jSc').textContent = ja;
-  document.getElementById('nSc').textContent = na;
-  document.getElementById('jScore').textContent = ja;
-  document.getElementById('nScore').textContent = na;
+  document.getElementById('jScore').textContent = jw;
+  document.getElementById('nScore').textContent = nw;
 
   // combined
   const cwe = ['cWeeks','cApps','cBoth','cEarn'];
@@ -3050,10 +3052,39 @@ function streak(p){
   return s;
 }
 
-function best(p){
-  const subs = _subs.filter(s => s.username === p && s.earnings > 0);
-  if (!subs.length) return '—';
-  return $$(Math.max(...subs.map(s => parseFloat(s.earnings)||0)));
+// SCORE — weeks won (more earnings than opponent, or solo submit when opponent didn't)
+function wins(p){
+  const weekMap = {};
+  _subs.forEach(s => {
+    if (!weekMap[s.week_id]) weekMap[s.week_id] = {};
+    weekMap[s.week_id][s.username] = parseFloat(s.earnings) || 0;
+  });
+  let w = 0;
+  for (const id of Object.keys(weekMap)){
+    const wk = weekMap[id];
+    const j = wk.john !== undefined ? wk.john : null;
+    const n = wk.nick !== undefined ? wk.nick : null;
+    if (p === 'john' && j !== null && (n === null || j > n)) w++;
+    if (p === 'nick'  && n !== null && (j === null || n > j)) w++;
+  }
+  return w;
+}
+
+// BEST — peak streak ever achieved
+function bestStreak(p){
+  const playerSubs = _subs.filter(s => s.username === p);
+  if (!playerSubs.length) return '—';
+  let best = 0, cur = 0;
+  const firstDate = new Date(Math.min(...playerSubs.map(s => new Date(s.submitted_at))));
+  let d = new Date(weekStart(wid(firstDate)));
+  const now = weekStart(wid());
+  while (d <= now){
+    const id = wid(d);
+    if (_subs.find(s => s.week_id === id && s.username === p)){ cur++; if (cur > best) best = cur; }
+    else { cur = 0; }
+    d = new Date(d.getTime() + 7 * 86400000);
+  }
+  return best > 0 ? best + (best === 1 ? ' WK' : ' WKS') : '—';
 }
 
 function applyBar(barId, nId, s, badgeId){
