@@ -5745,8 +5745,10 @@ const PRESENCE = {
   _bannerEl: null,
   _heartbeat: null,
   _staleTimer: null,
-  _STALE_MS: 3 * 60 * 1000,   // player considered gone if ts > 3 min old
-  _BEAT_MS:  90 * 1000,        // heartbeat every 90 sec (well within stale window)
+  _hiddenAt: null,
+  _STALE_MS:      3 * 60 * 1000,  // opponent ts must be < 3 min old (mobile: JS freezes so this fires fast)
+  _DESKTOP_AWAY:  5 * 60 * 1000,  // desktop: drop own presence after 5 min hidden
+  _BEAT_MS:      90 * 1000,        // heartbeat every 90s (well within stale window)
 
   init() {
     if (this._ch || !sb || !who()) return;
@@ -5771,27 +5773,44 @@ const PRESENCE = {
 
     this._ch = ch;
 
-    // Refresh timestamp when tab comes back into focus
+    // Track when this tab goes hidden / comes back
     document.addEventListener('visibilitychange', () => {
       if (!this._ch) return;
-      if (document.visibilityState === 'visible') {
+      if (document.visibilityState === 'hidden') {
+        // Record when we hid — stale timer will untrack after _DESKTOP_AWAY ms
+        this._hiddenAt = Date.now();
+      } else {
+        // Came back — clear hidden clock, refresh presence immediately
+        this._hiddenAt = null;
         this._ch.track({ player: me, ts: Date.now() });
       }
-      // No untrack on hide — tab stays in presence while open.
-      // Supabase drops the player naturally when the WebSocket closes (tab closed / navigated away).
     });
 
-    // Heartbeat: refresh ts every 90s so opponent's stale-check sees us as alive
+    // Heartbeat: keep ts fresh every 90s regardless of visibility.
+    // On desktop this runs even in background tabs → audio keeps playing in other apps.
+    // On mobile JS is frozen when backgrounded so this never fires → ts goes stale naturally.
     this._heartbeat = setInterval(() => {
       if (this._ch) this._ch.track({ player: me, ts: Date.now() });
     }, this._BEAT_MS);
 
-    // Stale-presence check: poll every 30s — if the other player's ts is too old
-    // (tab closed, phone off, crashed), stop shooting without waiting for Supabase timeout
+    // Combined check every 30s:
+    // 1. If opponent's ts is stale (phone off / tab closed) → stop shooting
+    // 2. If WE have been hidden on desktop for > 5 min → untrack ourselves
     this._staleTimer = setInterval(() => {
-      if (!this._ch || !this._bothActive) return;
+      if (!this._ch) return;
       const state = this._ch.presenceState();
       const now = Date.now();
+
+      // Untrack ourselves if hidden too long on desktop (mobile never reaches this — JS is frozen)
+      if (this._hiddenAt && (now - this._hiddenAt) > this._DESKTOP_AWAY) {
+        this._hiddenAt = null;
+        this._ch.untrack();
+        if (this._bothActive) { this._bothActive = false; BULLETS.stopAll(); }
+        return;
+      }
+
+      // Check if opponent has gone stale
+      if (!this._bothActive) return;
       const alive = (key) => {
         const entries = state[key];
         return entries && entries[0] && (now - entries[0].ts) < this._STALE_MS;
