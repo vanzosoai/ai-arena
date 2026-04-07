@@ -5744,7 +5744,9 @@ const PRESENCE = {
   _bothActive: false,
   _bannerEl: null,
   _heartbeat: null,
-  _GRACE_MS: 30 * 60 * 1000,  // 30-minute activity window
+  _staleTimer: null,
+  _STALE_MS: 3 * 60 * 1000,   // player considered gone if ts > 3 min old
+  _BEAT_MS:  90 * 1000,        // heartbeat every 90 sec (well within stale window)
 
   init() {
     if (this._ch || !sb || !who()) return;
@@ -5779,11 +5781,26 @@ const PRESENCE = {
       // Supabase drops the player naturally when the WebSocket closes (tab closed / navigated away).
     });
 
-    // Heartbeat: refresh timestamp every 10 min so the 30-min window stays valid
-    // while the tab is open in the background
+    // Heartbeat: refresh ts every 90s so opponent's stale-check sees us as alive
     this._heartbeat = setInterval(() => {
       if (this._ch) this._ch.track({ player: me, ts: Date.now() });
-    }, 10 * 60 * 1000);
+    }, this._BEAT_MS);
+
+    // Stale-presence check: poll every 30s — if the other player's ts is too old
+    // (tab closed, phone off, crashed), stop shooting without waiting for Supabase timeout
+    this._staleTimer = setInterval(() => {
+      if (!this._ch || !this._bothActive) return;
+      const state = this._ch.presenceState();
+      const now = Date.now();
+      const alive = (key) => {
+        const entries = state[key];
+        return entries && entries[0] && (now - entries[0].ts) < this._STALE_MS;
+      };
+      if (!alive('john') || !alive('nick')) {
+        this._bothActive = false;
+        BULLETS.stopAll();
+      }
+    }, 30 * 1000);
   },
 
   _onBoth() {
@@ -5812,7 +5829,9 @@ const PRESENCE = {
         'padding:10px 24px',
         'font-family:"Press Start 2P",monospace', 'font-size:.5em',
         'color:#CC0000', 'letter-spacing:3px', 'text-align:center',
-        'white-space:nowrap', 'box-shadow:0 0 24px rgba(200,0,0,.55)',
+        'white-space:normal', 'word-break:break-word',
+        'max-width:calc(100vw - 40px)', 'width:max-content',
+        'box-shadow:0 0 24px rgba(200,0,0,.55)',
         'opacity:0'
       ].join(';');
       el.textContent = '⚡ BOTH WARRIORS ONLINE — WEAPONS HOT ⚡';
